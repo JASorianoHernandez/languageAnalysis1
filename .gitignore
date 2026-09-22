@@ -1,0 +1,40 @@
+# Datos grandes (corpus raw)
+jsonfiles/MasterDataList_*.json
+
+# Credenciales
+telegram_config.json
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb_checkpoints
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.env
+venv/
+env/
+
+# Páginas de prueba HTML
+testPages/
+
+# LaTeX auxiliares
+proposal/*.aux
+proposal/*.log
+proposal/*.out
+proposal/*.toc
+proposal/*.synctex.gz
+proposal/*.fls
+proposal/*.fdb_latexmk
+proposal/*.xdv
+proposal/*.bcf
+proposal/*.blg
+proposal/*.bbl
+proposal/*.run.xml
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini

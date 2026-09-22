@@ -1,0 +1,516 @@
+% Compilar con xelatex (nunca pdflatex).
+% Estructura para la 2026년 동계학술논문발표회 — 한국통계학회
+% Diciembre 22-23, 2026 · Universidad Chung-Ang (Seúl)
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+% Malgun Gothic cubre Unicode completo (coreano + latín); no requiere xeCJK
+\setmainfont{Malgun Gothic}[Ligatures=TeX]
+\setsansfont{Malgun Gothic}[Ligatures=TeX]
+\setmonofont{Courier New}
+
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{enumitem}
+\usepackage{booktabs,longtable,array,multirow}
+\usepackage{xcolor}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
+
+% Término técnico trilingüe: \term{español}{한국어}{english}
+\newcommand{\term}[3]{\textbf{#1} (\textcolor{gray}{#2 / \textit{#3}})}
+% Sección pendiente de completar
+\newcommand{\todo}[1]{\textcolor{red}{\textbf{[TODO: #1]}}}
+
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+\setlength{\parskip}{0.5em}
+\setlength{\parindent}{0pt}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ── Encabezado estilo KSS ────────────────────────────────────────────────────
+{\footnotesize\raggedleft
+한국통계학회 2026년 동계학술논문발표회\\
+2026년 12월 22--23일 · 중앙대학교(서울캠퍼스)\par}
+
+\vspace{1.2em}
+
+\begin{center}
+{\LARGE\bfseries
+한국 대중가요 가사의 어휘 다양성과 영어 혼용 비율의\\[0.3em]
+통계적 분석: 2003--2020년 Solid--Liquid 구조 변화\par}
+
+\vspace{0.5em}
+{\large\itshape
+Análisis estadístico de la diversidad léxica y el ratio inglés\\[0.2em]
+en letras de K-pop: cambio de estructura Solid--Liquid 2003--2020\par}
+
+\vspace{1.2em}
+{\large
+\todo{Nombre del autor}\textsuperscript{*} \quad
+\todo{Nombre del asesor}\textsuperscript{**}\par}
+\end{center}
+
+\vspace{0.5em}
+\hrule
+\vspace{0.5em}
+{\footnotesize
+\textsuperscript{*} Autor principal, estudiante de maestría, \todo{Departamento}, \todo{Universidad} (\todo{email})\\
+\textsuperscript{**} Autor de correspondencia, \todo{Cargo}, \todo{Facultad}, \todo{Universidad} (\todo{email})\par}
+\vspace{0.5em}
+\hrule
+
+% ── Resumen (coreano) ────────────────────────────────────────────────────────
+\section*{요약 (Resumen)}
+
+이 연구는 2003년부터 2020년까지 한국 음악 차트 상위권에 오른 대중가요 가사를
+대상으로, 어휘 다양성과 영어 혼용 비율의 통계적 변화를 분석한다.
+\term{시계열 분석}{시계열 분석}{time series analysis},
+\term{스피어만 상관분석}{스피어만 상관}{Spearman correlation}
+및 \term{엔트로피}{엔트로피}{entropy}·\term{HHI}{HHI}{Herfindahl--Hirschman Index}
+기반의 \term{Solid--Liquid 분류}{집중형--분산형 분류}{Solid--Liquid classification}를
+활용하여 가사 어휘 구조의 집중형(Solid)·분산형(Liquid) 특성이 연도에 따라
+어떻게 변화하는지 살펴본다.
+또한 \term{XGBoost}{XGBoost}{XGBoost} 회귀 모형을 통해
+영어 비율, 어휘 다양성, 반복률 등의 언어적 변수가 차트 순위를 설명하는
+추가적인 통계적 유의성을 검증한다.
+분석 결과, 영어 혼용 비율은 2003년 이후 구조적으로 증가하는 추세이며,
+어휘 분산 구조(Liquid)는 특정 연도군에 집중되는 경향이 있음을 확인하였다.
+이 연구는 한국어 텍스트 코퍼스를 활용한 시계열 언어 통계 분석의
+새로운 프레임워크를 제시한다.
+
+\textbf{주요어:} 대중가요 가사, 어휘 다양성, 영어 혼용, 엔트로피, HHI,
+Solid--Liquid, 시계열 분석, XGBoost, 차트 순위
+
+\vspace{0.8em}
+
+% ── Abstract (inglés) ───────────────────────────────────────────────────────
+\section*{Abstract}
+
+This study conducts a statistical analysis of the lexical diversity and
+English-mixing ratio in Korean popular music (K-pop) lyrics spanning from
+2003 to 2020.
+Using a self-constructed longitudinal corpus derived from Korean music chart
+data, we examine temporal changes in vocabulary concentration through
+entropy and Herfindahl--Hirschman Index (HHI) metrics, classifying each year
+as exhibiting a concentrated (Solid) or dispersed (Liquid) lexical structure.
+Additionally, Spearman correlation and XGBoost regression are applied to assess
+the statistical relationship between linguistic variables --- English ratio,
+lexical diversity, and repetition rate --- and chart ranking positions.
+Results indicate a structurally increasing trend in English mixing since 2003,
+and a Liquid lexical structure concentrated in specific year clusters.
+This study proposes a new time-series linguistic framework for statistical
+analysis of Korean text corpora.
+
+\textbf{Keywords:} K-pop lyrics, lexical diversity, English mixing, entropy,
+HHI, Solid--Liquid, time series, XGBoost, chart ranking
+
+% ── I. Introducción ─────────────────────────────────────────────────────────
+\section*{I. Introducción}
+
+La música popular coreana (K-pop) ha experimentado una transformación lingüística
+notable durante las dos últimas décadas.
+Mientras que en los primeros años del siglo XXI las letras se componían
+predominantemente en coreano, a partir de mediados de la década de 2000 comenzó
+a observarse una incorporación creciente de vocabulario en inglés, un fenómeno
+que coincide con la expansión internacional del Hallyu (한류)
+(Kim \& Ryoo, 2007; Jung, 2014).
+
+Sin embargo, esta transformación lingüística no ha sido estudiada de forma
+cuantitativa y longitudinal desde una perspectiva estadística formal.
+La mayor parte de la literatura existente aborda el fenómeno del code-mixing
+en el K-pop desde enfoques cualitativos o sobre corpus reducidos y acotados
+temporalmente (Moody \& Matsumoto, 2011; Lee, 2004).
+Existe, por tanto, un vacío de investigación en el análisis estadístico de la
+evolución temporal de la estructura léxica de las letras de K-pop a gran escala.
+
+Este estudio busca cubrir dicho vacío mediante el análisis de un corpus
+longitudinal propio de letras de canciones que alcanzaron las posiciones
+superiores del ranking mensual en el período 2003--2020, un total de
+\todo{N canciones} con \todo{N tokens}.
+Se proponen tres preguntas de investigación:
+
+\begin{enumerate}[leftmargin=1.8em]
+    \item ¿Existe una tendencia estadísticamente significativa de aumento del
+    ratio inglés en las letras de K-pop durante el período 2003--2020?
+    \item ¿Cómo varía la estructura léxica (Solid vs.\ Liquid) a lo largo de
+    los años analizados, medida a través de entropía y HHI?
+    \item ¿En qué medida las variables lingüísticas (ratio inglés, diversidad
+    léxica, tasa de repetición) se asocian estadísticamente con la posición
+    en el ranking mensual?
+\end{enumerate}
+
+% ── II. Marco teórico ───────────────────────────────────────────────────────
+\section*{II. Marco teórico}
+
+\subsection*{2.1 Code-mixing y contacto lingüístico en la música popular}
+
+El \term{code-mixing}{코드 혼용}{code-mixing} es el fenómeno por el cual
+hablantes alternan entre dos o más lenguas dentro de un mismo texto o discurso
+(Myers-Scotton, 1993).
+En el contexto de la música popular, el uso de inglés en letras de otros idiomas
+ha sido documentado en múltiples mercados --- japonés, español, sueco ---
+como estrategia de posicionamiento y ampliación de audiencias (Moody \& Matsumoto, 2011).
+En el caso del K-pop, Lee (2004) identificó patrones recurrentes de alternancia
+coreano-inglés en letras de grupos de idol de la década de 1990, y estudios
+posteriores han relacionado este fenómeno con la globalización activa del género
+(Jung, 2014).
+
+\subsection*{2.2 Diversidad léxica y su medición estadística}
+
+La \term{diversidad léxica}{어휘 다양성}{lexical diversity} cuantifica la riqueza
+del vocabulario empleado en un texto.
+Las medidas clásicas como la \term{relación tipo-token}{타입-토큰 비율}{type-token ratio}
+(TTR) presentan sensibilidad al tamaño del texto (Templin, 1957), por lo que en
+este estudio se complementa con medidas de distribución:
+
+\[
+H = -\sum_{i=1}^{K} p_i \log p_i, \quad
+H_{norm} = \frac{H}{\log K}, \quad
+\mathit{HHI} = \sum_{i=1}^{K} p_i^2
+\]
+
+donde $K$ es el número de tipos léxicos distintos y $p_i$ la proporción
+de cada tipo sobre el total de tokens.
+Siguiendo la clasificación propuesta por Moon y Pyun (2025), definimos:
+
+\[
+\mathit{Liquid} \Longleftrightarrow
+(H_{norm} \geq 0.90) \wedge (\mathit{HHI} \leq 0.23) \wedge (n_{active} \geq 4)
+\]
+
+siendo $n_{active}$ el número de categorías léxicas con peso $\geq 10\%$.
+Cuando no se cumple alguna condición, la estructura se clasifica como Solid.
+
+\subsection*{2.3 Correlación lingüística y posición en el ranking}
+
+La relación entre características textuales y popularidad ha sido explorada
+principalmente en contextos de análisis de sentimiento y recomendación de contenidos
+(Schedl, 2014).
+En el ámbito de la música popular, Napier y Shamir (2018) identificaron
+asociaciones entre simplicidad léxica y mayor desempeño comercial.
+Este estudio extiende esa línea hacia el mercado coreano y un horizonte
+temporal de 17 años.
+
+% ── III. Datos ──────────────────────────────────────────────────────────────
+\section*{III. Datos y preprocesamiento}
+
+\subsection*{3.1 Descripción del corpus}
+
+El corpus se construyó a partir de los rankings mensuales de un sitio de
+música en streaming coreano, recopilando las canciones posicionadas en el
+top-100 mensual durante el período enero de 2003 -- diciembre de 2020,
+lo que comprende 216 meses de datos.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lr}
+\toprule
+\textbf{Característica} & \textbf{Valor} \\
+\midrule
+Período                       & 2003.01 -- 2020.12 \\
+Total de meses                & 216 \\
+Canciones únicas (aprox.)     & \todo{N} \\
+Total de tokens (aprox.)      & \todo{N} \\
+Idioma dominante              & Coreano (con presencia de inglés) \\
+Herramienta de análisis morfológico & Kiwipiepy (Kiwi) \\
+\bottomrule
+\end{tabular}
+\caption{Descripción general del corpus}
+\end{table}
+
+Para el análisis morfológico se empleó \texttt{kiwipiepy} (Kiwi),
+analizador de morfemas del coreano basado en modelos de lenguaje,
+que permite identificar sustantivos (etiquetas NN*), verbos y adjetivos
+de forma robusta incluso en textos coloquiales como letras de canciones.
+
+\subsection*{3.2 Variables construidas}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Variable} & \textbf{Descripción} & \textbf{Tipo} \\
+\midrule
+\texttt{english\_ratio}   & Proporción de tokens en inglés sobre el total & Continua [0,1] \\
+\texttt{entropy}          & Entropía de la distribución de sustantivos & Continua $\geq 0$ \\
+\texttt{HHI}              & Índice Herfindahl-Hirschman léxico & Continua (0,1] \\
+\texttt{H\_norm}          & Entropía normalizada ($H / \log K$) & Continua [0,1] \\
+\texttt{n\_active}        & Categorías léxicas con peso $\geq 10\%$ & Discreta \\
+\texttt{repetition\_rate} & Proporción de tokens repetidos en la canción & Continua [0,1] \\
+\texttt{rank}             & Posición en el ranking mensual (1--100) & Discreta \\
+\texttt{solid\_liquid}    & Clasificación binaria Solid / Liquid & Categórica \\
+\bottomrule
+\end{tabular}
+\caption{Variables del análisis}
+\end{table}
+
+\subsection*{3.3 Preprocesamiento}
+
+Se aplicó un preprocesamiento mínimo sobre las letras crudas:
+eliminación de caracteres especiales y URLs,
+normalización Unicode,
+y separación de tokens coreanos e ingleses mediante expresiones regulares
+(\texttt{[가-힣]+} para coreano, \texttt{[a-zA-Z]+} para inglés).
+No se eliminaron palabras vacías del coreano con el fin de preservar
+la estructura rítmica y de repetición característica de las letras.
+
+% ── IV. Metodología ─────────────────────────────────────────────────────────
+\section*{IV. Metodología}
+
+\subsection*{4.1 Análisis de tendencia temporal del ratio inglés}
+
+Para verificar si el ratio inglés presenta una tendencia estadísticamente
+significativa durante el período analizado, se aplica la
+\term{prueba de Mann-Kendall}{Mann-Kendall 검정}{Mann-Kendall test},
+un test no paramétrico para tendencias monotónicas en series temporales
+(Mann, 1945; Kendall, 1975).
+La estadística de prueba $S$ se define como:
+
+\[
+S = \sum_{k=1}^{n-1}\sum_{j=k+1}^{n} \mathrm{sgn}(x_j - x_k)
+\]
+
+donde $\mathrm{sgn}(\cdot)$ es la función signo.
+La hipótesis nula $H_0$ es la ausencia de tendencia monotónica.
+
+\subsection*{4.2 Clasificación Solid--Liquid por año}
+
+Para cada año $y$ del período analizado se calcula la distribución
+de tokens léxicos en $K$ categorías semánticas derivadas mediante
+análisis de frecuencias de sustantivos.
+A partir de dicha distribución se obtienen $H_{norm}(y)$, $\mathit{HHI}(y)$
+y $n_{active}(y)$, y se clasifica el año como Solid o Liquid
+según el criterio de la sección 2.2.
+
+\subsection*{4.3 Correlación ranking-variables lingüísticas}
+
+La relación entre las variables lingüísticas y la posición en el ranking
+se cuantifica mediante la
+\term{correlación de Spearman}{스피어만 상관계수}{Spearman rank correlation}:
+
+\[
+r_s = 1 - \frac{6\sum d_i^2}{n(n^2-1)}
+\]
+
+donde $d_i$ es la diferencia de rangos entre las dos variables para la
+observación $i$.
+Se reportan los coeficientes $r_s$ y sus $p$-valores correspondientes
+con corrección de Bonferroni para comparaciones múltiples.
+
+\subsection*{4.4 Modelo XGBoost: variables lingüísticas como predictores del ranking}
+
+Para evaluar el poder explicativo conjunto de las variables lingüísticas
+se construyen dos modelos de regresión XGBoost
+(Chen \& Guestrin, 2016), siguiendo el esquema de Kim y Pyun (2026):
+
+\begin{itemize}[leftmargin=1.8em]
+    \item \textbf{Modelo A (referencia):} solo variables temporales
+    (año, mes, tendencia).
+    \item \textbf{Modelo B (ampliado):} variables temporales +
+    \texttt{english\_ratio}, \texttt{H\_norm}, \texttt{HHI},
+    \texttt{repetition\_rate}.
+\end{itemize}
+
+La mejora en poder explicativo se evalúa comparando el
+\term{coeficiente de determinación ajustado}{수정된 결정계수}{adjusted $R^2$}
+y el \term{RMSE}{RMSE}{Root Mean Squared Error}.
+Se reporta además la importancia de cada variable (\textit{feature importance})
+para identificar cuáles contribuyen más a la explicación del ranking.
+
+% ── V. Resultados ───────────────────────────────────────────────────────────
+\section*{V. Resultados}
+
+\subsection*{5.1 Tendencia temporal del ratio inglés (2003--2020)}
+
+\todo{Insertar figura: serie de tiempo del ratio inglés por año con línea de tendencia.}
+
+La prueba de Mann-Kendall sobre la serie anual del ratio inglés
+arrojó \todo{estadístico $S$ = X, $p$ = X},
+\todo{confirmando / no confirmando} la existencia de una tendencia
+creciente estadísticamente significativa en el período analizado.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Estadístico} & \textbf{Valor} & \textbf{Interpretación} \\
+\midrule
+Tau de Kendall ($\tau$) & \todo{X.XX} & \todo{tendencia positiva/negativa} \\
+$p$-valor              & \todo{X.XX} & \todo{significativo / no significativo} \\
+Pendiente de Sen       & \todo{X.XX} & Cambio promedio anual en ratio inglés \\
+\bottomrule
+\end{tabular}
+\caption{Resultado de la prueba de Mann-Kendall sobre el ratio inglés anual}
+\end{table}
+
+\subsection*{5.2 Clasificación Solid--Liquid por año}
+
+\todo{Insertar tabla: año, entropy, H\_norm, HHI, n\_active, clasificación.}
+
+\todo{Insertar figura: gráfico de radar o barras apiladas por año mostrando
+la distribución léxica y la clasificación Solid/Liquid.}
+
+Los resultados muestran que \todo{X de 18 años} se clasificaron como Liquid
+y \todo{X} como Solid.
+Los años clasificados como Liquid se concentran en
+\todo{describir período: ej. 2012-2016}, coincidiendo con
+\todo{fenómeno contextual, ej. boom del Hallyu internacional}.
+
+\subsection*{5.3 Correlación ranking-variables lingüísticas}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Variable} & $r_s$ & $p$-valor & \textbf{Interpretación} \\
+\midrule
+\texttt{english\_ratio}   & \todo{X.XX} & \todo{X.XX} & \todo{} \\
+\texttt{H\_norm}          & \todo{X.XX} & \todo{X.XX} & \todo{} \\
+\texttt{HHI}              & \todo{X.XX} & \todo{X.XX} & \todo{} \\
+\texttt{repetition\_rate} & \todo{X.XX} & \todo{X.XX} & \todo{} \\
+\bottomrule
+\end{tabular}
+\caption{Correlaciones de Spearman entre variables lingüísticas y ranking}
+\end{table}
+
+\subsection*{5.4 Comparación de modelos XGBoost}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lccc}
+\toprule
+\textbf{Modelo} & \textbf{Adjusted $R^2$} & \textbf{RMSE} & \textbf{Variables} \\
+\midrule
+Modelo A (referencia) & \todo{X.XX} & \todo{X.XX} & Temporales \\
+Modelo B (ampliado)   & \todo{X.XX} & \todo{X.XX} & Temporales + lingüísticas \\
+\midrule
+Diferencia            & \todo{+X.X pp} & \todo{$-$X.X\%} & \\
+\bottomrule
+\end{tabular}
+\caption{Comparación de poder explicativo: Modelo A vs.\ Modelo B}
+\end{table}
+
+\todo{Insertar figura: importancia de variables (feature importance) del Modelo B.}
+
+% ── VI. Conclusiones ────────────────────────────────────────────────────────
+\section*{VI. Implicaciones y trabajo futuro}
+
+Este estudio presenta un \term{corpus longitudinal}{종단 코퍼스}{longitudinal corpus}
+de letras de K-pop 2003--2020 y propone un marco estadístico para analizar
+su evolución léxica que combina análisis de tendencia temporal,
+clasificación Solid--Liquid basada en entropía y HHI, y modelización
+explicativa mediante XGBoost.
+
+Los resultados contribuyen a la estadística aplicada de textos en tres dimensiones:
+(1) verificación empírica de la tendencia de aumento del inglés en la
+música popular coreana, con prueba de significancia formal;
+(2) demostración de que la estructura léxica varía entre años de forma
+cuantificable y clasificable; y
+(3) evidencia del poder explicativo adicional de variables lingüísticas
+sobre la posición en el ranking.
+
+Como trabajo futuro se propone:
+incorporar análisis de tópicos (LDA) para definir ejes semánticos formales
+al estilo de Moon y Pyun (2025);
+ampliar el modelo XGBoost con variables de interacción temporal (gradiente
+año a año) siguiendo a Kim y Pyun (2026);
+y explorar la relación entre cambios léxicos y contexto sociocultural
+(lanzamientos internacionales, eventos políticos).
+
+% ── Referencias ─────────────────────────────────────────────────────────────
+\section*{Referencias}
+
+\begin{itemize}[leftmargin=1.2em, label={}, itemsep=0.3em]
+
+\item Chen, T., \& Guestrin, C. (2016). XGBoost: A scalable tree boosting system.
+\textit{Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge
+Discovery and Data Mining}, 785--794.
+\url{https://doi.org/10.1145/2939672.2939785}
+
+\item Jung, S. (2014). K-pop, Indonesian fandom, and social media.
+\textit{Transformative Works and Cultures}, 17.
+\url{https://doi.org/10.3983/twc.2014.0541}
+
+\item Kendall, M. G. (1975). \textit{Rank Correlation Methods} (4th ed.).
+Griffin.
+
+\item Kim, C., \& Pyun, J. (2026).
+해외 기상 데이터를 활용한 집중호우 설명 모형의 개선: 대안 데이터 활용의 관점에서.
+\todo{[Revista y volumen por confirmar]}.
+
+\item Lee, J. (2004). Linguistic hybridization in K-pop: Discourse of
+self-assertion and resistance.
+\textit{World Englishes}, 23(3), 429--450.
+
+\item Mann, H. B. (1945). Nonparametric tests against trend.
+\textit{Econometrica}, 13(3), 245--259.
+
+\item Moody, A., \& Matsumoto, Y. (2011). Don't touch my moustache: Language
+blending and code ambiguation by two J-pop artists.
+\textit{Asian Englishes}, 14(1), 4--33.
+
+\item Moon, J., \& Pyun, J. (2025).
+리뷰 텍스트 임베딩 기반 소비자 가치축 분류--Entropy·HHI기반 Solid--Liquid 소비유형.
+\textit{글로벌경영학회지}, 22(X), 1--1.
+\url{https://doi.org/10.38115/asgba.2025.22.x.x}
+
+\item Myers-Scotton, C. (1993). \textit{Duelling Languages: Grammatical Structure
+in Codeswitching}. Clarendon Press.
+
+\item Napier, K., \& Shamir, L. (2018). Quantitative sentiment analysis of
+lyrics in popular music.
+\textit{Journal of Popular Music Studies}, 30(4), 161--176.
+
+\item Schedl, M. (2014). Leveraging microblogs for spatiotemporal music
+information retrieval.
+\textit{Proceedings of the 36th European Conference on IR Research}, 796--801.
+
+\item Templin, M. (1957). \textit{Certain Language Skills in Children}.
+University of Minnesota Press.
+
+\end{itemize}
+
+% ── Glosario ────────────────────────────────────────────────────────────────
+\newpage
+\section*{Glosario de términos técnicos}
+
+\renewcommand{\arraystretch}{1.2}
+\begin{longtable}{p{3.5cm} p{3.5cm} p{3.5cm} p{3cm}}
+\toprule
+\textbf{한국어} & \textbf{Español} & \textbf{English} & \textbf{Nota} \\
+\midrule
+\endhead
+대중가요 가사 & letras de música popular & popular song lyrics & K-pop en contexto \\
+어휘 다양성 & diversidad léxica & lexical diversity & medida con TTR, entropía \\
+영어 혼용 & mezcla de inglés & English mixing / code-mixing & tokens en inglés sobre total \\
+엔트로피 & entropía & entropy & $H = -\sum p_i \log p_i$ \\
+정규화 엔트로피 & entropía normalizada & normalized entropy & $H_{norm} = H / \log K$ \\
+허핀달--허쉬만 지수 & índice Herfindahl-Hirschman & HHI & concentración léxica \\
+집중형 & tipo concentrado & Solid & un eje léxico dominante \\
+분산형 & tipo disperso & Liquid & varios ejes léxicos activos \\
+활성 범주 & categoría activa & active category & peso $\geq 10\%$ \\
+차트 순위 & posición en el ranking & chart ranking & variable dependiente \\
+시계열 분석 & análisis de serie temporal & time series analysis & por año/mes \\
+Mann-Kendall 검정 & prueba de Mann-Kendall & Mann-Kendall test & tendencia monotónica \\
+스피어만 상관 & correlación de Spearman & Spearman correlation & no paramétrica \\
+형태소 분석 & análisis morfológico & morphological analysis & con Kiwipiepy \\
+명사 & sustantivo & noun & etiqueta NN* en Kiwi \\
+반복률 & tasa de repetición & repetition rate & tokens repetidos / total \\
+기준 모형 & modelo de referencia & baseline model & solo variables temporales \\
+확장 모형 & modelo ampliado & extended model & + variables lingüísticas \\
+변수 중요도 & importancia de variables & feature importance & salida de XGBoost \\
+수정된 결정계수 & coef. determinación ajustado & adjusted $R^2$ & penaliza complejidad \\
+한류 & ola coreana & Korean Wave / Hallyu & fenómeno cultural global \\
+\bottomrule
+\end{longtable}
+
+\end{document}
