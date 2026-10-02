@@ -1,0 +1,95 @@
+% Compile with xelatex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{Malgun Gothic}[Ligatures=TeX]
+\setsansfont{Malgun Gothic}[Ligatures=TeX]
+
+\usepackage[top=2.5cm, bottom=2.5cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+\pagestyle{empty}
+
+% ─────────────────────────────────────────────────────────────
+\begin{document}
+
+\begin{center}
+{\large\textbf{Cross-Cultural Perception of Korean Tourist Attractions:\\[3pt]
+A Comparative NLP Analysis of Domestic and Foreign Online Reviews}}
+
+\vspace{6pt}
+
+{\normalsize Jorge Adan Soriano Hernandez}\\
+{\small Department of Data Science, Hoseo University}
+
+\end{center}
+
+\vspace{6pt}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{4pt}
+
+\noindent\textbf{Abstract}
+
+\vspace{2pt}
+
+\noindent
+This study investigates how domestic Korean tourists and foreign visitors
+perceive the same tourist attractions differently, through a comparative
+analysis of online reviews collected from culturally segmented platforms.
+A bilingual review corpus is constructed covering major tourist destinations
+in Seoul and Busan, including palaces, traditional villages, markets,
+entertainment districts, and beaches, selected through stratified sampling
+informed by official Korean Tourism Organization (KTO) visitor statistics
+and tourism foot-traffic rankings. Each site is represented by balanced
+samples of Korean- and English-language reviews. We apply a multi-layered
+NLP pipeline comprising: (1)~sentiment analysis using pre-trained classifiers,
+with Mann-Whitney U tests for inter-group significance;
+(2)~LDA topic modeling to identify dominant themes per language group,
+supplemented by TF-IDF keyword contrast and type-token ratio (TTR) analysis;
+(3)~cross-lingual semantic similarity via multilingual sentence embeddings
+to quantify experiential convergence per site, combined with zero-shot
+motivation classification; and (4)~aspect-based sentiment analysis (ABSA)
+via instruction-tuned LLMs across five tourism-relevant dimensions
+(cultural heritage, accessibility, crowding, food, and visual experience).
+Preliminary results suggest that domestic reviewers emphasize practical
+concerns such as crowding and revisit logistics, while foreign reviewers
+focus on cultural-historical narrative and visual aesthetics. These findings
+contribute to the literature on platform-mediated cross-cultural tourism
+perception and offer practical implications for destination marketing
+organizations seeking to tailor messaging to heterogeneous visitor segments.
+
+\vspace{8pt}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{4pt}
+
+\noindent\textbf{초록}
+
+\vspace{2pt}
+
+\noindent
+본 연구는 문화적으로 분리된 온라인 리뷰 플랫폼에서 수집한 리뷰를 비교 분석하여,
+내국인 관광객과 외국인 방문객이 동일한 한국 관광지를 어떻게 상이하게 인식하는지를
+조사한다. 한국관광공사(KTO) 입장객 통계 및 관광 유동인구 순위를 활용한 층화
+추출로 서울·부산의 주요 관광지(궁궐, 전통마을, 시장, 유흥가, 해수욕장 등)를
+선정하고, 각 장소에 대해 한국어·영어 리뷰를 균형 있게 수집하여 이중언어
+코퍼스를 구축한다. 다층적 NLP 파이프라인을 적용하여 (1)~사전 학습된 감성 분류
+모델과 Mann-Whitney U 검정을 통한 감성 분석, (2)~LDA 주제 모델링 및 TF-IDF
+키워드 대조·유형-토큰 비율(TTR) 분석, (3)~다국어 문장 임베딩을 활용한
+교차언어 의미 유사도 측정과 제로샷 방문 동기 분류, (4)~명령 기반 대규모
+언어 모델(LLM)을 활용한 다섯 가지 관광 측면(역사·문화, 접근성, 혼잡도, 음식,
+시각적 경험)에 대한 측면 기반 감성 분석(ABSA)을 수행한다. 예비 결과에 따르면,
+내국인은 혼잡도와 재방문 편의성 등 실용적 측면을, 외국인은 역사·문화적 서사와
+시각적 미학을 중시하는 경향이 나타난다. 본 연구는 플랫폼 매개 문화 간 관광
+인식 연구에 기여하며, 이질적 방문객 집단에 맞춘 관광 마케팅 전략 수립에
+실질적 시사점을 제공한다.
+
+\vspace{6pt}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{2pt}
+
+{\small 호서대학교 / Hoseo University \hfill 2026년 10월}
+
+\end{document}

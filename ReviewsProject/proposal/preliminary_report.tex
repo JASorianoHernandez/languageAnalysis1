@@ -1,0 +1,236 @@
+% Compile with xelatex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{Malgun Gothic}[Ligatures=TeX]
+\setsansfont{Malgun Gothic}[Ligatures=TeX]
+
+\usepackage[top=2.2cm, bottom=2.2cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{booktabs,longtable,array,multirow}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newcolumntype{R}{>{\raggedleft\arraybackslash}p{1.4cm}}
+
+% ─────────────────────────────────────────────────────────────
+\begin{document}
+
+\begin{center}
+{\Large\textbf{Preliminary Analysis Report}}\\[6pt]
+{\large Cross-Cultural Perception of Korean Tourist Attractions}\\[4pt]
+{\normalsize 8 places (Seoul + Busan) $\cdot$ 496 reviews $\cdot$ October 2026}
+\end{center}
+
+\vspace{8pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ── 1. CORPUS ────────────────────────────────────────────────
+\section*{1. Corpus Summary}
+
+A bilingual corpus of 496 reviews was constructed from 8 tourist destinations
+in Seoul and Busan. Each place is represented by approximately 30 Korean-language
+(domestic) and 30 English-language (foreign) reviews, collected from
+culturally segmented online review platforms.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{llcc}
+\toprule
+\textbf{City} & \textbf{Place} & \textbf{KO reviews} & \textbf{EN reviews} \\
+\midrule
+Seoul  & Gyeongbokgung (경복궁)         & 30 & 30 \\
+Seoul  & Changdeokgung (창덕궁)         & 30 & 30 \\
+Seoul  & Bukchon Village (북촌한옥마을)   & 32 & 30 \\
+Seoul  & Gwangjang Market (광장시장)     & 30 & 30 \\
+Seoul  & Hongdae Street (홍대거리)       & 34 & 30 \\
+Seoul  & Lotte World (롯데월드)          & 34 & 30 \\
+Busan  & Gwangalli Beach (광안리해수욕장) & 34 & 30 \\
+Busan  & Haeundae Beach (해운대해수욕장)  & 32 & 30 \\
+\midrule
+       & \textbf{Total}                 & \textbf{256} & \textbf{240} \\
+\bottomrule
+\end{tabular}
+\caption{Corpus composition by place and language group.}
+\end{table}
+
+% ── 2. SENTIMENT ─────────────────────────────────────────────
+\section*{2. Sentiment Analysis}
+
+Pre-trained sentiment classifiers were applied to each language group separately.
+The following table shows the mean sentiment score (range 0--1) and the
+result of a one-sided Mann-Whitney U test (H$_1$: KO $>$ EN).
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lRRRl}
+\toprule
+\textbf{Place} & \textbf{KO} & \textbf{EN} & \textbf{p-value} & \textbf{Sig.} \\
+\midrule
+Gyeongbokgung    & 0.597 & 0.673 & 0.7855 & n.s. \\
+Changdeokgung    & 0.524 & 0.668 & 0.9253 & n.s. \\
+Bukchon Village  & 0.408 & 0.469 & 0.5782 & n.s. \\
+Gwangjang Market & 0.282 & 0.455 & 0.6078 & n.s. \\
+Hongdae Street   & 0.621 & 0.419 & 0.0509 & n.s. \\
+Lotte World      & 0.826 & 0.597 & 0.0362 & * \\
+Gwangalli Beach  & 0.745 & 0.775 & 0.9648 & n.s. \\
+Haeundae Beach   & 0.643 & 0.758 & 0.9314 & n.s. \\
+\midrule
+\textbf{Overall} & \textbf{0.587} & \textbf{0.602} & \textbf{0.6559} & n.s. \\
+\bottomrule
+\end{tabular}
+\caption{Mean sentiment and Mann-Whitney U test results. * $p < 0.05$.}
+\end{table}
+
+Lotte World is the only place with a statistically significant gap
+(KO $>$ EN, $p = 0.036$). Hongdae is borderline ($p = 0.051$).
+Gwangjang Market has the lowest domestic sentiment (0.282),
+suggesting more critical local reviewers for food-related destinations.
+
+% ── 3. CROSS-LINGUAL SIMILARITY ─────────────────────────────
+\section*{3. Cross-lingual Semantic Similarity}
+
+Multilingual sentence embeddings (multilingual-e5-base) project both
+Korean and English reviews into a shared semantic space. Per-site cosine
+similarity between group centroids quantifies experiential convergence.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lRRR}
+\toprule
+\textbf{Place} & \textbf{KO-EN sim} & \textbf{KO intra} & \textbf{EN intra} \\
+\midrule
+Gyeongbokgung    & 0.910 & 0.879 & 0.860 \\
+Changdeokgung    & 0.916 & 0.872 & 0.859 \\
+Bukchon Village  & 0.895 & 0.873 & 0.878 \\
+Gwangjang Market & 0.931 & 0.869 & 0.857 \\
+Hongdae Street   & 0.922 & 0.870 & 0.870 \\
+Lotte World      & 0.929 & 0.866 & 0.852 \\
+Gwangalli Beach  & 0.909 & 0.892 & 0.889 \\
+Haeundae Beach   & 0.896 & 0.895 & 0.892 \\
+\bottomrule
+\end{tabular}
+\caption{Cross-lingual cosine similarity and intra-group coherence.}
+\end{table}
+
+Cross-group similarity is consistently high (0.89--0.93) and exceeds
+intra-group similarity in all cases, indicating that both groups discuss
+similar aspects at each location. Gwangjang Market shows the highest
+alignment (0.931), while Haeundae Beach shows the most divergence (0.896).
+
+% ── 4. MOTIVATION ────────────────────────────────────────────
+\section*{4. Travel Motivation (Zero-shot Classification)}
+
+A zero-shot classification using cosine similarity in the embedding
+space assigned each review to one of five motivation categories.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lRR}
+\toprule
+\textbf{Motivation} & \textbf{KO (\%)} & \textbf{EN (\%)} \\
+\midrule
+Photography \& Visual Experience & 37.5 & 37.1 \\
+Nature \& Scenery                & 25.0 & 21.7 \\
+Cultural Heritage \& History     & 16.2 & 15.8 \\
+Food \& Gastronomy               & 16.2 & 15.8 \\
+Shopping \& Entertainment        &  5.0 &  9.6 \\
+\bottomrule
+\end{tabular}
+\caption{Overall motivation distribution by language group.}
+\end{table}
+
+Both groups are dominated by Photography/Visual ($\sim$37\%) and
+Nature/Scenery ($\sim$21--25\%). The only notable gap is in
+Shopping \& Entertainment, where English reviewers show nearly
+twice the proportion (9.6\% vs 5.0\%).
+
+% ── 5. LEXICAL DIVERSITY ────────────────────────────────────
+\section*{5. Lexical Diversity (TTR)}
+
+Type-Token Ratio (TTR) measures lexical diversity per review.
+English reviewers show consistently higher TTR across all places
+(mean EN = 0.937, mean KO = 0.873), suggesting more varied vocabulary
+usage. This may reflect differences in review writing conventions
+between platforms or the linguistic properties of each language.
+
+% ── 6. TF-IDF KEYWORDS ──────────────────────────────────────
+\section*{6. TF-IDF Keyword Contrast}
+
+Top distinctive keywords per group (by mean TF-IDF score):
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{clcl}
+\toprule
+\textbf{Rank} & \textbf{Korean} & & \textbf{English} \\
+\midrule
+1 & 시간 (time)     & & beach \\
+2 & 경복궁 (Gyeongb.)& & palace \\
+3 & 해운대 (Haeundae)& & worth \\
+4 & 바다 (sea)      & & area \\
+5 & 홍대 (Hongdae)  & & experience \\
+6 & 한옥 (hanok)    & & food \\
+7 & 사진 (photo)    & & street \\
+8 & 풍경 (scenery)  & & traditional \\
+\bottomrule
+\end{tabular}
+\caption{Top TF-IDF keywords per language group.}
+\end{table}
+
+Korean reviewers emphasize temporal and logistical aspects (시간, time),
+while English reviewers focus on evaluative language (worth, experience).
+
+% ── 7. LDA TOPICS ────────────────────────────────────────────
+\section*{7. LDA Topic Modeling}
+
+Five topics were extracted for each language group via Latent Dirichlet
+Allocation.
+
+\textbf{English Topics:}
+\begin{enumerate}\itemsep2pt
+  \item beach, clean, enjoy, rides, people, bridge
+  \item palace, garden, secret, changdeokgung, traditional
+  \item area, fun, beach, people, food, street, local
+  \item beach, busan, walking, haeundae, atmosphere, ocean
+  \item beach, food, street, night, area, busan, walk
+\end{enumerate}
+
+\textbf{Korean Topics:}
+\begin{enumerate}\itemsep2pt
+  \item 창덕궁, 시장, 광장시장, 전통, 다양, 빈대떡
+  \item 홍대, 거리, 시간, 다양, 북촌, 양평, 골목
+  \item 경복궁, 해운대, 사진, 드론, 광안리, 외국인
+  \item 창덕궁, 궁궐, 조선, 자연, 경복궁, 후원
+  \item 한옥, 바다, 풍경, 부산, 해변, 마을, 대교
+\end{enumerate}
+
+% ── 8. OBSERVATIONS ──────────────────────────────────────────
+\section*{8. Preliminary Observations}
+
+\begin{itemize}\itemsep3pt
+  \item No overall significant sentiment difference between domestic and
+        foreign reviewers ($p = 0.656$); differences are place-specific.
+  \item Lotte World shows the strongest cultural gap: Korean reviewers
+        are significantly more positive ($p = 0.036$).
+  \item High cross-lingual similarity (0.89--0.93) suggests both groups
+        discuss similar aspects, but with different emphasis and vocabulary.
+  \item Photography/Visual dominates both groups' motivations ($\sim$37\%),
+        while Shopping/Entertainment is more salient for foreign visitors.
+  \item Data collection for 2 additional places (인사동길, N서울타워) is pending.
+\end{itemize}
+
+\vspace{8pt}
+\noindent\rule{\linewidth}{0.4pt}
+{\small Hoseo University \hfill October 2026}
+
+\end{document}
