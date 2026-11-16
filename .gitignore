@@ -5,3 +5,8 @@ __pycache__/
 *.pyc
 node_modules/
 proposal/deck/proposal_deck.pptx
+literature/
+logs/
+*.log
+debug_html.txt
+_tmp_*.py
