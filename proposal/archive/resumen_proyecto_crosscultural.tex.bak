@@ -1,0 +1,270 @@
+% Compile with xelatex
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Malgun Gothic}
+\setCJKsansfont{Malgun Gothic}
+% Korean uses spaces between words, unlike Chinese/Japanese: keep them visible
+\xeCJKsetup{CJKspace=true}
+
+\usepackage[top=1.0cm, bottom=0.7cm, left=1.5cm, right=1.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+\linespread{0.95}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\setlength{\emergencystretch}{1em}
+\renewcommand{\arraystretch}{1.02}
+\pagestyle{empty}
+
+\newcommand{\headrule}{\vspace{1pt}\noindent\rule{\linewidth}{0.4pt}\vspace{1pt}}
+
+% section headings: bold, numbered by hand to match the reference layout
+\newcommand{\sect}[1]{\vspace{3pt}\noindent\textbf{#1}\par\vspace{0pt}}
+
+\begin{document}
+\footnotesize
+
+% ═══════════════════════════════════════════════════════════════════
+% PAGE 1 — ENGLISH
+% ═══════════════════════════════════════════════════════════════════
+\begin{center}
+{\large\textbf{What Domestic and Foreign Tourists Write}}\\[2pt]
+{\large\textbf{Cultural Distance and Information Behaviour in Korean Attraction Reviews}}\\[5pt]
+{\normalsize Jorge Adan Soriano Hernandez}\\
+{\small Department of Data Science, Hoseo University \quad$\cdot$\quad Research proposal, October 2026}
+\end{center}
+
+\headrule
+
+\sect{1. Topic}
+Online reviews are the main source travellers consult before choosing a destination. This study asks two
+questions about the same Korean attractions: whether domestic and foreign visitors describe them differently,
+and what drives the information behaviour of the reviewers themselves.
+
+\sect{2. Problem}
+Cross-cultural destination research has relied on surveys or a single language. Chen et al.\ (2024) compared
+Chinese- and English-speaking tourists in Xiamen with LDA and BERT, but without controlling for review length
+or repeat reviewers. Lee et al.\ (2026) separated information \textbf{diversity} from \textbf{quantity}, yet
+their panel is aggregated by business and week, so individual review content stays invisible. Neither uses the
+visit metadata the platform collects: companion, purpose, waiting time.
+
+\sect{3. Research questions}
+\begin{enumerate}[leftmargin=18pt, itemsep=1pt, topsep=2pt]
+  \item Do domestic and foreign reviewers differ in sentiment, topics and aspects when describing the same place?
+  \item Do Hofstede's cultural dimensions predict those differences?
+  \item Among domestic reviewers, what characterises those who return, those who contribute more information,
+        and the reviews other users find helpful?
+\end{enumerate}
+
+\sect{4. Setting and data}
+Two culturally segmented platforms: Naver Place for domestic reviews, Google Maps for foreign ones. Attractions
+were selected within typological strata (palaces, traditional quarters, markets, entertainment, museums, modern
+landmarks, nature), combining reputational prominence (Yanolja Research Top 500) with visitor volume by origin
+(Korea Tourism Organization). Both languages come from a common 12-month window.
+
+\begin{center}\footnotesize
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Corpus} & \textbf{Source} & \textbf{Size} \\
+\midrule
+Cross-cultural & Naver + Google Maps & balanced KO/EN samples, 12 attractions \\
+Domestic-only  & Naver Place         & 12{,}537 reviews, 9{,}843 with text, 7{,}230 reviewers, 21 attractions \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\sect{5. Variables}
+\begin{center}\footnotesize
+\begin{tabular}{@{}l p{14.2cm}@{}}
+\toprule
+\textbf{Role} & \textbf{Variables} \\
+\midrule
+Dependent   & \textit{Revisit}: second or later visit $\cdot$ \textit{Keyword tags}: information diversity, 0--5
+              $\cdot$ \textit{Star rating} $\cdot$ \textit{Reactions}: users who reacted, i.e. helpfulness \\
+Independent & Companion (alone, partner, friends, children, family) $\cdot$ purpose (travel, outing, daily
+              life, date) $\cdot$ waited, reserved $\cdot$ sentiment, $-1$ to $1$ $\cdot$ tag themes (visual,
+              crowding, facilities, access, family, food, water leisure) \\
+Control     & ln text length $\cdot$ ln review age $\cdot$ reviewer's reviews and followers $\cdot$ verification
+              (receipt, reservation) $\cdot$ season, weekend $\cdot$ place fixed effects \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\sect{6. Models}
+Group comparison for the cross-cultural corpus; regressions at the review level for the domestic corpus, with
+place fixed effects $\delta_j$ and standard errors clustered by reviewer, since the same person often writes
+several reviews.
+\vspace{-6pt}
+\begin{align*}
+\text{H1--H5:}\quad & \text{share of target tokens (Mann-Whitney U)};\quad \text{mentions / does not mention } (\chi^2),\ \text{Holm-corrected}\\[-1pt]
+\text{M1:}\quad & \operatorname{logit} P(\text{Revisit}_i) = \beta_0 + \mathbf{x}_i^{\top}\boldsymbol{\beta} + \delta_j \\[-1pt]
+\text{M2:}\quad & P(\text{Tags}_i \le k) = \bigl[1 + e^{-(\tau_k - \mathbf{x}_i^{\top}\boldsymbol{\beta} - \delta_j)}\bigr]^{-1},\quad k = 0,\dots,4 \\[-1pt]
+\text{M4:}\quad & \text{Reactions}_i \sim \text{NegBin}(\mu_i),\quad \ln \mu_i = \beta_0 + \mathbf{x}_i^{\top}\boldsymbol{\beta} + \gamma \ln(\text{age}_i) + \delta_j
+\end{align*}
+\vspace{-16pt}
+
+Each model is re-estimated keeping one random review per reviewer and place; only effects that survive are
+reported as robust. Dictionaries behind H1--H5 were validated by manually coding 602 keyword-in-context
+samples, dropping terms below 70\,\% precision.
+
+\sect{7. Preliminary results}
+\begin{center}\footnotesize
+\begin{tabular}{@{}l p{8.1cm} l@{}}
+\toprule
+ & \textbf{Finding} & \textbf{Status} \\
+\midrule
+Cross-cultural & Overall sentiment does not differ; cross-lingual similarity 0.92--0.94 everywhere & stable \\
+               & Domestic reviewers mention family and companions twice as often & robust, validated \\
+               & Planning, service, enjoyment and rating leniency & not supported \\
+Domestic-only  & Revisitors are highly active reviewers who write less effusively & robust \\
+               & Visitors who queued return less often & robust \\
+               & Engaged reviewers choose more keyword tags & 14 effects, two models \\
+               & Reactions follow the reviewer's audience and text length & robust \\
+\bottomrule
+\end{tabular}
+\end{center}
+Out-of-sample, grouped by reviewer: revisiting AUC $\approx 0.79$, keyword diversity $R^2 \approx 0.50$,
+helpfulness AUC $\approx 0.82$. Star rating stays weak and is reported as exploratory.
+
+\sect{8. Implications}
+For destination management, the contrast is not in how satisfied the two groups are but in what they talk about,
+so the same attraction needs different messages for each audience. For platforms, information diversity tracks
+reviewer engagement rather than visit type, so prompting varied keywords should work better with experienced
+reviewers.
+
+\sect{9. Points for discussion}
+\begin{itemize}[leftmargin=12pt, itemsep=1pt, topsep=1pt]
+  \item Platform and language are confounded: domestic reviews come from one platform and foreign ones from
+        another, so a difference may reflect the platform as much as the culture. English is also a lingua
+        franca, so the foreign group is culturally heterogeneous.
+  \item Results are associations: no time variation or natural experiment comparable to the keyword expansion
+        Lee et al.\ (2026) exploit.
+  \item Keyword tags are all praise, so counting them measures expressed approval as well as diversity;
+        \textit{Revisit} records platform-verified visits, not loyalty.
+\end{itemize}
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════════
+% PAGE 2 — KOREAN
+% ═══════════════════════════════════════════════════════════════════
+\begin{center}
+{\large\textbf{내국인과 외국인은 무엇을 쓰는가}}\\[2pt]
+{\large\textbf{한국 관광지 리뷰에 나타난 문화적 거리와 정보 행동}}\\[5pt]
+{\normalsize 소리아노 에르난데스 호르헤 아단}\\
+{\small 호서대학교 데이터사이언스학과 \quad$\cdot$\quad 연구 계획서, 2026년 10월}
+\end{center}
+
+\headrule
+
+\sect{1. 주제}
+온라인 리뷰는 여행자가 목적지를 선택하기 전에 참고하는 핵심 정보원이다. 본 연구는 동일한 한국 관광지를
+대상으로 두 가지를 묻는다. 첫째, 내국인과 외국인 방문객은 같은 장소를 다르게 서술하는가. 둘째, 리뷰
+작성자의 정보 행동은 무엇에 의해 결정되는가.
+
+\sect{2. 문제 제기}
+기존의 문화 간 목적지 연구는 설문조사나 단일 언어 자료에 의존해 왔다. Chen 외(2024)는 LDA와 BERT로
+샤먼의 중국어권·영어권 관광객을 비교하였으나, 리뷰 길이나 동일 작성자의 반복 작성을 통제하지 않았다.
+이민영 외(2026)는 정보 다양성과 정보량을 분리하였으나, 자료가 업체 및 주 단위로 집계되어 개별 리뷰의
+내용과 방문 맥락은 관측되지 않는다. 또한 두 연구 모두 플랫폼이 이미 수집하고 있는 방문 정보,
+즉 동반자, 방문 목적, 대기 시간을 활용하지 않는다.
+
+\sect{3. 연구 질문}
+\begin{enumerate}[leftmargin=18pt, itemsep=1pt, topsep=2pt]
+  \item 내국인과 외국인은 동일한 장소를 서술할 때 감성, 주제, 측면에서 차이를 보이는가?
+  \item 호프스테드의 문화 차원은 그러한 차이를 설명하는가?
+  \item 내국인 리뷰에서 재방문자, 더 많은 정보를 제공하는 작성자, 그리고 유용하다고 평가받는 리뷰는
+        각각 어떤 특성을 가지는가?
+\end{enumerate}
+
+\sect{4. 연구 맥락과 자료}
+문화적으로 분리된 두 플랫폼을 활용한다. 내국인 리뷰는 네이버 플레이스, 외국인 리뷰는 구글 지도에서
+수집한다. 관광지는 유형별 층(궁궐, 전통 지구, 시장, 유흥, 박물관, 현대 랜드마크, 자연)으로 나눈 뒤,
+사회적 평판(야놀자 리서치 Top 500)과 내·외국인별 입장객 통계(한국관광공사)를 함께 고려하여 선정하였다.
+두 집단이 동일한 기간을 서술하도록 12개월의 공통 기간을 적용한다.
+
+\begin{center}\footnotesize
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{코퍼스} & \textbf{출처} & \textbf{규모} \\
+\midrule
+문화 간 비교 & 네이버 + 구글 지도 & 한국어·영어 균형 표본, 관광지 12곳 \\
+내국인 전용   & 네이버 플레이스     & 리뷰 12{,}537건(텍스트 9{,}843건), 작성자 7{,}230명, 관광지 21곳 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\sect{5. 변수}
+\begin{center}\footnotesize
+\begin{tabular}{@{}l p{14.2cm}@{}}
+\toprule
+\textbf{구분} & \textbf{변수} \\
+\midrule
+종속변수 & \textit{재방문}: 2회차 이상 방문 $\cdot$ \textit{키워드 수}: 정보 다양성, 0--5
+           $\cdot$ \textit{별점} $\cdot$ \textit{반응 수}: 리뷰에 반응한 이용자 수, 즉 유용성 \\
+독립변수 & 동반자(혼자·연인·친구·아이·가족) $\cdot$ 목적(여행·나들이·일상·데이트) $\cdot$ 대기, 예약
+           $\cdot$ 감성 점수($-1$ $\sim$ $1$) $\cdot$ 키워드 주제(시각·혼잡·시설·접근성·가족·음식·물놀이) \\
+통제변수 & 텍스트 길이 $\cdot$ 리뷰 경과일 $\cdot$ 작성자 리뷰 수·팔로워 수 $\cdot$ 인증 수단(영수증·예약)
+           $\cdot$ 계절, 주말 $\cdot$ 장소 고정 효과 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\sect{6. 분석 모형}
+문화 간 비교에는 집단 간 검정을, 내국인 자료에는 리뷰 단위 회귀분석을 적용한다. 장소 고정 효과
+$\delta_j$를 포함하며, 동일 작성자가 여러 리뷰를 작성하므로 표준오차는 작성자 단위로 군집화한다.
+\vspace{-6pt}
+\begin{align*}
+\text{H1--H5:}\quad & \text{목표 어휘 비율(Mann-Whitney U)};\quad \text{언급 여부}(\chi^2),\ \text{Holm 보정}\\[-1pt]
+\text{M1:}\quad & \operatorname{logit} P(\text{재방문}_i) = \beta_0 + \mathbf{x}_i^{\top}\boldsymbol{\beta} + \delta_j \\[-1pt]
+\text{M2:}\quad & P(\text{키워드}_i \le k) = \bigl[1 + e^{-(\tau_k - \mathbf{x}_i^{\top}\boldsymbol{\beta} - \delta_j)}\bigr]^{-1},\quad k = 0,\dots,4 \\[-1pt]
+\text{M4:}\quad & \text{반응}_i \sim \text{NegBin}(\mu_i),\quad \ln \mu_i = \beta_0 + \mathbf{x}_i^{\top}\boldsymbol{\beta} + \gamma \ln(\text{경과일}_i) + \delta_j
+\end{align*}
+\vspace{-16pt}
+
+모든 모형은 작성자와 장소별로 리뷰 1건만 무작위 추출한 표본에서 재추정하며, 이 검정을 통과한 효과만
+강건한 것으로 보고한다. H1--H5의 사전은 602건의 문맥 표본을 수작업으로 코딩하여 검증하였고,
+정밀도 70\,\% 미만의 어휘는 민감도 분석에서 제외하였다.
+
+\sect{7. 예비 결과}
+\begin{center}\footnotesize
+\begin{tabular}{@{}l p{7.6cm} l@{}}
+\toprule
+ & \textbf{결과} & \textbf{상태} \\
+\midrule
+문화 간 비교 & 전체 감성에서는 두 집단 간 차이가 없음 & 모든 설정에서 일관 \\
+             & 내국인은 가족·동행자를 약 두 배 더 자주 언급 & 강건, 검증 후 유지 \\
+             & 계획성, 서비스, 즐거움, 관대한 평가 & 지지되지 않음 \\
+             & 교차언어 유사도 0.92--0.94 & 동일 측면을 논의 \\
+내국인 전용   & 재방문자는 활동량이 많고 표현은 더 절제됨 & 강건 \\
+             & 대기를 경험한 방문객은 재방문이 적음 & 강건 \\
+             & 참여도가 높은 작성자가 더 많은 키워드를 선택 & 두 모형에서 14개 일치 \\
+             & 반응 수는 작성자의 팔로워 수와 텍스트 길이를 따름 & 강건 \\
+\bottomrule
+\end{tabular}
+\end{center}
+작성자 단위 교차검증 기준: 재방문 AUC 약 0.79, 키워드 다양성 $R^2$ 약 0.50, 유용성 AUC 약 0.82.
+별점 모형은 설명력이 낮아 탐색적 결과로 보고한다.
+
+\sect{8. 시사점}
+관광 정책 측면에서 두 집단의 차이는 만족도가 아니라 \textbf{무엇을 이야기하는가}에 있으므로, 동일한
+관광지라도 집단별로 다른 메시지가 필요하다. 플랫폼 측면에서는 정보 다양성이 방문 유형보다 작성자의
+참여도에 좌우되므로, 다양한 키워드를 유도하는 기능은 경험이 많은 작성자에게 더 효과적일 것이다.
+분석 파이프라인은 전 과정이 재현 가능하도록 구성하였다.
+
+\sect{9. 토론 사항}
+\begin{itemize}[leftmargin=12pt, itemsep=1pt, topsep=1pt]
+  \item 플랫폼과 언어가 교락되어 있다. 내국인은 한 플랫폼, 외국인은 다른 플랫폼에서 수집되므로
+        차이가 문화가 아니라 플랫폼에서 비롯되었을 수 있다. 또한 영어는 링구아 프랑카이므로
+        외국인 집단은 문화적으로 이질적이다.
+  \item 결과는 상관관계이다. 이민영 외(2026)의 키워드 확장과 같은 시계열 변동이나 자연 실험이 없다.
+  \item 키워드는 모두 긍정 표현이므로 키워드 수는 정보 다양성과 표현된 호감도를 동시에 측정한다.
+        \textit{재방문} 역시 플랫폼이 인증한 방문 횟수이며 충성도와는 구별된다.
+\end{itemize}
+
+\end{document}

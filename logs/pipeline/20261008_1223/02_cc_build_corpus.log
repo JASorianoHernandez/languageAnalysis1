@@ -1,0 +1,17 @@
+Window: 2025-10-01 to 2026-09-30 (12 months); up to 100 most recent reviews per language and place
+
+경복궁: KO=100 of 216  EN=100 of 470
+창덕궁: KO=100 of 104  EN=100 of 163
+덕수궁: KO=100 of 169  EN=100 of 114
+북촌한옥마을: KO=46 of 46  EN=100 of 364
+인사동길: in window KO=17  EN=118  -> SKIPPED (needs >= 20 per language in the window)
+낙산공원: in window KO=65  EN=0  -> SKIPPED (needs >= 20 per language in the window)
+광장시장: in window KO=15  EN=226  -> SKIPPED (needs >= 20 per language in the window)
+홍대거리: in window KO=9  EN=186  -> SKIPPED (needs >= 20 per language in the window)
+국립중앙박물관: KO=100 of 382  EN=100 of 325
+N서울타워: KO=100 of 372  EN=100 of 357
+롯데월드: in window KO=19  EN=349  -> SKIPPED (needs >= 20 per language in the window)
+광안리해수욕장: KO=100 of 175  EN=64 of 64
+해운대해수욕장: KO=84 of 84  EN=100 of 128
+
+Corpus saved → data\corpus.csv  (1494 rows)

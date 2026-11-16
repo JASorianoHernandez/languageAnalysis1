@@ -1,0 +1,191 @@
+% Compile with xelatex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{Malgun Gothic}[Ligatures=TeX]
+
+\usepackage[top=2cm, bottom=2cm, left=2.2cm, right=2.2cm]{geometry}
+\usepackage{amsmath, amssymb, bm}
+\usepackage{array, booktabs}
+
+\newcommand{\logit}{\operatorname{logit}}
+\newcommand{\prob}{\operatorname{Pr}}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt}
+\pagestyle{empty}
+
+\begin{document}
+
+\begin{center}
+\large\textbf{Workshop paper — model equations preview}\\[2pt]
+\small \textit{For review before inserting into \texttt{report\_naver.tex}}
+\end{center}
+
+\hrulefill
+
+\section*{1. Common notation}
+
+\begin{tabular}{@{}l l@{}}
+\toprule
+$i$                 & index of review \\
+$j = 1, \ldots, 29$ & index of place (경복궁 = reference) \\
+$\Lambda(z) = \frac{1}{1 + e^{-z}}$ & logistic CDF \\
+$\delta_j$          & place fixed effect (28 dummies) \\
+$\varepsilon_i \sim \text{Logistic}(0, 1)$ & latent error \\
+SE                  & clustered by \texttt{user\_id} (reviewer) \\
+\bottomrule
+\end{tabular}
+
+\section*{2. Shared predictor vector \texorpdfstring{$X_{ij}$}{X} (18 variables)}
+
+\[
+X_{ij} = \bigl(\;\underbrace{V_{ij}}_{\text{visit context, 14}},\;
+                 \underbrace{R_{ij}}_{\text{reviewer, 2}},\;
+                 \underbrace{T_{ij}}_{\text{text, 2}}\;\bigr)
+\]
+
+\textbf{Visit context} $V_{ij}$ (14):
+\[
+V_{ij} = \bigl(\,\text{hasvisitinfo}_{ij},\;\text{waited}_{ij},\;\text{reserved}_{ij},\;
+                 \underbrace{c^{\mathrm{alone}}_{ij},\, c^{\mathrm{partner}}_{ij},\, c^{\mathrm{friend}}_{ij},\,
+                             c^{\mathrm{child}}_{ij},\, c^{\mathrm{family}}_{ij},\, c^{\mathrm{colleague}}_{ij}}_{\text{companion (6 dummies)}},
+\]
+\[
+\underbrace{p^{\mathrm{travel}}_{ij},\, p^{\mathrm{outing}}_{ij},\, p^{\mathrm{daily}}_{ij},\,
+            p^{\mathrm{date}}_{ij},\, p^{\mathrm{social}}_{ij}}_{\text{purpose (5 dummies)}}\;\bigr)
+\]
+
+\textbf{Reviewer} $R_{ij}$ (2):
+\[
+R_{ij} = \bigl(\,\ln(1 + \text{followers}_{ij}),\; \ln(1 + \text{reviews}_{ij})\,\bigr)
+\]
+
+\textbf{Text} $T_{ij}$ (2):
+\[
+T_{ij} = \bigl(\,\ln(\text{length}_{ij}),\; \text{sentiment}_{ij}\,\bigr)
+\]
+
+\hrulefill
+
+\section*{3. Model 1 — Binary Logistic (Revisit)}
+
+\textbf{Dependent variable:} $\text{Revisit}_{ij} = \mathbb{1}[\text{visitcount}_{ij} \geq 2]$
+
+\textbf{Compact form:}
+\[
+\prob(\text{Revisit}_{ij} = 1 \mid X_{ij}, \delta_j)
+    \;=\; \Lambda\!\left(\alpha + \bm{\beta}^{\top} X_{ij} + \delta_j\right)
+\]
+
+\textbf{Expanded:}
+\begin{align*}
+\logit \prob(\text{Revisit}_{ij} = 1) \;=\; &\; \alpha \\
+   &+ \beta_{1}\,\text{hasvisitinfo}_{ij}
+    + \beta_{2}\,\text{waited}_{ij}
+    + \beta_{3}\,\text{reserved}_{ij} \\
+   &+ \beta_{4}\,c^{\mathrm{alone}}_{ij}
+    + \beta_{5}\,c^{\mathrm{partner}}_{ij}
+    + \beta_{6}\,c^{\mathrm{friend}}_{ij} \\
+   &+ \beta_{7}\,c^{\mathrm{child}}_{ij}
+    + \beta_{8}\,c^{\mathrm{family}}_{ij}
+    + \beta_{9}\,c^{\mathrm{colleague}}_{ij} \\
+   &+ \beta_{10}\,p^{\mathrm{travel}}_{ij}
+    + \beta_{11}\,p^{\mathrm{outing}}_{ij}
+    + \beta_{12}\,p^{\mathrm{daily}}_{ij} \\
+   &+ \beta_{13}\,p^{\mathrm{date}}_{ij}
+    + \beta_{14}\,p^{\mathrm{social}}_{ij} \\
+   &+ \beta_{15}\,\ln(1 + \text{followers}_{ij})
+    + \beta_{16}\,\ln(1 + \text{reviews}_{ij}) \\
+   &+ \beta_{17}\,\ln(\text{length}_{ij})
+    + \beta_{18}\,\text{sentiment}_{ij}
+    + \delta_j
+\end{align*}
+
+\textit{Sample:} $N = 11{,}164$ reviews with text, 5{,}832 reviewers;
+revisit rate $= 15.3\%$; pseudo-$R^2 = 0.139$.
+
+\hrulefill
+
+\section*{4. Model 2 — Ordered Logistic (Rating)}
+
+\textbf{Observed dependent variable:} $Y_{ij} \in \{0, 1, 2\}$,
+\[
+Y_{ij} =
+\begin{cases}
+0 & \text{if rating}_{ij} \leq 4 \\
+1 & \text{if rating}_{ij} = 4.5 \\
+2 & \text{if rating}_{ij} = 5
+\end{cases}
+\]
+
+\textbf{Latent formulation:}
+\[
+Y^{*}_{ij} \;=\; \bm{\beta}^{\top} X_{ij} + \delta_j + \varepsilon_{ij},
+\qquad \varepsilon_{ij} \sim \text{Logistic}(0, 1)
+\]
+\[
+Y_{ij} =
+\begin{cases}
+0 & \text{if } Y^{*}_{ij} \leq \tau_{1} \\
+1 & \text{if } \tau_{1} < Y^{*}_{ij} \leq \tau_{2} \\
+2 & \text{if } Y^{*}_{ij} > \tau_{2}
+\end{cases}
+\]
+
+\textbf{Equivalent (cumulative CDF) form:}
+\[
+\prob(Y_{ij} \leq k \mid X_{ij}, \delta_j)
+   \;=\; \Lambda\!\left(\tau_{k+1} - \bm{\beta}^{\top} X_{ij} - \delta_j\right),
+   \quad k \in \{0, 1\}
+\]
+
+\textbf{Expanded (same $\bm{\beta}^{\top} X_{ij}$ as Model 1):}
+\begin{align*}
+Y^{*}_{ij} \;=\; &\; \beta_{1}\,\text{hasvisitinfo}_{ij}
+                  + \beta_{2}\,\text{waited}_{ij}
+                  + \beta_{3}\,\text{reserved}_{ij} \\
+   &+ \beta_{4}\,c^{\mathrm{alone}}_{ij}
+    + \beta_{5}\,c^{\mathrm{partner}}_{ij}
+    + \beta_{6}\,c^{\mathrm{friend}}_{ij} \\
+   &+ \beta_{7}\,c^{\mathrm{child}}_{ij}
+    + \beta_{8}\,c^{\mathrm{family}}_{ij}
+    + \beta_{9}\,c^{\mathrm{colleague}}_{ij} \\
+   &+ \beta_{10}\,p^{\mathrm{travel}}_{ij}
+    + \beta_{11}\,p^{\mathrm{outing}}_{ij}
+    + \beta_{12}\,p^{\mathrm{daily}}_{ij} \\
+   &+ \beta_{13}\,p^{\mathrm{date}}_{ij}
+    + \beta_{14}\,p^{\mathrm{social}}_{ij} \\
+   &+ \beta_{15}\,\ln(1 + \text{followers}_{ij})
+    + \beta_{16}\,\ln(1 + \text{reviews}_{ij}) \\
+   &+ \beta_{17}\,\ln(\text{length}_{ij})
+    + \beta_{18}\,\text{sentiment}_{ij}
+    + \delta_j + \varepsilon_{ij}
+\end{align*}
+
+\textit{Sample:} $N = 4{,}044$ reviews with text and rating, 2{,}172 reviewers;
+share of 5 stars $= 75.2\%$; McFadden $R^2 = 0.120$.
+
+\textbf{Note:} Model 2 has \emph{no} intercept $\alpha$. The constant is absorbed
+into the two thresholds $\tau_1, \tau_2$.
+
+\hrulefill
+
+\section*{5. Why the two models are comparable}
+
+\begin{itemize}
+\itemsep0pt
+\item Same predictor vector $\bm{\beta}^{\top} X_{ij}$ (18 variables, same names,
+      same coding).
+\item Same place fixed effects $\delta_j$ (28 dummies in each model).
+\item Same cluster level for SE (\texttt{user\_id}).
+\item Same link function (logistic).
+\end{itemize}
+
+What varies is only (i) the dependent variable (binary vs.\ ordinal 3-class)
+and (ii) the constant term (one $\alpha$ in M1 vs.\ two thresholds
+$\tau_1, \tau_2$ in M2). This is what allows the paper to interpret both
+models as parallel observable traces of a shared latent satisfaction
+construct.
+
+\end{document}

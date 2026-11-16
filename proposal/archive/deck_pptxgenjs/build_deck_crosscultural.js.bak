@@ -1,0 +1,966 @@
+/*
+ * Bilingual EN/KO proposal deck, built from the pipeline's result CSVs.
+ *
+ * Numbers are read from data/analysis/ at build time, so re-running this
+ * script after a pipeline run refreshes the deck:
+ *     node proposal/deck/build_deck.js
+ *
+ * Structure follows literature/IdeaTemplatepptx.pptx (Hoseo University):
+ * title -> 목차 -> numbered section dividers -> content -> 감사합니다.
+ */
+
+const fs = require("fs");
+const path = require("path");
+const pptxgen = require("pptxgenjs");
+// apply_theme.js resolves jszip relative to itself, so make this package's
+// node_modules visible to it before requiring.
+const SKILL_PPTX = path.join(
+    process.env.USERPROFILE || process.env.HOME,
+    ".claude/skills/synced/e0581bc6-3c76-46db-a07c-c4728ccb15d5_c2eab877-228e-40e7-8ef3-e87e2afc8873/pptx"
+);
+process.env.NODE_PATH = [path.join(__dirname, "node_modules"), process.env.NODE_PATH]
+    .filter(Boolean).join(path.delimiter);
+require("module").Module._initPaths();
+const { applyTheme } = require(path.join(SKILL_PPTX, "scripts", "apply_theme.js"));
+
+const ROOT = path.resolve(__dirname, "..", "..");
+const ANALYSIS = path.join(ROOT, "data", "analysis");
+const FIGURES = path.join(ANALYSIS, "figures");
+const OUT = path.join(__dirname, "proposal_deck.pptx");
+
+/* ------------------------------------------------------------------ *
+ * CSV helpers
+ * ------------------------------------------------------------------ */
+
+function readCsv(file) {
+    const full = path.isAbsolute(file) ? file : path.join(ANALYSIS, file);
+    if (!fs.existsSync(full)) {
+        console.warn(`  ! missing ${path.relative(ROOT, full)} - placeholders kept`);
+        return [];
+    }
+    const text = fs.readFileSync(full, "utf8").replace(/^﻿/, "");
+    const rows = [];
+    let field = "", row = [], quoted = false;
+    for (let i = 0; i < text.length; i++) {
+        const ch = text[i];
+        if (quoted) {
+            if (ch === '"') {
+                if (text[i + 1] === '"') { field += '"'; i++; } else { quoted = false; }
+            } else { field += ch; }
+        } else if (ch === '"') { quoted = true; }
+        else if (ch === ",") { row.push(field); field = ""; }
+        else if (ch === "\n") { row.push(field); rows.push(row); row = []; field = ""; }
+        else if (ch !== "\r") { field += ch; }
+    }
+    if (field.length || row.length) { row.push(field); rows.push(row); }
+    if (!rows.length) return [];
+    const head = rows.shift().map(h => h.trim());
+    return rows.filter(r => r.length === head.length)
+               .map(r => Object.fromEntries(head.map((h, i) => [h, r[i]])));
+}
+
+/** Same as readCsv, but silent when the file is not there yet. */
+function readCsvQuiet(file) {
+    const full = path.isAbsolute(file) ? file : path.join(ANALYSIS, file);
+    return fs.existsSync(full) ? readCsv(full) : [];
+}
+
+const num = v => { const n = parseFloat(v); return Number.isFinite(n) ? n : null; };
+const fmt = (v, d = 2) => (v === null || v === undefined ? "—" : v.toFixed(d));
+const pct = v => (v === null ? "—" : `${v.toFixed(1)}%`);
+
+function pval(p) {
+    if (p === null) return "—";
+    if (p < 0.001) return "< 0.001";
+    return p.toFixed(3);
+}
+
+function stars(p) {
+    if (p === null) return "";
+    if (p < 0.001) return "***";
+    if (p < 0.01) return "**";
+    if (p < 0.05) return "*";
+    return "n.s.";
+}
+
+/* ------------------------------------------------------------------ *
+ * Numbers pulled from the pipeline
+ * ------------------------------------------------------------------ */
+
+console.log("Reading results ...");
+
+const hyp = readCsv("hypothesis_tests.csv");
+const sens = readCsv("hypothesis_tests_sensitivity.csv");
+const sim = readCsv("crosslingual_similarity.csv");
+const sent = readCsv("summary_sentiment.csv");
+const metrics = readCsvQuiet(path.join(ANALYSIS, "naver", "model_metrics_cv.csv"));
+const kSel = readCsv("lda_k_selection.csv");
+
+// corpus size from the sentiment summary
+const corpusKo = sent.filter(r => r.language === "ko").reduce((a, r) => a + (num(r.count) || 0), 0);
+const corpusEn = sent.filter(r => r.language === "en").reduce((a, r) => a + (num(r.count) || 0), 0);
+const corpusPlaces = new Set(sent.map(r => r.place)).size;
+const meanKo = sent.filter(r => r.language === "ko").reduce((a, r, _, A) => a + (num(r.mean) || 0) / A.length, 0);
+const meanEn = sent.filter(r => r.language === "en").reduce((a, r, _, A) => a + (num(r.mean) || 0) / A.length, 0);
+
+// cross-lingual similarity range
+const simVals = sim.map(r => num(r.ko_en_sim)).filter(v => v !== null);
+const simLo = simVals.length ? Math.min(...simVals) : null;
+const simHi = simVals.length ? Math.max(...simVals) : null;
+
+// hypothesis rows, in H order
+const hRows = ["H1", "H2", "H3", "H4", "H5"].map(h => {
+    const r = hyp.find(x => x.hypothesis === h);
+    const s = sens.find(x => (x.hypothesis || x.H) === h);
+    if (!r) return null;
+    return {
+        h,
+        label: r.label,
+        dimension: r.dimension,
+        nKo: num(r.n_ko), nEn: num(r.n_en),
+        koPct: num(r.ko_presence_pct), enPct: num(r.en_presence_pct),
+        or: num(r.odds_ratio_ko_en),
+        p: num(r.presence_p_holm),
+        result: r.presence_result,
+        robust: s ? (s.robust || s.Robust || "") : ""
+    };
+}).filter(Boolean);
+
+const hTotalKo = hRows.length ? hRows[0].nKo : null;
+const hTotalEn = hRows.length ? hRows[0].nEn : null;
+
+// chosen K per language = highest mean coherence
+function bestK(lang) {
+    const rows = kSel.filter(r => r.language === lang);
+    if (!rows.length) return null;
+    return rows.reduce((b, r) => (num(r.coherence_mean) > num(b.coherence_mean) ? r : b)).k;
+}
+const kKo = bestK("ko"), kEn = bestK("en");
+
+// model metrics
+const metric = (model, name) => {
+    const r = metrics.find(x => x.model === model && x.metric === name);
+    return r ? num(r.value) : null;
+};
+const M = {
+    m1Auc: metric("Model 1 revisit", "AUC"),
+    m1xAuc: metric("Model 1x revisit, extended", "AUC"),
+    m1Brier: metric("Model 1 revisit", "Brier"),
+    m1Base: metric("Model 1 revisit", "Brier (base rate)"),
+    m2Rmse: metric("Model 2 keyword tags", "RMSE ordered logit"),
+    m2Base: metric("Model 2 keyword tags", "RMSE (predict mean)"),
+    m2xRmse: metric("Model 2x keyword tags, extended", "RMSE ordered logit"),
+    m4Auc: metric("Model 4b any reaction", "AUC"),
+    m4Brier: metric("Model 4b any reaction", "Brier"),
+    m4BrierBase: metric("Model 4b any reaction", "Brier (base rate)")
+};
+
+// Figures that will not change name between runs.
+const FIG = {
+    hypotheses: path.join(FIGURES, "13_hypothesis_tests.png"),
+    kSelection: path.join(FIGURES, "14_lda_k_selection.png"),
+    similarity: path.join(FIGURES, "08_crosslingual_sim.png"),
+    sentiment: path.join(FIGURES, "01_sentiment_bar.png"),
+    topicsKo: path.join(FIGURES, "04_topic_dist_ko.png"),
+    geo: path.join(FIGURES, "11_geo_bubble_seoul.png")
+};
+const fig = k => (fs.existsSync(FIG[k]) ? FIG[k] : null);
+
+/* Figures that still come from the older LLM run; flag them so the deck
+ * never silently shows stale ABSA output as if it were current. */
+const PENDING = "LLM steps (07) not yet re-run on this corpus";
+
+console.log(`  corpus      ${corpusKo} KO + ${corpusEn} EN across ${corpusPlaces} places`);
+console.log(`  hypotheses  ${hRows.length} rows, n = ${hTotalKo} KO / ${hTotalEn} EN`);
+console.log(`  similarity  ${fmt(simLo)}-${fmt(simHi)}`);
+console.log(`  LDA K       ko=${kKo} en=${kEn}`);
+console.log(`  M1 AUC      ${fmt(M.m1Auc, 3)}`);
+
+/* ------------------------------------------------------------------ *
+ * Theme
+ * ------------------------------------------------------------------ */
+
+const THEME = {
+    name: "Hoseo Reviews",
+    headFontFace: "Malgun Gothic",
+    bodyFontFace: "Malgun Gothic",
+    colors: {
+        dk1: "1A2B32",   // body text
+        lt1: "FFFFFF",
+        dk2: "2C4A54",   // divider / title backgrounds
+        lt2: "F4F1EC",   // warm panel
+        accent1: "55736D",  // sage  - domestic / Korean
+        accent2: "C96F4A",  // terracotta - foreign / English
+        accent3: "88A88E",
+        accent4: "FFB09D",
+        accent5: "44546A",
+        accent6: "A8BFC4",
+        hlink: "0563C1",
+        folHlink: "954F72"
+    }
+};
+
+const pres = new pptxgen();
+pres.layout = "LAYOUT_WIDE";          // 13.333 x 7.5 in, matches the template
+pres.theme = { headFontFace: THEME.headFontFace, bodyFontFace: THEME.bodyFontFace };
+pres.author = "Jorge Adan Soriano Hernandez";
+pres.title = "What Domestic and Foreign Tourists Write";
+pres.subject = "Research proposal - cross-cultural analysis of Korean attraction reviews";
+
+const C = pres.SchemeColor;
+const W = 13.333, H = 7.5;
+const MARGIN = 0.62;
+const BODY_W = W - MARGIN * 2;
+
+/* ------------------------------------------------------------------ *
+ * Layouts
+ * ------------------------------------------------------------------ */
+
+pres.defineSlideMaster({
+    title: "TITLE",
+    background: { color: C.text2 },
+    objects: [
+        { rect: { x: 0, y: 0, w: 0.22, h: H, fill: { color: C.accent1 } } },
+        { rect: { x: 0, y: H - 0.1, w: W, h: 0.1, fill: { color: C.accent2 } } },
+        {
+            placeholder: {
+                options: {
+                    name: "course", type: "body", x: 0.95, y: 0.85, w: 11.6, h: 0.35,
+                    fontSize: 13, color: C.accent4, charSpacing: 2, margin: 0
+                }, text: ""
+            }
+        },
+        {
+            placeholder: {
+                options: {
+                    name: "title", type: "title", x: 0.95, y: 1.55, w: 11.6, h: 1.9,
+                    fontSize: 36, bold: true, color: C.background1, valign: "top", margin: 0
+                }, text: ""
+            }
+        },
+        {
+            placeholder: {
+                options: {
+                    name: "body", type: "body", x: 0.95, y: 3.6, w: 11.6, h: 1.0,
+                    fontSize: 16, color: C.accent6, margin: 0
+                }, text: ""
+            }
+        }
+    ]
+});
+
+pres.defineSlideMaster({
+    title: "DIVIDER",
+    background: { color: C.text2 },
+    objects: [
+        { rect: { x: 0, y: 0, w: 0.22, h: H, fill: { color: C.accent2 } } },
+        {
+            placeholder: {
+                options: {
+                    name: "title", type: "title", x: 1.4, y: 3.0, w: 10.6, h: 1.4,
+                    fontSize: 34, bold: true, color: C.background1, valign: "middle", margin: 0
+                }, text: ""
+            }
+        }
+    ],
+    slideNumber: { x: 12.75, y: 6.95, color: "7E9AA2", fontSize: 11 }
+});
+
+pres.defineSlideMaster({
+    title: "CONTENT",
+    background: { color: C.background1 },
+    objects: [
+        { rect: { x: 0, y: 0, w: W, h: 0.075, fill: { color: C.accent1 } } },
+        {
+            placeholder: {
+                options: {
+                    name: "title", type: "title", x: MARGIN, y: 0.34, w: BODY_W, h: 0.52,
+                    fontSize: 23, bold: true, color: C.text2, valign: "middle", margin: 0
+                }, text: ""
+            }
+        },
+        { line: { x: MARGIN, y: 0.95, w: 1.5, h: 0, line: { color: C.accent2, width: 2.5 } } }
+    ],
+    slideNumber: { x: 12.75, y: 6.95, color: "9AA7AB", fontSize: 11 }
+});
+
+pres.defineSlideMaster({
+    title: "CLOSING",
+    background: { color: C.text2 },
+    objects: [
+        { rect: { x: 0, y: 0, w: W, h: 0.09, fill: { color: C.accent1 } } },
+        { rect: { x: 0, y: H - 0.09, w: W, h: 0.09, fill: { color: C.accent2 } } }
+    ]
+});
+
+/* ------------------------------------------------------------------ *
+ * Reusable pieces
+ * ------------------------------------------------------------------ */
+
+const TITLE_FS = 23;
+
+function contentSlide(section, titleEn, titleKo) {
+    const s = pres.addSlide({ masterName: "CONTENT", sectionTitle: section });
+    s.addText(
+        [
+            { text: titleEn, options: { bold: true } },
+            { text: `  ${titleKo}`, options: { bold: false, color: "6E8288", fontSize: TITLE_FS - 4 } }
+        ],
+        { placeholder: "title" }
+    );
+    return s;
+}
+
+function divider(section, n, en, ko) {
+    const s = pres.addSlide({ masterName: "DIVIDER", sectionTitle: section });
+    s.addText(String(n), {
+        x: 1.35, y: 1.85, w: 3.2, h: 1.4, isTextBox: true, margin: 0,
+        fontSize: 96, bold: true, color: "3E6670", objectName: "divider-number"
+    });
+    s.addText([
+        { text: en, options: { bold: true } },
+        { text: `\n${ko}`, options: { bold: false, fontSize: 24, color: "A8BFC4" } }
+    ], { placeholder: "title" });
+    s.addShape(pres.ShapeType.line, {
+        x: 1.4, y: 4.6, w: 2.2, h: 0, line: { color: THEME.colors.accent2, width: 3 },
+        objectName: "divider-rule"
+    });
+    return s;
+}
+
+/** Caption under a figure or table, template style: "그림 1. ..." */
+function caption(slide, text, x, y, w, align = "center") {
+    slide.addText(text, {
+        x, y, w, h: 0.28, isTextBox: true, margin: 0,
+        fontSize: 11, italic: true, color: "7B888C", align,
+        objectName: "caption"
+    });
+}
+
+/** Asterisked source note, bottom-left, as in the template. */
+function source(slide, text) {
+    slide.addText(`* ${text}`, {
+        x: MARGIN, y: 6.95, w: 11.4, h: 0.3, isTextBox: true, margin: 0,
+        fontSize: 9, color: "9AA7AB", objectName: "source-note"
+    });
+}
+
+/** Big-number callout tile. */
+function stat(slide, x, y, w, value, labelEn, labelKo, color) {
+    slide.addShape(pres.ShapeType.roundRect, {
+        x, y, w, h: 1.5, rectRadius: 0.08,
+        fill: { color: THEME.colors.lt2 }, line: { color: color, width: 1.5 },
+        objectName: `stat-${labelEn}`
+    });
+    slide.addText(value, {
+        x: x + 0.15, y: y + 0.17, w: w - 0.3, h: 0.62, isTextBox: true, margin: 0,
+        fontSize: 32, bold: true, color, align: "center", fontFace: THEME.headFontFace
+    });
+    slide.addText(`${labelEn}\n${labelKo}`, {
+        x: x + 0.15, y: y + 0.82, w: w - 0.3, h: 0.55, isTextBox: true, margin: 0,
+        fontSize: 11, color: C.text1, align: "center", lineSpacingMultiple: 1.05
+    });
+}
+
+const TABLE_HEAD = {
+    fill: { color: THEME.colors.dk2 }, color: "FFFFFF", bold: true, fontSize: 12
+};
+function tableOpts(extra = {}) {
+    return Object.assign({
+        x: MARGIN, w: BODY_W, border: { type: "solid", pt: 0.5, color: "D8D2C9" },
+        fontSize: 11, color: THEME.colors.dk1, valign: "middle",
+        margin: [4, 7, 4, 7], autoPage: false
+    }, extra);
+}
+
+/* ------------------------------------------------------------------ *
+ * 1. Title
+ * ------------------------------------------------------------------ */
+
+pres.addSection({ title: "Title" });
+{
+    const s = pres.addSlide({ masterName: "TITLE", sectionTitle: "Title" });
+    s.addText("RESEARCH PROPOSAL  연구 계획서", { placeholder: "course" });
+    s.addText([
+        { text: "What Domestic and Foreign Tourists Write", options: { breakLine: true } },
+        { text: "내국인과 외국인은 무엇을 쓰는가", options: { fontSize: 28, color: "A8BFC4" } }
+    ], { placeholder: "title" });
+    s.addText([
+        { text: "Cultural Distance and Information Behaviour in Korean Attraction Reviews", options: { breakLine: true } },
+        { text: "한국 관광지 리뷰에 나타난 문화적 거리와 정보 행동", options: { fontSize: 14 } }
+    ], { placeholder: "body" });
+
+    s.addShape(pres.ShapeType.line, {
+        x: 0.95, y: 5.0, w: 2.2, h: 0, line: { color: THEME.colors.accent2, width: 3 },
+        objectName: "title-rule"
+    });
+    s.addText([
+        { text: "Jorge Adan Soriano Hernandez", options: { bold: true, breakLine: true } },
+        { text: "소리아노 에르난데스 호르헤 아단", options: { fontSize: 13, color: "A8BFC4", breakLine: true } },
+        { text: "Department of Data Science, Hoseo University", options: { fontSize: 13, color: "A8BFC4", breakLine: true } },
+        { text: "호서대학교 데이터사이언스학과", options: { fontSize: 13, color: "A8BFC4" } }
+    ], {
+        x: 0.95, y: 5.3, w: 7.5, h: 1.6, isTextBox: true, margin: 0,
+        fontSize: 15, color: "FFFFFF", lineSpacingMultiple: 1.12, objectName: "author-block"
+    });
+    s.addText("October 2026\n2026년 10월", {
+        x: 9.3, y: 5.3, w: 3.2, h: 0.9, isTextBox: true, margin: 0,
+        fontSize: 13, color: "A8BFC4", align: "right", objectName: "date-block"
+    });
+    s.addNotes("Preview of work in progress. The cross-cultural corpus and the Korean-only panel are both built; LLM aspect extraction is still being re-run.");
+}
+
+/* ------------------------------------------------------------------ *
+ * 2. Table of contents
+ * ------------------------------------------------------------------ */
+
+{
+    const s = contentSlide("Title", "Table of Contents", "목차");
+    const toc = [
+        ["1", "Introduction", "서론"],
+        ["2", "Motivation & Problem Statement", "동기 및 문제 정의"],
+        ["3", "Related Work", "관련 연구"],
+        ["4", "Methodology", "방법론"],
+        ["5", "Results", "결과"],
+        ["6", "Conclusion", "결론"]
+    ];
+    toc.forEach(([n, en, ko], i) => {
+        const y = 1.45 + i * 0.84;
+        s.addShape(pres.ShapeType.ellipse, {
+            x: MARGIN + 0.1, y, w: 0.56, h: 0.56,
+            fill: { color: THEME.colors.accent1 }, objectName: `toc-dot-${n}`
+        });
+        s.addText(n, {
+            x: MARGIN + 0.1, y: y + 0.03, w: 0.56, h: 0.5, isTextBox: true, margin: 0,
+            fontSize: 17, bold: true, color: "FFFFFF", align: "center"
+        });
+        s.addText([
+            { text: en, options: { bold: true } },
+            { text: `   ${ko}`, options: { bold: false, color: "6E8288", fontSize: 15 } }
+        ], {
+            x: MARGIN + 0.95, y: y + 0.04, w: 10.5, h: 0.5, isTextBox: true, margin: 0,
+            fontSize: 18, color: C.text1, valign: "middle"
+        });
+    });
+}
+
+/* ------------------------------------------------------------------ *
+ * 3-4. Introduction
+ * ------------------------------------------------------------------ */
+
+pres.addSection({ title: "1. Introduction" });
+divider("1. Introduction", 1, "Introduction", "서론");
+
+{
+    const s = contentSlide("1. Introduction", "Introduction", "서론");
+    s.addText([
+        { text: "Online reviews are the main source travellers consult before choosing a destination.", options: { bullet: true, breakLine: true } },
+        { text: "온라인 리뷰는 여행자가 목적지를 선택하기 전에 참고하는 핵심 정보원이다.", options: { bullet: true, color: "6E8288", fontSize: 13, breakLine: true } },
+        { text: "In Korea the two audiences sit on two different platforms: domestic visitors review on Naver Place, foreign visitors on Google Maps.", options: { bullet: true, breakLine: true } },
+        { text: "한국에서 두 집단은 서로 다른 플랫폼을 사용한다. 내국인은 네이버 플레이스, 외국인은 구글 지도에 리뷰를 남긴다.", options: { bullet: true, color: "6E8288", fontSize: 13, breakLine: true } },
+        { text: "This study asks two questions about the same attractions: do the groups describe them differently, and what drives the information behaviour of the reviewers themselves?", options: { bullet: true, breakLine: true } },
+        { text: "본 연구는 동일한 관광지를 대상으로 두 가지를 묻는다. 두 집단은 같은 장소를 다르게 서술하는가, 그리고 리뷰 작성자의 정보 행동은 무엇에 의해 결정되는가.", options: { bullet: true, color: "6E8288", fontSize: 13 } }
+    ], {
+        x: MARGIN, y: 1.25, w: BODY_W, h: 2.9, isTextBox: true, margin: 0,
+        fontSize: 15, color: C.text1, paraSpaceAfter: 7, lineSpacingMultiple: 1.05,
+        objectName: "intro-bullets"
+    });
+
+    const statW = 3.75, gap = 0.52;
+    stat(s, MARGIN, 4.55, statW, "2", "Platforms compared", "비교 플랫폼", THEME.colors.accent5);
+    stat(s, MARGIN + statW + gap, 4.55, statW, String(corpusPlaces || 12), "Attractions, paired corpus", "쌍 코퍼스 관광지", THEME.colors.accent1);
+    stat(s, MARGIN + (statW + gap) * 2, 4.55, statW,
+        (corpusKo + corpusEn).toLocaleString("en-US"), "Paired reviews, KO + EN", "쌍 리뷰 (한국어+영어)", THEME.colors.accent2);
+}
+
+/* ------------------------------------------------------------------ *
+ * 5-6. Motivation and problem statement
+ * ------------------------------------------------------------------ */
+
+pres.addSection({ title: "2. Motivation" });
+divider("2. Motivation", 2, "Motivation & Problem Statement", "동기 및 문제 정의");
+
+{
+    const s = contentSlide("2. Motivation", "Motivation & Problem Statement", "동기 및 문제 정의");
+
+    s.addText([
+        { text: "Why this matters", options: { bold: true } },
+        { text: "   왜 중요한가?", options: { bold: false, fontSize: 13, color: "6E8288" } }
+    ], {
+        x: MARGIN, y: 1.22, w: BODY_W, h: 0.36, isTextBox: true, margin: 0,
+        fontSize: 16, color: THEME.colors.accent1, objectName: "why-head"
+    });
+    s.addText([
+        { text: "Destination managers address both audiences with one message, although the two may value different things.", options: { bullet: true, breakLine: true } },
+        { text: "관광 정책은 두 집단에 동일한 메시지를 전달하지만, 두 집단이 중요하게 여기는 바는 다를 수 있다.", options: { bullet: true, fontSize: 12.5, color: "6E8288", breakLine: true } },
+        { text: "Platforms rank and recommend reviews without knowing what makes a reviewer informative or engaged.", options: { bullet: true, breakLine: true } },
+        { text: "플랫폼은 어떤 작성자가 더 유익한 리뷰를 쓰는지 모른 채 리뷰를 정렬하고 추천한다.", options: { bullet: true, fontSize: 12.5, color: "6E8288" } }
+    ], {
+        x: MARGIN, y: 1.62, w: BODY_W, h: 1.75, isTextBox: true, margin: 0,
+        fontSize: 14, color: C.text1, paraSpaceAfter: 6, objectName: "why-bullets"
+    });
+
+    s.addShape(pres.ShapeType.roundRect, {
+        x: MARGIN, y: 3.6, w: BODY_W, h: 2.55, rectRadius: 0.08,
+        fill: { color: THEME.colors.lt2 }, line: { color: THEME.colors.accent2, width: 1.5 },
+        objectName: "problem-box"
+    });
+    s.addText([
+        { text: "Problem Statement", options: { bold: true } },
+        { text: "   문제 정의", options: { bold: false, fontSize: 13, color: "6E8288" } }
+    ], {
+        x: MARGIN + 0.3, y: 3.8, w: BODY_W - 0.6, h: 0.36, isTextBox: true, margin: 0,
+        fontSize: 16, color: THEME.colors.accent2
+    });
+    s.addText([
+        { text: "Cross-cultural destination research has relied on surveys or on a single language. Chen et al. (2024) compared Chinese- and English-speaking tourists in Xiamen with LDA and BERT, without controlling for review length or repeat authorship. Lee et al. (2026) separated information ", options: {} },
+        { text: "diversity", options: { bold: true } },
+        { text: " from ", options: {} },
+        { text: "quantity", options: { bold: true } },
+        { text: ", yet their panel is aggregated by business and week, so individual review content stays invisible. Neither uses the visit metadata the platform already collects: companion, purpose, waiting time.", options: { breakLine: true } },
+        { text: "기존 연구는 설문 또는 단일 언어 자료에 의존했고, 리뷰 길이와 반복 작성을 통제하지 않았으며, 자료가 업체·주 단위로 집계되어 개별 리뷰의 내용과 방문 맥락은 관측되지 않는다.", options: { fontSize: 12.5, color: "6E8288" } }
+    ], {
+        x: MARGIN + 0.3, y: 4.22, w: BODY_W - 0.6, h: 1.8, isTextBox: true, margin: 0,
+        fontSize: 13.5, color: C.text1, lineSpacingMultiple: 1.08, paraSpaceAfter: 6
+    });
+}
+
+/* ------------------------------------------------------------------ *
+ * 7-8. Related work
+ * ------------------------------------------------------------------ */
+
+pres.addSection({ title: "3. Related Work" });
+divider("3. Related Work", 3, "Related Work", "관련 연구");
+
+{
+    const s = contentSlide("3. Related Work", "Related Work", "관련 연구");
+    const rows = [
+        [
+            { text: "Study  연구", options: TABLE_HEAD },
+            { text: "Data  자료", options: TABLE_HEAD },
+            { text: "Method  방법", options: TABLE_HEAD },
+            { text: "What is missing  한계", options: TABLE_HEAD }
+        ],
+        ["Chen et al. (2024)", "Xiamen attractions;\nChinese vs English reviews", "LDA + BERT sentiment",
+         "No control for review length or\nrepeat reviewers"],
+        ["Lee et al. (2026)", "Platform review panel", "Information diversity vs quantity",
+         "Aggregated by business-week;\nreview content not observed"],
+        ["Hofstede (2001, 2010)", "Survey-based cultural indices", "Cultural dimensions theory",
+         "A framework, never applied to\nreview text at review level"],
+        [
+            { text: "This study  본 연구", options: { bold: true, color: THEME.colors.accent2 } },
+            { text: "Naver Place + Google Maps,\nKorean attractions", options: { bold: true } },
+            { text: "Dictionaries + LDA + ABSA,\nreview-level regressions", options: { bold: true } },
+            { text: "Review level, visit metadata,\nplace fixed effects", options: { bold: true } }
+        ]
+    ];
+    s.addTable(rows, tableOpts({
+        y: 1.35, colW: [2.3, 3.0, 3.3, 3.49], rowH: 0.62,
+        fill: { color: "FFFFFF" }
+    }));
+    caption(s, "표 1. 선행 연구 비교.", MARGIN, 5.6, BODY_W, "left");
+    s.addText([
+        { text: "The gap: ", options: { bold: true, color: THEME.colors.accent2 } },
+        { text: "no study compares the two audiences at the review level while controlling for who wrote the review, how long it is, and which place it describes.", options: {} }
+    ], {
+        x: MARGIN, y: 6.05, w: BODY_W, h: 0.6, isTextBox: true, margin: 0,
+        fontSize: 13.5, color: C.text1, objectName: "gap-note"
+    });
+}
+
+/* ------------------------------------------------------------------ *
+ * 9-13. Methodology
+ * ------------------------------------------------------------------ */
+
+pres.addSection({ title: "4. Methodology" });
+divider("4. Methodology", 4, "Methodology", "방법론");
+
+{
+    const s = contentSlide("4. Methodology", "Pipeline", "분석 파이프라인");
+    const steps = [
+        ["Place selection", "관광지 선정", "Yanolja Research Top 500 crossed with KTO visitor\nvolume, inside typological strata"],
+        ["Collection", "수집", "Naver Place and Google Maps scrapers;\none common time window for both languages"],
+        ["Preprocessing", "전처리", "Deduplication, language check, Korean and\nEnglish tokenisation"],
+        ["Text analytics", "텍스트 분석", "Sentiment, LDA with K chosen by coherence and\nperplexity, aspect extraction"],
+        ["Hypothesis tests", "가설 검정", "Hofstede H1-H5; Mann-Whitney U and chi-square,\nHolm-corrected, dictionaries validated"],
+        ["Regression models", "회귀 모형", "Revisit, keyword diversity, reactions;\nplace fixed effects, clustered SE"]
+    ];
+    const cols = 3, cw = 3.95, ch = 2.1, gx = 0.37, gy = 0.42;
+    steps.forEach(([en, ko, desc], i) => {
+        const cx = MARGIN + (i % cols) * (cw + gx);
+        const cy = 1.35 + Math.floor(i / cols) * (ch + gy);
+        const accent = i < 3 ? THEME.colors.accent1 : THEME.colors.accent5;
+        s.addShape(pres.ShapeType.roundRect, {
+            x: cx, y: cy, w: cw, h: ch, rectRadius: 0.06,
+            fill: { color: "FFFFFF" }, line: { color: "D8D2C9", width: 1 },
+            objectName: `step-box-${i + 1}`
+        });
+        s.addShape(pres.ShapeType.rect, {
+            x: cx, y: cy, w: cw, h: 0.07, fill: { color: accent }, objectName: `step-rule-${i + 1}`
+        });
+        s.addShape(pres.ShapeType.ellipse, {
+            x: cx + 0.22, y: cy + 0.27, w: 0.46, h: 0.46,
+            fill: { color: accent }, objectName: `step-dot-${i + 1}`
+        });
+        s.addText(String(i + 1), {
+            x: cx + 0.22, y: cy + 0.3, w: 0.46, h: 0.4, isTextBox: true, margin: 0,
+            fontSize: 15, bold: true, color: "FFFFFF", align: "center"
+        });
+        s.addText([
+            { text: en, options: { bold: true, breakLine: true } },
+            { text: ko, options: { fontSize: 11.5, color: "6E8288" } }
+        ], {
+            x: cx + 0.8, y: cy + 0.24, w: cw - 1.0, h: 0.62, isTextBox: true, margin: 0,
+            fontSize: 14, color: THEME.colors.dk2
+        });
+        s.addText(desc, {
+            x: cx + 0.22, y: cy + 0.95, w: cw - 0.44, h: 1.0, isTextBox: true, margin: 0,
+            fontSize: 11.5, color: C.text1, lineSpacingMultiple: 1.05
+        });
+    });
+    caption(s, "그림 1. 분석 파이프라인.", MARGIN, 6.35, BODY_W, "left");
+    source(s, "Every step is scripted and re-runnable end to end (run_pipeline.py).");
+}
+
+{
+    const s = contentSlide("4. Methodology", "Setting and Data", "연구 맥락과 자료");
+    const rows = [
+        [
+            { text: "Corpus  코퍼스", options: TABLE_HEAD },
+            { text: "Source  출처", options: TABLE_HEAD },
+            { text: "Size  규모", options: TABLE_HEAD },
+            { text: "Used for  용도", options: TABLE_HEAD }
+        ],
+        ["Cross-cultural\n문화 간 비교", "Naver Place + Google Maps",
+         `${corpusKo.toLocaleString("en-US")} KO + ${corpusEn.toLocaleString("en-US")} EN\n${corpusPlaces} attractions, common window`,
+         "H1-H5, topics, sentiment"],
+        ["Domestic-only\n내국인 전용", "Naver Place",
+         "12,537 reviews, 9,843 with text\n7,230 reviewers, 21 attractions",
+         "Review-level regressions M1-M4"]
+    ];
+    s.addTable(rows, tableOpts({
+        y: 1.35, colW: [2.6, 3.0, 3.8, 2.69], rowH: 0.82, fill: { color: "FFFFFF" }
+    }));
+    caption(s, "표 2. 자료 구성.", MARGIN, 3.65, BODY_W, "left");
+
+    s.addText([
+        { text: "Place selection  관광지 선정", options: { bold: true, color: THEME.colors.accent1, breakLine: true } },
+        { text: "Attractions were selected inside typological strata — palaces, traditional quarters, markets, entertainment, museums, modern landmarks, nature — combining reputational prominence (Yanolja Research Top 500) with visitor volume by origin (Korea Tourism Organization). Only places with enough reviews in both languages enter the paired corpus.", options: { breakLine: true } },
+        { text: "관광지는 유형별 층(궁궐, 전통 지구, 시장, 유흥, 박물관, 현대 랜드마크, 자연)으로 나눈 뒤, 사회적 평판(야놀자 리서치 Top 500)과 내·외국인별 입장객 통계(한국관광공사)를 함께 고려하여 선정하였다.", options: { fontSize: 12.5, color: "6E8288" } }
+    ], {
+        x: MARGIN, y: 4.15, w: BODY_W, h: 2.0, isTextBox: true, margin: 0,
+        fontSize: 13.5, color: C.text1, lineSpacingMultiple: 1.08, paraSpaceAfter: 6,
+        objectName: "selection-note"
+    });
+    source(s, "Yanolja Research Top 500 (2024); Korea Tourism Organization visitor statistics.");
+}
+
+{
+    const s = contentSlide("4. Methodology", "Variables", "변수");
+    const rows = [
+        [
+            { text: "Role  구분", options: TABLE_HEAD },
+            { text: "Variables  변수", options: TABLE_HEAD }
+        ],
+        [
+            { text: "Dependent\n종속변수", options: { bold: true, color: THEME.colors.accent2 } },
+            "Revisit (second or later visit) · Keyword tags (information diversity, 0-5) · Star rating · Reactions (users who marked the review helpful)"
+        ],
+        [
+            { text: "Independent\n독립변수", options: { bold: true, color: THEME.colors.accent1 } },
+            "Companion (alone, partner, friends, children, family) · Purpose (travel, outing, daily life, date) · Waited · Reserved · Sentiment (-1 to 1) · Tag themes (visual, crowding, facilities, access, family, food, water leisure)"
+        ],
+        [
+            { text: "Control\n통제변수", options: { bold: true, color: THEME.colors.accent5 } },
+            "ln text length · ln review age · reviewer's review count and followers · verification (receipt, reservation) · season · weekend · place fixed effects"
+        ]
+    ];
+    s.addTable(rows, tableOpts({
+        y: 1.35, colW: [2.2, 9.89], rowH: 0.95, fill: { color: "FFFFFF" }, fontSize: 12
+    }));
+    caption(s, "표 3. 변수 구성.", MARGIN, 5.0, BODY_W, "left");
+
+    s.addText([
+        { text: "Controls answer the obvious objection. ", options: { bold: true } },
+        { text: "A longer review mentions more of everything, an older review has had more time to collect reactions, and a prolific reviewer behaves differently from a one-time visitor. Holding these fixed is what separates a cultural or behavioural effect from an artefact of who wrote the review and when.", options: {} }
+    ], {
+        x: MARGIN, y: 5.45, w: BODY_W, h: 1.2, isTextBox: true, margin: 0,
+        fontSize: 13, color: C.text1, lineSpacingMultiple: 1.08, objectName: "controls-note"
+    });
+}
+
+{
+    const s = contentSlide("4. Methodology", "Models", "분석 모형");
+
+    s.addText([
+        { text: "Group comparison for the cross-cultural corpus; regressions at the review level for the domestic corpus, with place fixed effects δ", options: {} },
+        { text: "j", options: { subscript: true } },
+        { text: " and standard errors clustered by reviewer, since the same person often writes several reviews.", options: {} }
+    ], {
+        x: MARGIN, y: 1.22, w: BODY_W, h: 0.55, isTextBox: true, margin: 0,
+        fontSize: 13, color: "6E8288", objectName: "models-intro"
+    });
+
+    const models = [
+        ["H1-H5", "Group comparison\n집단 간 검정",
+         "Share of target tokens (Mann-Whitney U)\nMentions / does not mention (chi-square), Holm-corrected",
+         THEME.colors.accent5],
+        ["M1", "Revisit\n재방문",
+         "logit P(Revisit) = β₀ + x′β + δⱼ\nWho comes back to the same place",
+         THEME.colors.accent1],
+        ["M2", "Keyword tags\n키워드 수",
+         "Ordered logit over 0-5 tags, proportional odds\nWho contributes more information",
+         THEME.colors.accent2],
+        ["M4", "Reactions\n반응 수",
+         "Negative binomial with ln(review age) offset\nWhich reviews other users find helpful",
+         THEME.colors.accent5]
+    ];
+    models.forEach(([tag, name, body, color], i) => {
+        const y = 1.88 + i * 1.22;
+        s.addShape(pres.ShapeType.roundRect, {
+            x: MARGIN, y, w: BODY_W, h: 1.08, rectRadius: 0.06,
+            fill: { color: "FFFFFF" }, line: { color: "D8D2C9", width: 1 },
+            objectName: `model-box-${tag}`
+        });
+        s.addShape(pres.ShapeType.rect, {
+            x: MARGIN, y, w: 0.08, h: 1.08, fill: { color }, objectName: `model-rule-${tag}`
+        });
+        s.addText(tag, {
+            x: MARGIN + 0.25, y: y + 0.3, w: 1.0, h: 0.5, isTextBox: true, margin: 0,
+            fontSize: 19, bold: true, color, fontFace: THEME.headFontFace
+        });
+        s.addText(name, {
+            x: MARGIN + 1.3, y: y + 0.2, w: 2.5, h: 0.7, isTextBox: true, margin: 0,
+            fontSize: 13.5, bold: true, color: THEME.colors.dk2, valign: "middle",
+            lineSpacingMultiple: 1.05
+        });
+        s.addText(body, {
+            x: MARGIN + 3.95, y: y + 0.2, w: BODY_W - 4.2, h: 0.7, isTextBox: true, margin: 0,
+            fontSize: 12, color: C.text1, valign: "middle", lineSpacingMultiple: 1.08
+        });
+    });
+    source(s, "Each model is re-estimated keeping one random review per reviewer and per place; only effects that survive are reported as robust.");
+}
+
+/* ------------------------------------------------------------------ *
+ * 14-17. Results
+ * ------------------------------------------------------------------ */
+
+pres.addSection({ title: "5. Results" });
+divider("5. Results", 5, "Results", "결과");
+
+{
+    const s = contentSlide("5. Results", "Cross-cultural hypotheses", "문화 간 가설 검정");
+
+    const rows = [[
+        { text: "H", options: TABLE_HEAD },
+        { text: "Dimension  문화 차원", options: TABLE_HEAD },
+        { text: "Topic  주제", options: TABLE_HEAD },
+        { text: "KO %", options: TABLE_HEAD },
+        { text: "EN %", options: TABLE_HEAD },
+        { text: "OR", options: TABLE_HEAD },
+        { text: "p (Holm)", options: TABLE_HEAD },
+        { text: "Robust", options: TABLE_HEAD }
+    ]];
+    hRows.forEach(r => {
+        const supported = /Supported/i.test(r.result) && !/Not/i.test(r.result);
+        const isRobust = /^y/i.test(r.robust);
+        const strong = supported && isRobust;
+        const o = strong ? { bold: true, color: THEME.colors.accent2 } : {};
+        rows.push([
+            { text: r.h, options: Object.assign({ bold: true }, strong ? { color: THEME.colors.accent2 } : {}) },
+            { text: r.dimension, options: Object.assign({}, o) },
+            { text: r.label, options: Object.assign({}, o) },
+            { text: pct(r.koPct), options: Object.assign({ align: "right" }, o) },
+            { text: pct(r.enPct), options: Object.assign({ align: "right" }, o) },
+            { text: fmt(r.or), options: Object.assign({ align: "right" }, o) },
+            { text: `${pval(r.p)} ${stars(r.p)}`.trim(), options: Object.assign({ align: "right" }, o) },
+            { text: isRobust ? "yes" : "no", options: Object.assign({ align: "center" }, o) }
+        ]);
+    });
+    s.addTable(rows, tableOpts({
+        y: 1.3, colW: [0.55, 2.35, 2.5, 1.0, 1.0, 0.85, 1.55, 2.29], rowH: 0.42,
+        fill: { color: "FFFFFF" }, fontSize: 11.5
+    }));
+    caption(s, `표 4. 출현 여부 기준 가설 검정 (카이제곱, Holm 보정; n = ${hTotalKo} KO / ${hTotalEn} EN).`,
+        MARGIN, 4.05, BODY_W, "left");
+
+    s.addShape(pres.ShapeType.roundRect, {
+        x: MARGIN, y: 4.5, w: 6.0, h: 1.95, rectRadius: 0.06,
+        fill: { color: THEME.colors.lt2 }, line: { color: THEME.colors.accent2, width: 1.5 },
+        objectName: "h2-callout"
+    });
+    const h2 = hRows.find(r => r.h === "H2");
+    s.addText([
+        { text: "H2  Family & companions", options: { bold: true, color: THEME.colors.accent2, breakLine: true } },
+        { text: h2 ? `Korean reviewers mention family and companions ${pct(h2.koPct)} of the time against ${pct(h2.enPct)} for foreign reviewers — an odds ratio of ${fmt(h2.or)}, p ${pval(h2.p)}.` : "—", options: { breakLine: true } },
+        { text: "Significant in both the presence and the intensity test, and unchanged when ambiguous dictionary terms are dropped. This is the project's most robust finding.", options: { breakLine: true } },
+        { text: "출현 여부와 강도 검정 모두에서 유의하며, 민감도 분석에서도 유지된다.", options: { fontSize: 11.5, color: "6E8288" } }
+    ], {
+        x: MARGIN + 0.22, y: 4.68, w: 5.56, h: 1.6, isTextBox: true, margin: 0,
+        fontSize: 12, color: C.text1, lineSpacingMultiple: 1.06, paraSpaceAfter: 4
+    });
+
+    s.addText([
+        { text: "Reading the rest", options: { bold: true, color: THEME.colors.accent1, breakLine: true } },
+        { text: "H1 (planning) is significant in the raw test but does not survive the sensitivity run: the Korean word 시간 covers both 'opening hours' and 'a good time'.", options: { bullet: true, breakLine: true } },
+        { text: "H3, H4 and H5 are not supported; H5 runs opposite to the prediction.", options: { bullet: true, breakLine: true } },
+        { text: `Overall sentiment is close across groups (KO ${fmt(meanKo)} vs EN ${fmt(meanEn)}); the contrast is in subject matter, not satisfaction.`, options: { bullet: true } }
+    ], {
+        x: MARGIN + 6.35, y: 4.5, w: BODY_W - 6.35, h: 1.95, isTextBox: true, margin: 0,
+        fontSize: 12, color: C.text1, lineSpacingMultiple: 1.06, paraSpaceAfter: 5,
+        objectName: "other-h-note"
+    });
+    source(s, "Dictionaries behind H1-H5 were validated by manually coding keyword-in-context samples; terms below 70% precision are dropped in the sensitivity run.");
+    s.addNotes("H2 is the headline. H1 is the cautionary tale: it shows why dictionary validation matters.");
+}
+
+{
+    const s = contentSlide("5. Results", "Topics and cross-lingual comparability", "주제 분석과 교차언어 비교");
+    const kFig = fig("kSelection"), simFig = fig("similarity");
+
+    if (kFig) {
+        s.addImage({ path: kFig, x: MARGIN, y: 1.3, w: 6.0, h: 3.6, sizing: { type: "contain", w: 6.0, h: 3.6 }, objectName: "fig-k" });
+        caption(s, `그림 2. LDA 토픽 수 선택 (일관성·혼란도).`, MARGIN, 4.95, 6.0);
+    }
+    if (simFig) {
+        s.addImage({ path: simFig, x: MARGIN + 6.35, y: 1.3, w: 5.74, h: 3.6, sizing: { type: "contain", w: 5.74, h: 3.6 }, objectName: "fig-sim" });
+        caption(s, "그림 3. 관광지별 한국어-영어 교차언어 유사도.", MARGIN + 6.35, 4.95, 5.74);
+    }
+
+    s.addText([
+        { text: `K was chosen from mean c_v coherence across seeds${kKo && kEn ? ` (KO K = ${kKo}, EN K = ${kEn})` : ""}, not by eye, and perplexity is reported alongside it.`, options: { bullet: true, breakLine: true } },
+        { text: `Cross-lingual similarity of the two topic profiles stays between ${fmt(simLo)} and ${fmt(simHi)} across places: the two groups are describing the same attractions, which is what makes the dictionary contrasts interpretable.`, options: { bullet: true, breakLine: true } },
+        { text: `교차언어 유사도는 ${fmt(simLo)}~${fmt(simHi)} 범위로, 두 집단이 동일한 대상을 서술하고 있음을 확인한다.`, options: { bullet: true, fontSize: 11.5, color: "6E8288" } }
+    ], {
+        x: MARGIN, y: 5.35, w: BODY_W, h: 1.4, isTextBox: true, margin: 0,
+        fontSize: 12.5, color: C.text1, paraSpaceAfter: 5, lineSpacingMultiple: 1.06,
+        objectName: "topics-note"
+    });
+}
+
+{
+    const s = contentSlide("5. Results", "Domestic reviewers: what the models recover", "내국인 리뷰: 모형 결과");
+    const rows = [
+        [
+            { text: "Model  모형", options: TABLE_HEAD },
+            { text: "Outcome  종속변수", options: TABLE_HEAD },
+            { text: "Out-of-sample  교차검증", options: TABLE_HEAD },
+            { text: "Baseline  기준", options: TABLE_HEAD },
+            { text: "Reading  해석", options: TABLE_HEAD }
+        ],
+        ["M1  Revisit", "Second or later visit",
+         `AUC ${fmt(M.m1Auc, 3)}  (extended ${fmt(M.m1xAuc, 3)})`,
+         `Brier ${fmt(M.m1Brier, 3)} vs ${fmt(M.m1Base, 3)}`,
+         "Revisitors are highly active reviewers\nwho write less effusively"],
+        ["M2  Keyword tags", "Information diversity, 0-5",
+         `RMSE ${fmt(M.m2Rmse, 3)}  (extended ${fmt(M.m2xRmse, 3)})`,
+         `RMSE ${fmt(M.m2Base, 3)} predicting the mean`,
+         "Engaged reviewers choose more\nkeyword tags"],
+        ["M4b  Any reaction", "Review received a reaction",
+         `AUC ${fmt(M.m4Auc, 3)}`,
+         `Brier ${fmt(M.m4Brier, 3)} vs ${fmt(M.m4BrierBase, 3)}`,
+         "Reactions follow the reviewer's\naudience and text length"],
+        [
+            { text: "M3  Star rating", options: { color: "8A9499" } },
+            { text: "1-5 stars", options: { color: "8A9499" } },
+            { text: "weak", options: { color: "8A9499" } },
+            { text: "—", options: { color: "8A9499" } },
+            { text: "Reported as exploratory only", options: { color: "8A9499", italic: true } }
+        ]
+    ];
+    s.addTable(rows, tableOpts({
+        y: 1.3, colW: [2.1, 2.3, 2.75, 2.5, 2.44], rowH: 0.72,
+        fill: { color: "FFFFFF" }, fontSize: 11
+    }));
+    caption(s, "표 5. 모형 성능 (작성자 단위 GroupKFold 교차검증).", MARGIN, 5.15, BODY_W, "left");
+
+    s.addText([
+        { text: "Cross-validation is grouped by reviewer", options: { bold: true } },
+        { text: ", so no reviewer appears in both the training and the test fold. Every model is also re-estimated on one random review per reviewer and per place; the effects reported above are the ones that survive that check.", options: { breakLine: true } },
+        { text: "교차검증은 작성자 단위로 분할하여, 동일 작성자가 학습과 검증에 함께 포함되지 않도록 하였다.", options: { fontSize: 11.5, color: "6E8288" } }
+    ], {
+        x: MARGIN, y: 5.6, w: BODY_W, h: 1.1, isTextBox: true, margin: 0,
+        fontSize: 12.5, color: C.text1, lineSpacingMultiple: 1.06, paraSpaceAfter: 5,
+        objectName: "cv-note"
+    });
+}
+
+/* ------------------------------------------------------------------ *
+ * 18-19. Conclusion
+ * ------------------------------------------------------------------ */
+
+pres.addSection({ title: "6. Conclusion" });
+divider("6. Conclusion", 6, "Conclusion", "결론");
+
+{
+    const s = contentSlide("6. Conclusion", "Conclusion", "결론");
+    const blocks = [
+        ["What we find", "주요 결과", THEME.colors.accent1, [
+            "The two groups rate Korean attractions almost identically, but write about different things: family and companions are the one dimension that separates them robustly.",
+            "Among domestic reviewers, information diversity tracks engagement with the platform rather than the type of visit."
+        ]],
+        ["Limitations", "한계", THEME.colors.accent5, [
+            "Platform and language are confounded: domestic reviews come from one platform and foreign ones from another, so a difference may reflect the platform as much as the culture.",
+            "Results are associations; there is no time variation or natural experiment comparable to the keyword expansion Lee et al. (2026) exploit.",
+            "English is a lingua franca, so the foreign group is culturally heterogeneous."
+        ]],
+        ["Next steps", "향후 계획", THEME.colors.accent2, [
+            "Finish the LLM aspect extraction on the current corpus and validate it against blind manual coding (Cohen's kappa).",
+            "Extend the paired corpus to the remaining attractions and report the window-length sensitivity.",
+            "Test whether the family contrast holds inside place type, not only across places."
+        ]]
+    ];
+    let y = 1.25;
+    blocks.forEach(([en, ko, color, items], i) => {
+        const h = 0.42 + items.length * 0.46;
+        s.addShape(pres.ShapeType.rect, {
+            x: MARGIN, y, w: 0.07, h, fill: { color }, objectName: `concl-rule-${i}`
+        });
+        s.addText([
+            { text: en, options: { bold: true } },
+            { text: `   ${ko}`, options: { bold: false, fontSize: 12, color: "6E8288" } }
+        ], {
+            x: MARGIN + 0.28, y, w: BODY_W - 0.28, h: 0.36, isTextBox: true, margin: 0,
+            fontSize: 15, color
+        });
+        s.addText(items.map((t, j) => ({
+            text: t, options: { bullet: true, breakLine: j < items.length - 1 }
+        })), {
+            x: MARGIN + 0.28, y: y + 0.38, w: BODY_W - 0.4, h: items.length * 0.46, isTextBox: true,
+            margin: 0, fontSize: 12.5, color: C.text1, paraSpaceAfter: 4, lineSpacingMultiple: 1.05
+        });
+        y += h + 0.22;
+    });
+    source(s, `Work in progress: ${PENDING}.`);
+}
+
+/* ------------------------------------------------------------------ *
+ * 20. Closing
+ * ------------------------------------------------------------------ */
+
+pres.addSection({ title: "Closing" });
+{
+    const s = pres.addSlide({ masterName: "CLOSING", sectionTitle: "Closing" });
+    s.addText([
+        { text: "Thank you", options: { bold: true, breakLine: true } },
+        { text: "감사합니다", options: { fontSize: 30, color: "A8BFC4" } }
+    ], {
+        x: 1.0, y: 2.8, w: 11.3, h: 1.9, isTextBox: true, margin: 0,
+        fontSize: 44, color: "FFFFFF", align: "center", objectName: "thanks"
+    });
+    s.addText("Jorge Adan Soriano Hernandez  ·  Department of Data Science, Hoseo University  ·  October 2026", {
+        x: 1.0, y: 4.9, w: 11.3, h: 0.4, isTextBox: true, margin: 0,
+        fontSize: 13, color: "7E9AA2", align: "center", objectName: "thanks-footer"
+    });
+}
+
+/* ------------------------------------------------------------------ *
+ * Write
+ * ------------------------------------------------------------------ */
+
+(async () => {
+    await pres.writeFile({ fileName: OUT });
+    await applyTheme(OUT, THEME);
+    console.log(`\nWrote ${path.relative(ROOT, OUT)}`);
+})().catch(err => { console.error(err); process.exit(1); });

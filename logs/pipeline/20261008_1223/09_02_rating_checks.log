@@ -1,0 +1,35 @@
+C:\Users\crono\anaconda3\Lib\site-packages\statsmodels\base\model.py:607: ConvergenceWarning: Maximum Likelihood optimization failed to converge. Check mle_retvals
+  warnings.warn("Maximum Likelihood optimization failed to "
+1. SENTIMENT vs STAR RATING (Spearman rho; AUC = sentiment separating <=3 from 4-5 stars)
+  corpus EN: Spearman rho                      n = 764      0.270   p = 0.0000  
+  corpus EN: AUC low rating (n low = 56)       n = 764      0.742     
+  corpus KO: Spearman rho                      n = 483      0.328   p = 0.0000  
+  corpus KO: AUC low rating (n low = 32)       n = 483      0.896     
+  Korean-only dataset: Spearman rho            n = 4048     0.277   p = 0.0000  
+  Korean-only dataset: AUC low rating (n low = 210) n = 4048     0.897     
+
+2. H5 WITH STAR RATINGS (cross-cultural corpus, rated reviews only)
+  mean rating KO                               n = 483      4.660     
+  mean rating EN                               n = 764      4.660     
+  Mann-Whitney U (H1: KO > EN, one-sided)      n = 1247  182683.500   p = 0.6524  
+  5-star share KO 73.9% vs EN 76.8% (chi2)     n = 1247     1.371   p = 0.8792  one-sided
+  low ratings (<=3) KO 6.6% vs EN 7.3%         n = 1247    -0.007     
+   Adjusted for place (rated reviews; place fixed effects, robust SE):
+  KO - EN rating difference, place-adjusted (OLS) n = 1247    -0.004   p = 0.5332  one-sided
+  OR 5 stars KO vs EN, place-adjusted (logit)  n = 1247     0.796   p = 0.9460  one-sided
+
+   Missingness: Korean corpus reviews with vs without a rating
+  KO rated: 483 / 730                          n = 730      0.662     
+  sentiment rated 0.557 vs unrated 0.599       n = 730   60389.000   p = 0.7843  two-sided
+   rated share by place (KO): {'N서울타워': '100%', '경복궁': '76%', '광안리해수욕장': '64%', '국립중앙박물관': '100%', '덕수궁': '58%', '북촌한옥마을': '33%', '창덕궁': '25%', '해운대해수욕장': '54%'}
+
+3. KOREAN-ONLY DATASET: RATINGS OF REVISITORS vs FIRST-TIME VISITORS
+  mean rating revisitors                       n = 979      4.780     
+  mean rating first-time                       n = 3673     4.656     
+  Mann-Whitney U (two-sided)                   n = 4652  1960596.000   p = 0.0000  
+   Adjusted for place, SE clustered by reviewer:
+  rating difference revisit - first (OLS)      n = 4652     0.087   p = 0.0143  
+  OR 5 stars revisit vs first (logit)          n = 4652     1.489   p = 0.0091  
+   rated share: 32.3% of 14401 reviews (revisitors 31.2%, first-time 32.6%)
+
+Saved: data\analysis\rating_checks.csv

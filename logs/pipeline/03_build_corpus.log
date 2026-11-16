@@ -1,0 +1,15 @@
+경복궁: KO=30  EN=30
+창덕궁: KO=30  EN=30
+덕수궁: KO=30  EN=30
+북촌한옥마을: KO=30  EN=30
+인사동길: KO=30  EN=30
+낙산공원: KO=30  EN=0  -> SKIPPED (needs >= 20 per language; scrape the missing platform)
+광장시장: KO=30  EN=30
+홍대거리: KO=22  EN=30
+국립중앙박물관: KO=30  EN=30
+N서울타워: KO=30  EN=30
+롯데월드: KO=30  EN=30
+광안리해수욕장: KO=30  EN=30
+해운대해수욕장: KO=30  EN=30
+
+Corpus saved → data\corpus.csv  (712 rows)

@@ -1,0 +1,115 @@
+Corpus: 472 reviews, 8 places
+
+════════════════════════════════════════════════════════════
+PART 1 — ABSA  (Qwen2-0.5B-Instruct)
+════════════════════════════════════════════════════════════
+  Loading Qwen/Qwen2-0.5B-Instruct...
+  494M params loaded on cuda:0
+  1/472  (3s elapsed, ~1429s remaining)
+  20/472  (31s elapsed, ~707s remaining)
+  40/472  (57s elapsed, ~614s remaining)
+  60/472  (82s elapsed, ~565s remaining)
+  80/472  (110s elapsed, ~541s remaining)
+  100/472  (137s elapsed, ~511s remaining)
+  120/472  (162s elapsed, ~477s remaining)
+  140/472  (192s elapsed, ~455s remaining)
+  160/472  (219s elapsed, ~427s remaining)
+  180/472  (243s elapsed, ~395s remaining)
+  200/472  (273s elapsed, ~371s remaining)
+  220/472  (298s elapsed, ~342s remaining)
+  240/472  (322s elapsed, ~311s remaining)
+  260/472  (358s elapsed, ~292s remaining)
+  280/472  (383s elapsed, ~263s remaining)
+  300/472  (411s elapsed, ~236s remaining)
+  320/472  (440s elapsed, ~209s remaining)
+  340/472  (465s elapsed, ~180s remaining)
+  360/472  (494s elapsed, ~154s remaining)
+  380/472  (525s elapsed, ~127s remaining)
+  400/472  (553s elapsed, ~100s remaining)
+  420/472  (585s elapsed, ~72s remaining)
+  440/472  (613s elapsed, ~45s remaining)
+  460/472  (638s elapsed, ~17s remaining)
+
+Saved: absa_results.csv  (472 rows)
+Saved: absa_summary.csv
+Saved: 09_absa_heatmap_ko.png
+Saved: 09_absa_heatmap_en.png
+Saved: 10_absa_radar.png
+
+════════════════════════════════════════════════════════════
+PART 2 — Narrative summaries  (Qwen2.5-7B-Instruct)
+════════════════════════════════════════════════════════════
+  Loading Qwen/Qwen2.5-7B-Instruct...
+  7616M params loaded on cuda:0
+
+  [경복궁 / ko]  (1144s)
+  The main themes emphasized in the reviews include the historical significance of 경복궁 (Gyeongbokgung), its architectural beauty, and the cultural experiences such as traditional ceremonies and wearing ...
+
+  [경복궁 / en]  (915s)
+  The main themes emphasized in the reviews include the historical significance, architectural beauty, and cultural experiences offered by Gyeongbokgung Palace. The overall sentiment is overwhelmingly p...
+
+  [창덕궁 / ko]  (1364s)
+  The main themes emphasized in the reviews include the historical significance and architectural beauty of 창덕궁, its natural integration with the surrounding environment, and the personal experiences of...
+
+  [창덕궁 / en]  (2085s)
+  The main themes emphasized in the reviews include the historical significance, architectural beauty, and the expansive size of 창덕궁 (Changdeokgung Palace). The overall sentiment is overwhelmingly posit...
+
+  [북촌한옥마을 / ko]  (2221s)
+  The main themes emphasized include the historical significance of the area, its transformation into a tourist destination, and the coexistence of traditional and modern elements. The overall sentiment...
+
+  [북촌한옥마을 / en]  (1637s)
+  The main themes emphasized in the reviews include historical significance, traditional architecture, and the crowded nature of the area. The overall sentiment is predominantly positive, with many visi...
+
+  [광장시장 / ko]  (1874s)
+  The main themes emphasized in the reviews include the diverse and abundant food options, the high number of foreign tourists, and the market's long history and vibrant atmosphere. The overall sentimen...
+
+  [광장시장 / en]  (1817s)
+  The main themes emphasized in the reviews include the market's authenticity, variety of traditional Korean foods, and its status as a must-visit destination. The overall sentiment is predominantly pos...
+
+  [홍대거리 / ko]  (1298s)
+  The main themes emphasized in the reviews include the vibrant atmosphere, diverse entertainment options such as street performances and pop-up stores, and a wide range of dining and shopping choices. ...
+
+  [홍대거리 / en]  (675s)
+  The main themes emphasized include shopping, street performances, and a vibrant youth culture. The overall sentiment is predominantly positive, with tourists finding the area lively, fun, and full of ...
+
+  [롯데월드 / ko]  (1966s)
+  The main themes emphasized in the reviews include the diverse attractions, especially the pop-up stores and events like the Maple Story theme and Christmas market, as well as the scenic beauty of the ...
+
+  [롯데월드 / en]  (2306s)
+  The main themes emphasized in the reviews include the variety of attractions, the presence of both indoor and outdoor areas, and the popularity of the park, particularly among families and children. T...
+
+  [광안리해수욕장 / ko]  (2165s)
+  The main themes emphasized in the reviews include the scenic beauty of both daytime and nighttime views, particularly the iconic Guang'an Bridge and its surroundings, as well as the various events and...
+
+  [광안리해수욕장 / en]  (2185s)
+  The main themes emphasized in the reviews include the beauty and relaxation offered by Gwangalli Beach, its popularity and crowdedness, especially during weekends, and the presence of various activiti...
+
+  [해운대해수욕장 / ko]  (2547s)
+  The main themes emphasized include the vibrant atmosphere, diverse activities, and scenic beauty of 해운대해수욕장, with particular mentions of its large scale, variety of facilities, and international appea...
+
+  [해운대해수욕장 / en]  (1846s)
+  The main themes emphasized in the reviews include the cleanliness and beauty of the beach, its popularity and vibrant atmosphere, and the variety of activities available. The overall sentiment is over...
+
+Saved: llm_summaries.json
+Updated: analysis_data.json
+
+── Done ──
+  01_sentiment_bar.png
+  02_sentiment_heatmap.png
+  03a_wordcloud_ko.png
+  03b_wordcloud_en.png
+  04_topic_dist_en.png
+  04_topic_dist_ko.png
+  05_ttr_bar.png
+  06_tfidf_contrast.png
+  07_motivations_stacked.png
+  08_crosslingual_sim.png
+  09_absa_heatmap_en.png
+  09_absa_heatmap_ko.png
+  10_absa_radar.png
+  11_geo_bubble_busan.png
+  11_geo_bubble_seoul.png
+  12_sentiment_scatter.png
+  13_hypothesis_tests.png
+  14_lda_k_selection.png
+  bubble_map.html

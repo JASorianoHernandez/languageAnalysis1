@@ -1,0 +1,14 @@
+Loaded 1494 reviews, 8 places
+  Seoul: ['Gyeongbokgung', 'Changdeokgung', 'Deoksugung', 'Bukchon Village', 'Natl. Museum', 'N Seoul Tower']
+  Busan: ['Gwangalli Beach', 'Haeundae Beach']
+
+  Saved interactive map: data\analysis\figures\bubble_map.html
+
+Generating static figures...
+  Saved: 11_geo_bubble_seoul.png
+  Saved: 11_geo_bubble_busan.png
+
+Generating sentiment comparison bubble chart...
+  Saved: 12_sentiment_scatter.png
+
+── Done ──

@@ -1,0 +1,56 @@
+Reviews: 1487  (KO=724, EN=763)
+
+============================================================================================
+TEST A  Intensity: % target tokens per review (H5: sentiment score), Mann-Whitney U
+--------------------------------------------------------------------------------------------
+H   Dimension              Label                         KO      EN   p(Holm)      r   Result
+--------------------------------------------------------------------------------------------
+H1  Uncertainty avoidance  Planning & logistics       2.168   2.756    0.7015   0.02   Not supported n.s.
+H2  Collectivism           Family & companions        1.148   0.302    0.0000   0.13   Supported ***
+H3  Power distance         Service & staff            0.371   0.500    1.0000  -0.02   Not supported n.s.
+H4  Indulgence             Hedonic enjoyment          0.641   0.963    1.0000  -0.01   Not supported n.s.
+H5  Collectivism           Favourable evaluation      0.574   0.678    1.0000  -0.06   Not supported n.s.
+============================================================================================
+
+============================================================================================
+TEST B  Presence: % reviews mentioning the topic (H5: % positive reviews), chi-square
+--------------------------------------------------------------------------------------------
+H   Dimension              Label                      KO %   EN %   chi2  p(Holm)   phi    OR   Result
+--------------------------------------------------------------------------------------------
+H1  Uncertainty avoidance  Planning & logistics       41.7   35.0   7.10   0.0154  0.07  1.33   Supported *
+H2  Collectivism           Family & companions        19.2    6.2  57.71   0.0000  0.20  3.59   Supported ***
+H3  Power distance         Service & staff             5.5    7.5   2.31   1.0000  0.04  0.73   Not supported n.s.
+H4  Indulgence             Hedonic enjoyment          17.0   15.7   0.43   1.0000  0.02  1.10   Not supported n.s.
+H5  Collectivism           Favourable evaluation      82.5   91.2  25.13   1.0000  0.13  0.45   Opposite direction n.s.
+============================================================================================
+OR = odds ratio KO vs EN (>1: Korean reviews more likely to mention the topic)
+
+Most frequent matched terms (check the dictionaries):
+  H1 KO: 시간(181), 입장(60), 입장료(39), 예약(35), 주차(26), 줄(25)
+  H1 EN: time(102), hours(42), admission(39), entrance(30), entry(29), times(23)
+  H2 KO: 아이(72), 가족(39), 친구(35), 데이트(21), 부모(9), 연인(8)
+  H2 EN: kids(10), family(8), children(8), families(8), groups(4), couple(3)
+  H3 KO: 안내(17), 해설(16), 친절(14), 직원(10), 해설사(6), 서비스(3)
+  H3 EN: guided(18), staff(15), guide(15), friendly(10), service(4), helpful(2)
+  H4 KO: 즐기(62), 즐겁(24), 재밌(19), 놀(12), 행복(11), 재미(8)
+  H4 EN: enjoy(58), enjoyed(37), fun(16), enjoyable(13), enjoying(11), playing(5)
+
+============================================================================================
+SENSITIVITY  Test B with vs without ambiguous terms
+Source: manual coding: precision < 70% with >= 5 reviewed examples
+Excluded: H1 KO: 시간, 버스, 주말; H1 EN: time, times; H3 EN: friendly
+--------------------------------------------------------------------------------------------
+H   Label                      Full KO/EN %  p(Holm)   Reduced KO/EN %  p(Holm)   Robust
+--------------------------------------------------------------------------------------------
+H1  Planning & logistics          41.7/35.0   0.0154         27.1/27.0   1.0000   NO
+H2  Family & companions            19.2/6.2   0.0000          19.2/6.2   0.0000   yes
+H3  Service & staff                 5.5/7.5   1.0000           5.5/6.8   1.0000   yes
+H4  Hedonic enjoyment             17.0/15.7   1.0000         17.0/15.7   1.0000   yes
+H5  Favourable evaluation         82.5/91.2   1.0000         82.5/91.2   1.0000   yes
+============================================================================================
+
+Saved: data\analysis\hypothesis_tests.csv
+Saved: data\analysis\hypothesis_tests_sensitivity.csv
+Saved: data\analysis\hypothesis_by_place.csv
+Saved: data\analysis\hypothesis_matched_terms.csv
+Saved: data\analysis\figures\13_hypothesis_tests.png

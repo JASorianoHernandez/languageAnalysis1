@@ -1,0 +1,413 @@
+Reviews: 12537 (with text 9843, keyword-only 2694)  |  reviewers: 7230  |  reference place: N서울타워
+VIF range: 1.07 to 2.53
+
+============================================================================================
+MODEL 1  P(revisit) | logistic, place FE, SE clustered by reviewer | N = 9843 (5409 reviewers), revisit = 23.5%, pseudo-R2 = 0.200
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Visit info provided                0.112    1.12      [0.71, 1.76]   0.6276 
+Waited to enter                   -0.695    0.50      [0.35, 0.72]   0.0002 ***
+Reservation                        0.213    1.24      [0.92, 1.66]   0.1543 
+With: alone                        0.515    1.67      [1.17, 2.39]   0.0044 **
+With: partner/spouse              -0.310    0.73      [0.52, 1.03]   0.0773 .
+With: friends                     -0.562    0.57      [0.41, 0.80]   0.0013 **
+With: children                    -0.200    0.82      [0.61, 1.10]   0.1883 
+With: parents/relatives           -0.000    1.00      [0.69, 1.45]   0.9994 
+With: colleagues                  -0.231    0.79      [0.54, 1.17]   0.2441 
+Purpose: travel                   -0.547    0.58      [0.43, 0.78]   0.0003 ***
+Purpose: outing                    0.278    1.32      [1.03, 1.70]   0.0315 *
+Purpose: daily life                0.079    1.08      [0.83, 1.41]   0.5563 
+Purpose: date                     -0.339    0.71      [0.52, 0.97]   0.0297 *
+Purpose: socializing               0.138    1.15      [0.81, 1.62]   0.4315 
+Sentiment (-1 to 1)               -0.384    0.68      [0.58, 0.80]   0.0000 ***
+Keyword tags (0-5)                 0.142    1.15      [1.07, 1.24]   0.0002 ***
+ln(text length)                    0.272    1.31      [1.15, 1.51]   0.0001 ***
+ln(1 + reviewer's reviews)         0.428    1.53      [1.42, 1.66]   0.0000 ***
+============================================================================================
+  Model 1s: dropped places with no variation in revisit: 홍대거리 (18 reviews)
+
+MODEL 1s  sensitivity: one random review per reviewer x place | N = 6583, revisit = 12.2%, pseudo-R2 = 0.102
+Variable                          OR all       p   OR one       p   same conclusion (p<.05)
+Visit info provided                 1.12   0.628     1.38   0.059   yes
+Waited to enter                     0.50   0.000     0.51   0.000   yes
+Reservation                         1.24   0.154     1.20   0.199   yes
+With: alone                         1.67   0.004     1.73   0.000   yes
+With: partner/spouse                0.73   0.077     0.60   0.000   NO
+With: friends                       0.57   0.001     0.70   0.044   yes
+With: children                      0.82   0.188     0.99   0.939   yes
+With: parents/relatives             1.00   0.999     1.02   0.909   yes
+With: colleagues                    0.79   0.244     0.84   0.358   yes
+Purpose: travel                     0.58   0.000     0.65   0.001   yes
+Purpose: outing                     1.32   0.031     1.14   0.249   NO
+Purpose: daily life                 1.08   0.556     1.03   0.830   yes
+Purpose: date                       0.71   0.030     0.93   0.667   NO
+Purpose: socializing                1.15   0.431     0.96   0.853   yes
+Sentiment (-1 to 1)                 0.68   0.000     0.78   0.007   yes
+Keyword tags (0-5)                  1.15   0.000     1.09   0.006   yes
+ln(text length)                     1.31   0.000     1.06   0.205   NO
+ln(1 + reviewer's reviews)          1.53   0.000     1.46   0.000   yes
+  Model 1b: dropped historical_cultural_neg (only 3 reviews)
+  Model 1b: dropped visual_photo_neg (only 3 reviews)
+
+============================================================================================
+MODEL 1b  P(revisit) + ABSA aspects | clustered SE | N = 1173, pseudo-R2 = 0.187 (Model 1: 0.200)
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Visit info provided                0.158    1.17      [0.55, 2.48]   0.6803 
+Waited to enter                   -0.322    0.72      [0.32, 1.63]   0.4377 
+Reservation                        0.508    1.66      [0.66, 4.20]   0.2824 
+With: alone                        0.297    1.35      [0.73, 2.47]   0.3370 
+With: partner/spouse              -0.684    0.50      [0.27, 0.93]   0.0290 *
+With: friends                     -0.920    0.40      [0.20, 0.78]   0.0072 **
+With: children                    -0.196    0.82      [0.48, 1.40]   0.4710 
+With: parents/relatives            0.325    1.38      [0.65, 2.97]   0.4037 
+With: colleagues                  -0.181    0.83      [0.38, 1.84]   0.6542 
+Purpose: travel                   -0.445    0.64      [0.38, 1.07]   0.0877 .
+Purpose: outing                    0.470    1.60      [0.96, 2.66]   0.0696 .
+Purpose: daily life                0.270    1.31      [0.78, 2.20]   0.3059 
+Purpose: date                     -0.224    0.80      [0.38, 1.69]   0.5562 
+Purpose: socializing               0.024    1.02      [0.49, 2.16]   0.9496 
+Sentiment (-1 to 1)               -0.347    0.71      [0.49, 1.02]   0.0660 .
+Keyword tags (0-5)                 0.166    1.18      [0.98, 1.43]   0.0879 .
+ln(text length)                    0.318    1.37      [1.07, 1.77]   0.0128 *
+ln(1 + reviewer's reviews)         0.487    1.63      [1.32, 2.01]   0.0000 ***
+ABSA history + (n=548)             0.540    1.72      [0.96, 3.07]   0.0693 .
+ABSA accessibility + (n=173)      -0.552    0.58      [0.37, 0.89]   0.0135 *
+ABSA accessibility - (n=18)       -0.318    0.73      [0.20, 2.63]   0.6279 
+ABSA crowding + (n=116)            0.028    1.03      [0.63, 1.69]   0.9113 
+ABSA crowding - (n=212)            0.286    1.33      [0.89, 1.99]   0.1638 
+ABSA food + (n=111)                0.173    1.19      [0.66, 2.14]   0.5660 
+ABSA food - (n=16)                 0.652    1.92      [0.41, 9.01]   0.4086 
+ABSA visual + (n=842)              0.202    1.22      [0.82, 1.83]   0.3204 
+============================================================================================
+
+============================================================================================
+MODEL 2  Keyword tags (0-5), all reviews | ordered logit, clustered SE | N = 12537, mean tags = 3.05
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Revisitor (2+ visits)              0.483    1.62      [1.33, 1.97]   0.0000 ***
+Wrote text (15+ chars)             1.480    4.39      [3.77, 5.12]   0.0000 ***
+Visit info provided                0.779    2.18      [1.70, 2.80]   0.0000 ***
+Waited to enter                   -0.285    0.75      [0.64, 0.88]   0.0005 ***
+Reservation                       -0.228    0.80      [0.68, 0.93]   0.0045 **
+With: alone                        0.470    1.60      [1.22, 2.10]   0.0008 ***
+With: partner/spouse               0.213    1.24      [1.05, 1.45]   0.0099 **
+With: friends                      0.069    1.07      [0.89, 1.30]   0.4728 
+With: children                     0.075    1.08      [0.93, 1.25]   0.3248 
+With: parents/relatives            0.168    1.18      [1.00, 1.40]   0.0486 *
+With: colleagues                   0.162    1.18      [0.91, 1.53]   0.2201 
+Purpose: travel                    0.579    1.78      [1.53, 2.08]   0.0000 ***
+Purpose: outing                    0.574    1.78      [1.54, 2.05]   0.0000 ***
+Purpose: daily life                0.377    1.46      [1.23, 1.72]   0.0000 ***
+Purpose: date                      0.283    1.33      [1.11, 1.59]   0.0020 **
+Purpose: socializing               0.419    1.52      [1.25, 1.85]   0.0000 ***
+ln(1 + reviewer's reviews)         0.109    1.12      [1.07, 1.16]   0.0000 ***
+============================================================================================
+
+============================================================================================
+MODEL 2b (robustness)  Keyword tags as Binomial(5, p) | clustered SE
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Revisitor (2+ visits)              0.355    1.43      [1.22, 1.66]   0.0000 ***
+Wrote text (15+ chars)             1.084    2.96      [2.65, 3.30]   0.0000 ***
+Visit info provided                0.499    1.65      [1.38, 1.97]   0.0000 ***
+Waited to enter                   -0.251    0.78      [0.68, 0.88]   0.0001 ***
+Reservation                       -0.178    0.84      [0.74, 0.95]   0.0058 **
+With: alone                        0.371    1.45      [1.16, 1.80]   0.0009 ***
+With: partner/spouse               0.188    1.21      [1.06, 1.38]   0.0053 **
+With: friends                      0.063    1.06      [0.91, 1.24]   0.4259 
+With: children                     0.096    1.10      [0.98, 1.24]   0.1163 
+With: parents/relatives            0.133    1.14      [1.00, 1.30]   0.0465 *
+With: colleagues                   0.124    1.13      [0.92, 1.39]   0.2371 
+Purpose: travel                    0.492    1.64      [1.44, 1.86]   0.0000 ***
+Purpose: outing                    0.477    1.61      [1.43, 1.81]   0.0000 ***
+Purpose: daily life                0.292    1.34      [1.17, 1.54]   0.0000 ***
+Purpose: date                      0.225    1.25      [1.08, 1.45]   0.0025 **
+Purpose: socializing               0.367    1.44      [1.22, 1.70]   0.0000 ***
+ln(1 + reviewer's reviews)         0.091    1.10      [1.06, 1.13]   0.0000 ***
+============================================================================================
+Significant in both ordered logit and binomial: Revisitor (2+ visits), Wrote text (15+ chars), Visit info provided, Waited to enter, Reservation, With: alone, With: partner/spouse, With: parents/relatives, Purpose: travel, Purpose: outing, Purpose: daily life, Purpose: date, Purpose: socializing, ln(1 + reviewer's reviews)
+
+============================================================================================
+MODEL 2t  Keyword tags, reviews with text (+ sentiment, length) | ordered logit, clustered SE | N = 9843
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Revisitor (2+ visits)              0.426    1.53      [1.26, 1.86]   0.0000 ***
+Visit info provided                0.500    1.65      [1.24, 2.19]   0.0006 ***
+Waited to enter                   -0.216    0.81      [0.67, 0.96]   0.0173 *
+Reservation                       -0.175    0.84      [0.71, 1.00]   0.0466 *
+With: alone                        0.368    1.45      [1.10, 1.90]   0.0085 **
+With: partner/spouse               0.221    1.25      [1.05, 1.48]   0.0104 *
+With: friends                      0.069    1.07      [0.87, 1.31]   0.5065 
+With: children                     0.083    1.09      [0.93, 1.27]   0.2984 
+With: parents/relatives            0.130    1.14      [0.96, 1.36]   0.1444 
+With: colleagues                   0.252    1.29      [0.97, 1.70]   0.0762 .
+Purpose: travel                    0.567    1.76      [1.50, 2.07]   0.0000 ***
+Purpose: outing                    0.505    1.66      [1.43, 1.92]   0.0000 ***
+Purpose: daily life                0.321    1.38      [1.15, 1.65]   0.0004 ***
+Purpose: date                      0.257    1.29      [1.06, 1.58]   0.0113 *
+Purpose: socializing               0.425    1.53      [1.23, 1.90]   0.0001 ***
+Sentiment (-1 to 1)                0.895    2.45      [2.16, 2.77]   0.0000 ***
+ln(text length)                    0.637    1.89      [1.75, 2.04]   0.0000 ***
+ln(1 + reviewer's reviews)         0.121    1.13      [1.08, 1.17]   0.0000 ***
+============================================================================================
+
+============================================================================================
+MODEL 3  Star rating (<=4 / 4.5 / 5) | ordered logit, clustered SE | N = 4148 (2333 reviewers), 5 stars = 74.2%, McFadden R2 = 0.102
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Revisitor (2+ visits)              0.361    1.43      [1.06, 1.94]   0.0200 *
+Wrote text (15+ chars)            -0.451    0.64      [0.48, 0.84]   0.0017 **
+Reservation                       -0.142    0.87      [0.63, 1.19]   0.3830 
+With: alone                       -0.417    0.66      [0.37, 1.17]   0.1561 
+With: partner/spouse              -0.040    0.96      [0.74, 1.24]   0.7607 
+With: friends                     -0.053    0.95      [0.64, 1.40]   0.7881 
+With: children                    -0.169    0.84      [0.64, 1.12]   0.2355 
+Purpose: travel                    0.136    1.15      [0.84, 1.55]   0.3807 
+Purpose: outing                   -0.157    0.86      [0.66, 1.11]   0.2336 
+Keyword tags (0-5)                 0.463    1.59      [1.47, 1.72]   0.0000 ***
+ln(1 + reviewer's reviews)         0.004    1.00      [0.94, 1.07]   0.9142 
+============================================================================================
+
+============================================================================================
+MODEL 3b (robustness)  P(5 stars) | logistic, clustered SE | N = 4148, events (<5 stars) = 1070, pseudo-R2 = 0.111
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Revisitor (2+ visits)              0.365    1.44      [1.06, 1.96]   0.0210 *
+Wrote text (15+ chars)            -0.410    0.66      [0.50, 0.88]   0.0050 **
+Reservation                       -0.113    0.89      [0.65, 1.23]   0.4869 
+With: alone                       -0.360    0.70      [0.39, 1.24]   0.2171 
+With: partner/spouse              -0.022    0.98      [0.75, 1.27]   0.8689 
+With: friends                     -0.062    0.94      [0.64, 1.39]   0.7541 
+With: children                    -0.164    0.85      [0.64, 1.12]   0.2516 
+Purpose: travel                    0.131    1.14      [0.84, 1.55]   0.4023 
+Purpose: outing                   -0.173    0.84      [0.65, 1.09]   0.1939 
+Keyword tags (0-5)                 0.412    1.51      [1.40, 1.63]   0.0000 ***
+ln(1 + reviewer's reviews)        -0.004    1.00      [0.93, 1.06]   0.9097 
+============================================================================================
+Significant in both ordered logit and 5-star logit: Revisitor (2+ visits), Wrote text (15+ chars), Keyword tags (0-5)
+
+============================================================================================
+MODEL 3t  Star rating, reviews with text (+ sentiment, length) | ordered logit, clustered SE | N = 3585, McFadden R2 = 0.151
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Revisitor (2+ visits)              0.679    1.97      [1.38, 2.83]   0.0002 ***
+Reservation                       -0.184    0.83      [0.58, 1.19]   0.3105 
+With: alone                       -0.311    0.73      [0.40, 1.34]   0.3119 
+With: partner/spouse              -0.002    1.00      [0.75, 1.32]   0.9915 
+With: friends                     -0.125    0.88      [0.57, 1.36]   0.5694 
+With: children                    -0.222    0.80      [0.59, 1.09]   0.1519 
+Purpose: travel                    0.257    1.29      [0.93, 1.80]   0.1309 
+Purpose: outing                   -0.151    0.86      [0.65, 1.14]   0.2912 
+Keyword tags (0-5)                 0.378    1.46      [1.34, 1.59]   0.0000 ***
+ln(1 + reviewer's reviews)        -0.004    1.00      [0.93, 1.07]   0.9117 
+Sentiment (-1 to 1)                1.600    4.95      [3.81, 6.44]   0.0000 ***
+ln(text length)                   -0.087    0.92      [0.80, 1.05]   0.2242 
+============================================================================================
+
+Extended VIF, highest: verif_reservation 4.22, reserved 3.76, has_visit_info 2.56
+
+============================================================================================
+MODEL 1x  P(revisit), extended | logistic, clustered SE | N = 9843, pseudo-R2 = 0.222 (Model 1: 0.200), AIC = 8457 (Model 1: 8665)
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Visit info provided                0.059    1.06      [0.69, 1.64]   0.7900 
+Waited to enter                   -0.584    0.56      [0.39, 0.79]   0.0012 **
+Reservation                        0.004    1.00      [0.73, 1.37]   0.9805 
+With: alone                        0.499    1.65      [1.18, 2.31]   0.0037 **
+With: partner/spouse              -0.332    0.72      [0.52, 0.99]   0.0419 *
+With: friends                     -0.487    0.61      [0.44, 0.86]   0.0049 **
+With: children                    -0.173    0.84      [0.62, 1.14]   0.2600 
+With: parents/relatives            0.041    1.04      [0.73, 1.48]   0.8198 
+With: colleagues                  -0.239    0.79      [0.54, 1.14]   0.2091 
+Purpose: travel                   -0.511    0.60      [0.45, 0.80]   0.0005 ***
+Purpose: outing                    0.250    1.28      [1.01, 1.64]   0.0437 *
+Purpose: daily life                0.107    1.11      [0.86, 1.44]   0.4200 
+Purpose: date                     -0.271    0.76      [0.56, 1.03]   0.0794 .
+Purpose: socializing               0.135    1.14      [0.80, 1.63]   0.4533 
+Sentiment (-1 to 1)               -0.342    0.71      [0.60, 0.83]   0.0000 ***
+ln(text length)                    0.143    1.15      [1.01, 1.32]   0.0419 *
+ln(1 + reviewer's reviews)         0.337    1.40      [1.27, 1.55]   0.0000 ***
+Visit: summer                      0.147    1.16      [0.96, 1.40]   0.1214 
+Visit: autumn                      0.151    1.16      [0.98, 1.38]   0.0867 .
+Visit: winter                      0.126    1.13      [0.92, 1.40]   0.2341 
+Visit: weekend                    -0.047    0.95      [0.83, 1.10]   0.5207 
+Verified by receipt               -1.048    0.35      [0.26, 0.47]   0.0000 ***
+ln(1 + reviewer's followers)       0.160    1.17      [1.08, 1.27]   0.0001 ***
+Tags: visual                       0.220    1.25      [1.01, 1.54]   0.0434 *
+Tags: things to see/learn          0.208    1.23      [0.96, 1.57]   0.0944 .
+Tags: crowded                      0.122    1.13      [0.91, 1.40]   0.2600 
+Tags: quiet                        0.364    1.44      [1.09, 1.90]   0.0102 *
+Tags: facilities                   0.065    1.07      [0.87, 1.31]   0.5326 
+Tags: access                       0.056    1.06      [0.86, 1.30]   0.5875 
+Tags: family/kids                  0.239    1.27      [1.00, 1.62]   0.0528 .
+Tags: price/value                  0.015    1.01      [0.77, 1.34]   0.9185 
+Tags: food                         0.080    1.08      [0.77, 1.52]   0.6482 
+Tags: water leisure               -0.480    0.62      [0.43, 0.89]   0.0090 **
+============================================================================================
+  Model 1x-s: dropped places with no variation in revisit: 홍대거리 (18 reviews)
+Model 1x effects significant in both (all reviews / one per reviewer x place): Waited to enter (0.56), With: alone (1.65), With: partner/spouse (0.72), Purpose: travel (0.60), Sentiment (-1 to 1) (0.71), ln(1 + reviewer's reviews) (1.40), Verified by receipt (0.35), ln(1 + reviewer's followers) (1.17), Tags: water leisure (0.62)
+
+============================================================================================
+MODEL 2x  Keyword tags (0-5), extended | ordered logit, clustered SE | N = 12537
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Revisitor (2+ visits)              0.302    1.35      [1.13, 1.61]   0.0008 ***
+Wrote text (15+ chars)             1.101    3.01      [2.61, 3.46]   0.0000 ***
+Visit info provided                0.636    1.89      [1.48, 2.41]   0.0000 ***
+Waited to enter                   -0.231    0.79      [0.67, 0.94]   0.0065 **
+Reservation                       -0.386    0.68      [0.57, 0.81]   0.0000 ***
+With: alone                        0.388    1.47      [1.15, 1.89]   0.0023 **
+With: partner/spouse               0.217    1.24      [1.06, 1.46]   0.0072 **
+With: friends                      0.161    1.17      [0.96, 1.43]   0.1114 
+With: children                     0.168    1.18      [1.02, 1.37]   0.0255 *
+With: parents/relatives            0.220    1.25      [1.06, 1.47]   0.0083 **
+With: colleagues                   0.208    1.23      [0.95, 1.59]   0.1137 
+Purpose: travel                    0.561    1.75      [1.50, 2.05]   0.0000 ***
+Purpose: outing                    0.545    1.73      [1.50, 1.98]   0.0000 ***
+Purpose: daily life                0.373    1.45      [1.23, 1.72]   0.0000 ***
+Purpose: date                      0.341    1.41      [1.17, 1.69]   0.0003 ***
+Purpose: socializing               0.447    1.56      [1.27, 1.92]   0.0000 ***
+ln(1 + reviewer's reviews)         0.016    1.02      [0.97, 1.06]   0.4624 
+Visit: summer                      0.100    1.10      [0.97, 1.25]   0.1191 
+Visit: autumn                      0.048    1.05      [0.93, 1.18]   0.4191 
+Visit: winter                      0.056    1.06      [0.93, 1.21]   0.4131 
+Visit: weekend                    -0.001    1.00      [0.91, 1.09]   0.9882 
+Verified by receipt               -0.878    0.42      [0.35, 0.49]   0.0000 ***
+ln(1 + reviewer's followers)       0.231    1.26      [1.21, 1.32]   0.0000 ***
+============================================================================================
+
+============================================================================================
+MODEL 4  Reactions per review | negative binomial, clustered SE | N = 9843, with reactions = 23.2%, mean = 1.61, alpha = 2.53, pseudo-R2 = 0.205
+--------------------------------------------------------------------------------------------
+Variable                            coef     IRR            95% CI        p
+--------------------------------------------------------------------------------------------
+Visit info provided                0.436    1.55      [0.94, 2.55]   0.0882 .
+Waited to enter                    0.160    1.17      [0.90, 1.53]   0.2383 
+Reservation                       -0.131    0.88      [0.64, 1.19]   0.4071 
+With: alone                       -0.276    0.76      [0.48, 1.19]   0.2269 
+With: partner/spouse              -0.346    0.71      [0.47, 1.07]   0.0985 .
+With: friends                     -0.077    0.93      [0.69, 1.24]   0.6044 
+With: children                     0.092    1.10      [0.83, 1.44]   0.5103 
+With: parents/relatives           -0.102    0.90      [0.69, 1.17]   0.4468 
+With: colleagues                   0.457    1.58      [1.02, 2.46]   0.0425 *
+Purpose: travel                   -0.407    0.67      [0.49, 0.90]   0.0082 **
+Purpose: outing                   -0.423    0.66      [0.46, 0.93]   0.0188 *
+Purpose: daily life               -0.109    0.90      [0.63, 1.27]   0.5438 
+Purpose: date                      0.242    1.27      [0.88, 1.85]   0.2004 
+Purpose: socializing              -0.216    0.81      [0.57, 1.13]   0.2153 
+Revisitor (2+ visits)              0.229    1.26      [0.94, 1.67]   0.1170 
+Sentiment (-1 to 1)               -0.276    0.76      [0.63, 0.92]   0.0047 **
+Keyword tags (0-5)                 0.088    1.09      [1.01, 1.18]   0.0226 *
+ln(text length)                    0.496    1.64      [1.43, 1.88]   0.0000 ***
+ln(1 + reviewer's reviews)        -0.095    0.91      [0.82, 1.01]   0.0865 .
+Visit: summer                     -0.164    0.85      [0.70, 1.03]   0.0974 .
+Visit: autumn                     -0.391    0.68      [0.58, 0.79]   0.0000 ***
+Visit: winter                     -0.206    0.81      [0.67, 1.00]   0.0455 *
+Visit: weekend                     0.088    1.09      [0.94, 1.27]   0.2520 
+Verified by receipt               -0.211    0.81      [0.63, 1.05]   0.1075 
+ln(1 + reviewer's followers)       0.672    1.96      [1.77, 2.17]   0.0000 ***
+ln(1 + days since visit)          -0.004    1.00      [0.91, 1.09]   0.9272 
+============================================================================================
+
+============================================================================================
+MODEL 4b (robustness)  P(at least one reaction) | logistic, clustered SE | pseudo-R2 = 0.268
+--------------------------------------------------------------------------------------------
+Variable                            coef      OR            95% CI        p
+--------------------------------------------------------------------------------------------
+Visit info provided               -0.167    0.85      [0.57, 1.25]   0.4046 
+Waited to enter                   -0.036    0.96      [0.69, 1.35]   0.8326 
+Reservation                        0.067    1.07      [0.79, 1.45]   0.6650 
+With: alone                       -0.052    0.95      [0.66, 1.36]   0.7759 
+With: partner/spouse              -0.037    0.96      [0.76, 1.23]   0.7645 
+With: friends                     -0.036    0.96      [0.73, 1.27]   0.7945 
+With: children                    -0.000    1.00      [0.79, 1.26]   0.9992 
+With: parents/relatives            0.107    1.11      [0.87, 1.42]   0.3854 
+With: colleagues                   0.296    1.34      [0.96, 1.89]   0.0871 .
+Purpose: travel                    0.010    1.01      [0.79, 1.29]   0.9387 
+Purpose: outing                   -0.117    0.89      [0.71, 1.11]   0.2990 
+Purpose: daily life               -0.120    0.89      [0.69, 1.15]   0.3598 
+Purpose: date                      0.161    1.17      [0.88, 1.57]   0.2767 
+Purpose: socializing               0.185    1.20      [0.88, 1.64]   0.2434 
+Revisitor (2+ visits)              0.331    1.39      [1.10, 1.76]   0.0059 **
+Sentiment (-1 to 1)               -0.128    0.88      [0.74, 1.05]   0.1558 
+Keyword tags (0-5)                 0.105    1.11      [1.04, 1.19]   0.0033 **
+ln(text length)                    0.693    2.00      [1.74, 2.30]   0.0000 ***
+ln(1 + reviewer's reviews)         0.001    1.00      [0.92, 1.09]   0.9773 
+Visit: summer                     -0.371    0.69      [0.57, 0.84]   0.0002 ***
+Visit: autumn                     -0.643    0.53      [0.43, 0.64]   0.0000 ***
+Visit: winter                     -0.425    0.65      [0.52, 0.82]   0.0003 ***
+Visit: weekend                    -0.014    0.99      [0.86, 1.13]   0.8462 
+Verified by receipt               -0.087    0.92      [0.71, 1.18]   0.4970 
+ln(1 + reviewer's followers)       0.406    1.50      [1.38, 1.63]   0.0000 ***
+ln(1 + days since visit)           0.032    1.03      [0.95, 1.12]   0.4496 
+============================================================================================
+Significant in both negative binomial and logit: Keyword tags (0-5), ln(text length), Visit: autumn, Visit: winter, ln(1 + reviewer's followers)
+
+============================================================
+OUT-OF-SAMPLE METRICS (5-fold CV, grouped by reviewer)
+============================================================
+Model 1 revisit
+  AUC                                  0.776
+  Brier                                0.148
+  Brier (base rate)                    0.180
+  Log-loss                             0.460
+  Accuracy @0.5                        0.788
+  Accuracy (always 'no')               0.765
+  Balanced accuracy                    0.604
+  Precision (revisit)                  0.614
+  Recall (revisit)                     0.258
+  F1 (revisit)                         0.363
+Model 1x revisit, extended
+  AUC                                  0.788
+  Brier                                0.144
+  Brier (base rate)                    0.180
+  Log-loss                             0.449
+  Accuracy @0.5                        0.794
+  Accuracy (always 'no')               0.765
+  Balanced accuracy                    0.625
+  Precision (revisit)                  0.627
+  Recall (revisit)                     0.306
+  F1 (revisit)                         0.411
+Model 2 keyword tags
+  RMSE ordered logit                   1.343
+  RMSE binomial                        1.341
+  RMSE (predict mean)                  1.861
+  MAE ordered logit                    1.066
+  MAE (predict mean)                   1.635
+  Exact accuracy (ordered)             0.483
+  Exact accuracy (always mode)         0.357
+  Within +-1 accuracy (ordered)        0.655
+Model 2x keyword tags, extended
+  RMSE ordered logit                   1.316
+  RMSE binomial                        1.312
+  RMSE (predict mean)                  1.861
+  MAE ordered logit                    1.029
+  MAE (predict mean)                   1.635
+  Exact accuracy (ordered)             0.494
+  Exact accuracy (always mode)         0.357
+  Within +-1 accuracy (ordered)        0.657
+Model 4 reactions
+  Spearman rho (predicted vs observed)   0.470
+  AUC any reaction (from predicted mean)   0.806
+  RMSE negative binomial              10.033
+  RMSE (predict mean)                  7.707
+  MAE negative binomial                2.004
+  MAE (predict mean)                   2.627
+Model 4b any reaction
+  AUC                                  0.819
+  Brier                                0.130
+  Brier (base rate)                    0.179
+
+OR > 1 = higher odds / more tags; < 1 = lower. Significance: *** <.001 ** <.01 * <.05 . <.1
+Saved tables, models_summary.txt and figures in data\analysis\naver

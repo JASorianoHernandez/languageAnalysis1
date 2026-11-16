@@ -1,0 +1,111 @@
+Corpus loaded: 1494 reviews
+
+── Sentiment analysis ──
+  Loading KO sentiment model (hun3359/klue-bert-base-sentiment)...
+  klue-bert-base-sentiment loaded OK
+  Scoring English reviews (VADER)...
+  Scoring Korean reviews (transformer)...
+    20/730
+    40/730
+    60/730
+    80/730
+    100/730
+    120/730
+    140/730
+    160/730
+    180/730
+    200/730
+    220/730
+    240/730
+    260/730
+    280/730
+    300/730
+    320/730
+    340/730
+    360/730
+    380/730
+    400/730
+    420/730
+    440/730
+    460/730
+    480/730
+    500/730
+    520/730
+    540/730
+    560/730
+    580/730
+    600/730
+    620/730
+    640/730
+    660/730
+    680/730
+    700/730
+    720/730
+  Saved: sentiment_results.csv
+  Saved: summary_sentiment.csv
+                    mean     std  count
+place   language                       
+N서울타워   en        0.7174  0.2998    100
+        ko        0.4335  0.6334    100
+경복궁     en        0.6443  0.3859    100
+        ko        0.5615  0.4869    100
+광안리해수욕장 en        0.7230  0.3017     64
+        ko        0.6973  0.3759    100
+국립중앙박물관 en        0.6882  0.2922    100
+        ko        0.5767  0.4913    100
+덕수궁     en        0.6985  0.3474    100
+        ko        0.6075  0.4492    100
+북촌한옥마을  en        0.5831  0.3481    100
+        ko        0.5709  0.4145     46
+창덕궁     en        0.6045  0.4134    100
+        ko        0.5199  0.5021    100
+해운대해수욕장 en        0.7770  0.2520    100
+        ko        0.6072  0.4929     84
+
+── Topic modeling (LDA) ──
+  English LDA...
+  Saved: lda_en_topics.csv
+    Topic 1: tower, worth, area, view, walk, well, take, views, people, way
+    Topic 2: museum, free, history, well, experience, visiting, admission, building, english, national
+    Topic 3: beach, busan, night, view, sand, city, restaurants, haeundae, clean, area
+    Topic 4: palace, traditional, experience, modern, history, photos, architecture, walking, deoksugung, city
+    Topic 5: palace, garden, secret, free, hanbok, buildings, gyeongbokgung, changdeokgung, royal, palaces
+  Korean LDA...
+  Saved: lda_ko_topics.csv
+    Topic 1: 경복궁, 구경, 외국인, 날씨, 창덕궁, 사진, 한복, 아이, 덕수궁, 북촌
+    Topic 2: 궁궐, 창덕궁, 덕수궁, 시간, 한옥, 조선, 경복궁, 후원, 풍경, 북촌
+    Topic 3: 전시, 시대, 시간, 국립중앙박물관, 유물, 광안리, 저녁, 기증, 공간, 드론
+    Topic 4: 해운대, 해수욕장, 부산, 바다, 산책, 해변, 광안리, 야경, 대교, 주변
+    Topic 5: 전망대, 이용, 경복궁, 남산, N서울타워, 드론, 추천, 박물관, 시간, 아이
+  Saved: topic_assignments.csv
+
+── Complete ──
+Output files in data\analysis/
+  absa_codebook.md
+  absa_pilot.csv
+  absa_results.csv
+  absa_summary.csv
+  absa_validation.csv
+  analysis_data.json
+  crosslingual_similarity.csv
+  dictionary_check.csv
+  dictionary_precision.csv
+  figures
+  hypothesis_by_place.csv
+  hypothesis_matched_terms.csv
+  hypothesis_tests.csv
+  hypothesis_tests_sensitivity.csv
+  lda_en_topics.csv
+  lda_k_selection.csv
+  lda_ko_topics.csv
+  llm_summaries.json
+  motivation_results.csv
+  motivation_summary.csv
+  naver
+  rating_checks.csv
+  sentiment_results.csv
+  stats_mannwhitney.csv
+  summary_sentiment.csv
+  tfidf_contrast.csv
+  topic_assignments.csv
+  ttr_results.csv

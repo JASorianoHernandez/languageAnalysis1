@@ -1,0 +1,63 @@
+﻿Corpus: 472 reviews, 8 places
+
+Loading multilingual-e5-base...
+python.exe : 
+At line:1 char:361
++ ... iss-gpu\python.exe"; & $gpu 06_advanced_nlp.py *> logs\06.log; "06 ex ...
++                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]
+Loading weights:   2%|▏         | 3/199 [00:00<00:06, 29.88it/s]
+Loading weights:   6%|▌         | 12/199 [00:00<00:03, 58.76it/s]
+Loading weights: 100%|██████████| 199/199 [00:00<00:00, 814.32it/s]
+  Model loaded OK
+
+── Part 1: Zero-shot motivation classification ──
+  Embedding motivation labels...
+  Embedding reviews...
+  Saved: motivation_results.csv
+  Saved: motivation_summary.csv
+
+  Motivation distribution (% by language, all places):
+motivation  Cultural Heritage & History  Food & Gastronomy  Nature & Scenery  Photography & Visual Experience  Shopping & Entertainment
+language                                                                                                                               
+en                                 15.8               15.8              21.7                             37.1                       9.6
+ko                                 14.7               15.9              27.2                             36.6                       5.6
+  Saved: 07_motivations_stacked.png
+
+── Part 2: Cross-lingual cosine similarity ──
+  경복궁             KO↔EN sim=0.910  KO-intra=0.878  EN-intra=0.823  divergence=-0.036
+  창덕궁             KO↔EN sim=0.917  KO-intra=0.860  EN-intra=0.817  divergence=-0.066
+  북촌한옥마을          KO↔EN sim=0.898  KO-intra=0.878  EN-intra=0.813  divergence=-0.022
+  광장시장            KO↔EN sim=0.933  KO-intra=0.862  EN-intra=0.818  divergence=-0.083
+  홍대거리            KO↔EN sim=0.926  KO-intra=0.868  EN-intra=0.804  divergence=-0.067
+  롯데월드            KO↔EN sim=0.930  KO-intra=0.854  EN-intra=0.806  divergence=-0.089
+  광안리해수욕장         KO↔EN sim=0.914  KO-intra=0.880  EN-intra=0.823  divergence=-0.039
+  해운대해수욕장         KO↔EN sim=0.903  KO-intra=0.891  EN-intra=0.813  divergence=-0.014
+  Saved: crosslingual_similarity.csv
+  Saved: 08_crosslingual_sim.png
+
+  Updated: analysis_data.json
+
+── Done ──
+  01_sentiment_bar.png
+  02_sentiment_heatmap.png
+  03a_wordcloud_ko.png
+  03b_wordcloud_en.png
+  04_topic_dist_en.png
+  04_topic_dist_ko.png
+  05_ttr_bar.png
+  06_tfidf_contrast.png
+  07_motivations_stacked.png
+  08_crosslingual_sim.png
+  09_absa_heatmap_en.png
+  09_absa_heatmap_ko.png
+  10_absa_radar.png
+  11_geo_bubble_busan.png
+  11_geo_bubble_seoul.png
+  12_sentiment_scatter.png
+  13_hypothesis_tests.png
+  14_lda_k_selection.png
+  bubble_map.html

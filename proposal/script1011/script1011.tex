@@ -1,0 +1,497 @@
+% Compile with xelatex (twice).
+% Talk script — parallel EN / KO columns, ~5 min.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont[AutoFakeSlant=0.15]{Malgun Gothic}
+\setCJKsansfont[AutoFakeSlant=0.15]{Malgun Gothic}
+\xeCJKsetup{CJKspace=true}
+
+\usepackage[top=1.4cm, bottom=1.4cm, left=1.4cm, right=1.4cm]{geometry}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{microtype}
+
+\linespread{1.1}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+
+% ── layout helpers ────────────────────────────────────────────────────────────
+\newcommand{\sechead}[2]{%
+  \vspace{6pt}%
+  \noindent\rule{\linewidth}{0.6pt}\\[1pt]
+  {\small\bfseries #1\hfill #2}\\[-3pt]
+  \rule{\linewidth}{0.4pt}\par\vspace{2pt}%
+}
+
+% Each sentence on its own line: use \sent{} inside bilingual
+\newcommand{\sent}[1]{#1\\[5pt]}
+
+\newcommand{\bilingual}[2]{%
+  \noindent%
+  \begin{minipage}[t]{0.485\linewidth}
+    \small #1
+  \end{minipage}\hfill\vrule\hfill%
+  \begin{minipage}[t]{0.483\linewidth}
+    \small #2
+  \end{minipage}\par\vspace{4pt}%
+}
+
+% ── document ─────────────────────────────────────────────────────────────────
+\begin{document}
+
+\begin{center}
+  {\large\bfseries Talk Script --- Naver Place Review Analysis}\\[3pt]
+  {\large\bfseries 발표 스크립트 --- 네이버 플레이스 리뷰 분석}\\[2pt]
+  {\small Jorge Adan Soriano Hernandez \quad|\quad 2026-10-12 \quad|\quad \textit{approx.\ 5 min}}
+\end{center}
+\rule{\linewidth}{0.8pt}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\sechead{1. Research Background}{1. 연구 배경}
+\bilingual{%
+  \sent{Korean tourist attractions receive millions of domestic visitors each year, and Naver Place is the primary platform where those visitors record their experiences.}
+  \sent{Unlike global review sites, it captures an almost entirely domestic audience, producing structured behavioral data in a single language.}
+  \sent{This makes it a valuable source for studying how Korean tourists describe, evaluate, and share their visits.}
+}{%
+  \sent{한국의 주요 관광지는 매년 수백만 명의 국내 방문객을 받으며, 네이버 플레이스는 그 경험을 기록하는 주된 플랫폼이다.}
+  \sent{글로벌 리뷰 플랫폼과 달리, 거의 전적으로 국내 이용자를 대상으로 하며 단일 언어로 구조화된 행동 데이터를 생성한다.}
+  \sent{이는 한국 관광객이 방문을 어떻게 묘사하고 평가하며 공유하는지 연구하는 데 유용한 자료원이다.}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\sechead{2. Research Questions}{2. 연구 질문}
+\bilingual{%
+  \sent{This study asks four questions: what predicts a return visit? What drives how many keywords a reviewer selects? What determines the star rating? And what explains how many reactions a review receives?}
+  \sent{Each question targets a different stage of the reviewer's journey, from the visit itself to the community's response.}
+}{%
+  \sent{본 연구는 네 가지 질문을 제기한다: 재방문을 예측하는 요인은? 키워드 수를 결정하는 요인은? 별점을 결정하는 요인은? 리뷰의 반응 수를 설명하는 요인은?}
+  \sent{각 질문은 방문 경험부터 커뮤니티 반응까지 리뷰어 여정의 각기 다른 단계를 다룬다.}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\sechead{3. Data}{3. 데이터}
+\bilingual{%
+  \sent{The dataset contains 14,401 reviews from 29 major South Korean tourist attractions written by 8,276 unique users.}
+  \sent{Each review includes structured metadata provided by the platform: companion type, visit purpose, wait experience, reservation status, and up to five keyword tags.}
+  \sent{Attractions are located in Seoul (25) and Busan (4).}
+}{%
+  \sent{데이터셋은 8,276명의 고유 사용자가 작성한 29개 주요 관광지의 리뷰 14,401건으로 구성된다.}
+  \sent{각 리뷰에는 플랫폼이 제공하는 구조화된 메타데이터가 포함된다: 동반자 유형, 방문 목적, 대기 경험, 예약 여부, 최대 5개의 키워드 태그.}
+  \sent{관광지는 서울(25곳)과 부산(4곳)에 위치한다.}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\sechead{4. Data Collection}{4. 데이터 수집}
+\bilingual{%
+  \sent{Data were collected with a custom Python scraper built on Selenium that loaded all reviews for each attraction and extracted both structured fields and free text.}
+  \sent{Places were selected from the Yanolja Top 500 Korean tourism ranking, filtered to those with at least 30 Korean reviews.}
+  \sent{A total of 29 attractions met the threshold.}
+}{%
+  \sent{데이터는 Selenium 기반의 맞춤형 Python 스크래퍼를 이용해 수집되었으며, 각 관광지의 모든 리뷰를 불러와 구조화된 필드와 자유 텍스트를 추출했다.}
+  \sent{관광지는 야놀자 Top 500 한국 관광 순위에서 선정되었으며, 한국어 리뷰 30건 이상인 곳으로 필터링했다.}
+  \sent{총 29개 관광지가 기준을 충족했다.}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\sechead{5. Variables}{5. 변수}
+\bilingual{%
+  \sent{The four dependent variables are: \textit{Revisit} (binary), \textit{Keyword Count} (0 to 5, operationalizing information diversity), \textit{Rating} (1 to 5 stars), and \textit{Reactions} (count of user interactions).}
+  \sent{Independent variables include companion type, visit purpose, wait and reservation status, sentiment score, and keyword theme dummies.}
+  \sent{Controls are text length, image count, reviewer history, follower count, review age, verification, season, and weekend. All models include place fixed effects.}
+}{%
+  \sent{종속변수는 네 가지다: \textit{재방문}(이진), \textit{키워드 수}(0\textasciitilde5, 정보 다양성 조작화), \textit{별점}(1\textasciitilde5), \textit{반응 수}(사용자 상호작용 횟수).}
+  \sent{독립변수에는 동반자 유형, 방문 목적, 대기 및 예약 여부, 감성 점수, 키워드 주제 더미가 포함된다.}
+  \sent{통제변수는 텍스트 길이, 사진 수, 작성자 리뷰 이력, 팔로워 수, 리뷰 경과일, 인증 여부, 계절, 주말 여부이며, 모든 모형에 관광지 고정효과가 포함된다.}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\sechead{6. Descriptive Statistics}{6. 기술통계}
+\bilingual{%
+  \sent{About 22\% of reviews come from revisitors, and the average keyword count is 2.97 out of 5.}
+  \sent{Reactions are highly skewed: the mean is 1.44 but the median is 0 and the maximum is 122, so a small number of reviews attract most of the engagement.}
+  \sent{Sentiment scores average 0.65, indicating generally positive text.}
+}{%
+  \sent{전체 리뷰의 약 22\%는 재방문자가 작성했으며, 평균 키워드 수는 5점 만점 중 2.97이다.}
+  \sent{반응 수는 크게 편향되어 있다: 평균 1.44이나 중앙값은 0, 최댓값은 122로, 소수의 리뷰가 대부분의 반응을 받는다.}
+  \sent{감성 점수는 평균 0.65로, 텍스트가 전반적으로 긍정적임을 나타낸다.}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\sechead{7. Correlations}{7. 상관분석}
+\bilingual{%
+  \sent{Revisit correlates most strongly with reviewer history ($r = 0.26$) and text length ($r = 0.20$), suggesting that active, verbose reviewers are the most likely to return.}
+  \sent{Sentiment and rating correlate at $r = 0.51$, which validates the text-based sentiment measure.}
+  \sent{No variable pair exceeds a VIF of 2.82, so multicollinearity is not a concern.}
+}{%
+  \sent{재방문은 작성자 리뷰 이력($r = 0.26$)과 텍스트 길이($r = 0.20$)와 가장 강한 상관을 보이며, 활동적이고 장문을 쓰는 리뷰어일수록 재방문 가능성이 높음을 시사한다.}
+  \sent{감성 점수와 별점의 상관은 $r = 0.51$로, 텍스트 기반 감성 측정치의 타당성을 확인해 준다.}
+  \sent{어떠한 변수 쌍도 VIF 2.82를 초과하지 않아 다중공선성은 문제가 되지 않는다.}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\sechead{8. Models}{8. 모형}
+\bilingual{%
+  \sent{Four models are estimated, all including place fixed effects: M1 logistic regression on revisit, M2 ordered logistic on keyword count, M3 ordered logistic on rating (exploratory), and M4 negative binomial on reactions with log review age as an offset.}
+  \sent{Results are reported as odds ratios or incidence rate ratios, the exponentiated coefficient $e^{\hat\beta}$: values above 1 indicate a positive association and values below 1 a negative one.}
+}{%
+  \sent{관광지 고정효과를 포함한 네 가지 모형을 추정했다: M1 로지스틱(재방문), M2 순서 로지스틱(키워드 수), M3 순서 로지스틱(별점, 탐색적), M4 음이항(반응 수, 리뷰 경과일 오프셋 포함).}
+  \sent{결과는 지수화된 계수 $e^{\hat\beta}$, 즉 승산비 또는 발생비로 보고된다: 1보다 크면 정적 연관, 1보다 작으면 부적 연관이다.}
+}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\sechead{9. Results}{9. 연구결과}
+\bilingual{%
+  \sent{In M1, reviewer history multiplies revisit odds by 1.52 and visiting alone raises them by 1.68; waiting reduces the odds by half.}
+  \sent{In M2, writing free text quadruples keyword count odds and providing visit information multiplies them by 2.53, consistent with information diversity theory.}
+  \sent{In M4, follower count nearly doubles reaction incidence and text length multiplies it by 1.64, while lower sentiment reduces reactions.}
+}{%
+  \sent{M1에서 작성자 리뷰 이력은 재방문 승산을 1.52배 높이며, 혼자 방문한 경우 1.68배 높인다; 대기 경험은 승산을 절반으로 줄인다.}
+  \sent{M2에서 자유 텍스트 작성은 키워드 수 승산을 4배 높이며, 방문 정보 제공은 2.53배 높인다. 이는 정보 다양성 이론과 일치한다.}
+  \sent{M4에서 팔로워 수는 반응 발생률을 거의 2배 높이며, 텍스트 길이는 1.64배 높인다. 낮은 감성 점수는 반응을 감소시킨다.}
+}
+
+\vspace{4pt}
+\noindent\rule{\linewidth}{0.8pt}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\clearpage
+
+\begin{center}
+  {\large\bfseries Glossary of Variables}\\[2pt]
+  {\large\bfseries 변수 용어 설명}
+\end{center}
+\rule{\linewidth}{0.8pt}\vspace{4pt}
+
+% Helper for glossary entries
+\newcommand{\gterm}[4]{%
+  \noindent%
+  \begin{minipage}[t]{0.485\linewidth}
+    \small\textbf{#1}\\[2pt] #2
+  \end{minipage}\hfill\vrule\hfill%
+  \begin{minipage}[t]{0.483\linewidth}
+    \small\textbf{#3}\\[2pt] #4
+  \end{minipage}\par\vspace{8pt}%
+}
+
+% ── Dependent Variables ───────────────────────────────────────────────────────
+\noindent{\footnotesize\bfseries DEPENDENT VARIABLES \hfill 종속변수}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\gterm{Revisit}{%
+Binary variable (0/1): 1 if the reviewer has visited the same attraction more than once. Captured directly from a platform field the reviewer fills in when posting.
+}{재방문}{%
+이진변수(0/1): 리뷰 작성자가 동일 관광지를 두 번 이상 방문한 경우 1. 리뷰 작성 시 플랫폼 항목에서 직접 입력한 값이다.
+}
+
+\gterm{Keyword Count}{%
+Ordinal variable (0--5): the number of keyword tags the reviewer selected from a predefined platform list. Operationalizes the information diversity construct from Lee et al.\ (2026): more tags mean a richer, more varied description of the visit.
+}{키워드 수}{%
+순서형 변수(0\textasciitilde5): 리뷰어가 플랫폼 목록에서 선택한 키워드 태그의 수. 이민영 외(2026)의 정보 다양성 개념을 조작화한 것으로, 태그 수가 많을수록 방문 경험을 더 다양하게 기술한 것으로 본다.
+}
+
+\gterm{Rating}{%
+Ordinal variable (1--5 stars): the reviewer's overall satisfaction score. Not all reviews include a star rating; used as the outcome in the exploratory model M3.
+}{별점}{%
+순서형 변수(1\textasciitilde5점): 리뷰어의 전반적 만족도 점수. 모든 리뷰에 별점이 포함되지는 않으며, 탐색적 모형 M3의 종속변수로 사용된다.
+}
+
+\gterm{Reactions}{%
+Count variable: number of user interactions received by the review (e.g.\ likes). Proxy for review helpfulness or social impact. Highly skewed: most reviews receive zero.
+}{반응 수}{%
+계수형 변수: 리뷰가 받은 사용자 반응 수(예: 좋아요). 리뷰 유용성 또는 사회적 영향력의 대리 지표다. 대부분의 리뷰는 반응이 없어 분포가 크게 편향된다.
+}
+
+% ── Independent Variables ─────────────────────────────────────────────────────
+\vspace{2pt}
+\noindent{\footnotesize\bfseries INDEPENDENT VARIABLES \hfill 독립변수}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\gterm{Companion type}{%
+Categorical: who the reviewer visited with. Categories: alone, partner, friends, children, family, colleagues. Entered as dummy variables with a reference category.
+}{동반자 유형}{%
+범주형: 리뷰어가 누구와 방문했는지. 혼자, 연인, 친구, 아이, 가족, 동료로 구분하며 더미변수로 투입된다.
+}
+
+\gterm{Visit purpose}{%
+Categorical: the reviewer's stated reason for visiting. Categories: travel, outing, daily life, date, social gathering. Entered as dummy variables.
+}{방문 목적}{%
+범주형: 리뷰어가 명시한 방문 이유. 여행, 나들이, 일상, 데이트, 친목으로 구분되며 더미변수로 투입된다.
+}
+
+\gterm{Wait}{%
+Binary (0/1): 1 if the reviewer reported having to wait at the attraction before entering or being served.
+}{대기}{%
+이진변수(0/1): 리뷰어가 관광지 입장 또는 서비스 이용 전 대기 경험을 보고한 경우 1.
+}
+
+\gterm{Reservation}{%
+Binary (0/1): 1 if the reviewer made an advance reservation before the visit.
+}{예약}{%
+이진변수(0/1): 방문 전 사전 예약을 한 경우 1.
+}
+
+\gterm{Sentiment score}{%
+Continuous ($-1$ to $1$) derived from the free text of each review using a pre-trained Korean NLP sentiment model. The model reads each review and assigns a polarity score: near $+1$ means the text is strongly positive, near $-1$ strongly negative. The measure is validated internally: its correlation with star ratings is $r = 0.51$, confirming it captures genuine reviewer valence. Reviews without free text receive no score and are excluded from models that require it.
+}{감성 점수}{%
+연속형 변수($-1$에서 $1$): 사전 학습된 한국어 자연어처리 감성 분석 모델을 이용해 각 리뷰의 자유 텍스트에서 산출한다. 모델은 텍스트를 읽고 극성 점수를 부여하며, $+1$에 가까울수록 강한 긍정, $-1$에 가까울수록 강한 부정이다. 별점과의 상관($r = 0.51$)을 통해 내적 타당성이 확인되었다. 자유 텍스트가 없는 리뷰는 점수를 받지 못하며 해당 변수를 사용하는 모형에서 제외된다.
+}
+
+\gterm{Keyword themes}{%
+Ten binary dummies for thematic clusters derived from the keyword tags: scenery, sightseeing, crowded, quiet, facilities, accessibility, family, price, food, water activities.
+}{키워드 주제 더미}{%
+키워드 태그에서 도출된 10개 주제 범주의 이진 더미변수: 경관, 볼거리, 혼잡, 한적, 시설, 접근성, 가족, 가격, 음식, 물놀이.
+}
+
+% ── Control Variables ─────────────────────────────────────────────────────────
+\vspace{2pt}
+\noindent{\footnotesize\bfseries CONTROL VARIABLES \hfill 통제변수}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\gterm{What is a control variable?}{%
+\textit{A variable held constant in the model to block alternative explanations of the main relationship.}\\[3pt]
+Included not as the theoretical focus but to isolate the true effect of the independent variables. Without controls, relationships can be spurious: experienced reviewers also write longer texts, so without controlling for text length we could mistake a length effect for an experience effect.
+}{통제변수란?}{%
+\textit{주된 관계에 대한 대안적 설명을 차단하기 위해 모형에서 일정하게 유지하는 변수.}\\[3pt]
+이론적 초점은 아니지만 독립변수의 순수한 효과를 분리하기 위해 포함된다. 통제 없이는 관계가 허위일 수 있다: 경험 많은 리뷰어는 텍스트도 길게 쓰므로, 텍스트 길이를 통제하지 않으면 길이 효과를 경험 효과로 오인할 수 있다.
+}
+
+\gterm{Text length}{%
+Log-transformed character count of the review text. Captures reviewer effort; longer reviews may signal more engaged users.
+}{텍스트 길이}{%
+리뷰 텍스트 글자 수의 로그 변환값. 리뷰어의 노력을 반영하며, 긴 리뷰는 더 적극적인 이용자를 나타낼 수 있다.
+}
+
+\gterm{Image count}{%
+Number of photos attached to the review. Measures visual effort beyond written text.
+}{사진 수}{%
+리뷰에 첨부된 사진 수. 텍스트 외의 시각적 기여를 측정한다.
+}
+
+\gterm{Reviewer history}{%
+Log-transformed cumulative number of reviews the user has written on the platform. Captures experience and overall platform engagement.
+}{작성자 리뷰 이력}{%
+해당 사용자가 플랫폼에서 누적 작성한 리뷰 수의 로그 변환값. 리뷰어 경험과 플랫폼 참여도를 반영한다.
+}
+
+\gterm{Follower count}{%
+Log-transformed number of followers the reviewer has on the platform. Proxy for social influence: more followers means a wider potential audience.
+}{팔로워 수}{%
+플랫폼 팔로워 수의 로그 변환값. 사회적 영향력의 대리 지표로, 팔로워가 많을수록 잠재 노출 범위가 넓다.
+}
+
+\gterm{Review age}{%
+Log-transformed days since the review was posted. In M4 it is used as an exposure offset so that older reviews are not penalized for having had more time to accumulate reactions.
+}{리뷰 경과일}{%
+리뷰 작성 후 경과한 일수의 로그 변환값. M4에서는 오프셋으로 사용되어, 오래된 리뷰가 반응 누적 시간이 많다는 이유로 불이익을 받지 않도록 한다.
+}
+
+\gterm{Verification}{%
+Binary (0/1): 1 if the review was posted with a receipt verification, confirming an actual purchase or entry at the attraction.
+}{인증 여부}{%
+이진변수(0/1): 영수증 인증을 통해 실제 방문 또는 구매를 확인한 리뷰인 경우 1.
+}
+
+\gterm{Season}{%
+Dummy variables for the season of visit: summer, autumn, winter (spring is the reference category). Controls for seasonal variation in visitor behavior.
+}{계절}{%
+방문 계절 더미변수: 여름, 가을, 겨울 (봄이 참조 범주). 방문객 행동의 계절적 변동을 통제한다.
+}
+
+\gterm{Weekend}{%
+Binary (0/1): 1 if the visit took place on a Saturday or Sunday.
+}{주말}{%
+이진변수(0/1): 방문이 토요일 또는 일요일에 이루어진 경우 1.
+}
+
+% ── Place Fixed Effects ───────────────────────────────────────────────────────
+\vspace{2pt}
+\noindent{\footnotesize\bfseries PLACE FIXED EFFECTS \hfill 관광지 고정효과}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\gterm{Place fixed effects}{%
+A dummy variable for each of the 29 attractions. They absorb all time-invariant, location-specific characteristics (fame, size, entry fee, type). Each model then compares reviewers \textit{within} the same attraction, not across different ones.
+}{관광지 고정효과}{%
+29개 관광지 각각에 대한 더미변수. 지명도, 규모, 입장료, 유형 등 시간 불변의 장소 고유 특성을 모두 흡수한다. 따라서 각 모형은 관광지 간 비교가 아닌, 동일 관광지 내 리뷰어 간 비교를 수행한다.
+}
+
+% ── VIF ───────────────────────────────────────────────────────────────────────
+\vspace{2pt}
+\noindent{\footnotesize\bfseries STATISTICAL CONCEPTS \hfill 통계 개념}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\gterm{VIF --- Variance Inflation Factor (분산팽창계수)}{%
+\textit{How much a predictor's standard error is inflated by its correlation with the other predictors in the model.}\\[3pt]
+Computed as $\text{VIF}_j = 1/(1 - R^2_j)$, where $R^2_j$ is the proportion of variance in predictor $j$ explained by all other predictors. A VIF of 1 means no correlation with any other predictor. Values above 5--10 are considered problematic: the coefficient estimate is still unbiased, but its standard error is so large that significance tests lose power.\\[3pt]
+In this study the maximum VIF is 2.82 (for \textit{has\_visit\_info}), well below any threshold. Multicollinearity is not a concern.
+}{VIF --- 분산팽창계수}{%
+\textit{모형 내 다른 예측변수들과의 상관으로 인해 해당 예측변수의 표준오차가 얼마나 부풀려지는지를 나타낸다.}\\[3pt]
+$\text{VIF}_j = 1/(1 - R^2_j)$로 계산되며, $R^2_j$는 예측변수 $j$의 분산 중 다른 예측변수들에 의해 설명되는 비율이다. VIF가 1이면 다른 예측변수와 전혀 상관이 없다는 의미다. 5\textasciitilde10 이상이면 문제로 간주된다: 계수 추정값은 여전히 불편이지만 표준오차가 커서 유의성 검정의 검정력이 떨어진다.\\[3pt]
+본 연구에서 최대 VIF는 2.82(\textit{has\_visit\_info})로, 어떤 기준값도 크게 하회한다. 다중공선성은 문제가 되지 않는다.
+}
+
+% ── Research Framework Figure ─────────────────────────────────────────────────
+\vspace{2pt}
+\noindent{\footnotesize\bfseries RESEARCH FRAMEWORK FIGURE \hfill 연구 프레임워크 그림}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\gterm{What the diagram shows}{%
+\textit{A top-to-bottom map of the research pipeline: data collection feeds variable construction, which feeds the models.}\\[3pt]
+\textbf{Block 1 --- Data Acquisition:} Selenium scraper, 29 attractions, 14,401 reviews; each carries structured metadata and optional free text.\\[3pt]
+\textbf{Block 2 --- Variables:} raw data mapped to 4 DVs (what to explain) and IVs + controls (how to explain them).\\[3pt]
+\textbf{Block 3 --- Models:} one model per DV, chosen by outcome type: M1 logistic, M2--M3 ordered logistic, M4 negative binomial.\\[3pt]
+\textbf{Arrows:} analytical flow only --- not a causal path diagram.
+}{그림이 보여주는 것}{%
+\textit{데이터 수집이 변수 구성을 가능하게 하고, 변수가 모형에 투입되는 연구 파이프라인의 지도.}\\[3pt]
+\textbf{블록 1 --- 데이터 수집:} Selenium 스크래퍼, 29개 관광지, 리뷰 14,401건; 각 리뷰에는 구조화된 메타데이터와 선택적 자유 텍스트가 포함된다.\\[3pt]
+\textbf{블록 2 --- 변수:} 원시 데이터를 4개의 종속변수(설명 대상)와 독립변수 및 통제변수(설명 수단)로 변환한다.\\[3pt]
+\textbf{블록 3 --- 모형:} 결과 유형에 따라 종속변수별로 하나의 모형을 선택: M1 로지스틱, M2--M3 순서 로지스틱, M4 음이항.\\[3pt]
+\textbf{화살표:} 분석 흐름만을 나타내며, 인과 경로 다이어그램이 아니다.
+}
+
+% ── Models ────────────────────────────────────────────────────────────────────
+\vspace{2pt}
+\noindent{\footnotesize\bfseries MODELS --- WHAT THEY ARE AND WHY THEY WERE CHOSEN \hfill 모형 --- 정의 및 선택 이유}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\gterm{M1 --- Logistic Regression (Revisit)}{%
+\textit{What it is:} a regression model for binary outcomes (0/1). Instead of predicting a raw probability, it models the log-odds of the event, which ensures predictions stay between 0 and 1.\\[3pt]
+\textit{Why chosen:} Revisit is binary. Ordinary linear regression applied to a 0/1 outcome can predict values outside the 0--1 range and violates assumptions. Logistic regression is the standard choice for this type of outcome.\\[3pt]
+\textit{Output:} odds ratios ($e^{\hat\beta}$). An OR of 1.52 means the odds of revisiting are 52\% higher for each unit increase in that predictor.
+}{M1 --- 로지스틱 회귀 (재방문)}{%
+\textit{정의:} 이진 결과(0/1)를 위한 회귀 모형. 원시 확률 대신 사건의 로그 승산을 모형화하여 예측값이 0과 1 사이에 머물도록 한다.\\[3pt]
+\textit{선택 이유:} 재방문은 이진변수다. 0/1 결과에 일반 선형 회귀를 적용하면 0--1 범위를 벗어나는 예측값이 나오고 가정이 위반된다. 로지스틱 회귀는 이 유형의 결과에 대한 표준 선택이다.\\[3pt]
+\textit{결과:} 승산비($e^{\hat\beta}$). 승산비 1.52는 해당 예측변수가 한 단위 증가할 때 재방문 승산이 52\% 높아짐을 의미한다.
+}
+
+\gterm{M2 --- Ordered Logistic Regression (Keyword Count)}{%
+\textit{What it is:} an extension of logistic regression for ordered categorical outcomes. It models the probability of being at or above each threshold on the scale, respecting the natural order of the categories without assuming equal intervals between them.\\[3pt]
+\textit{Why chosen:} Keyword Count takes values 0, 1, 2, 3, 4, 5 in a fixed order. Treating it as continuous (OLS) would assume that the gap between 0 and 1 equals the gap between 4 and 5, which is not warranted. Ordered logistic respects the ranking without that assumption.\\[3pt]
+\textit{Output:} cumulative odds ratios. An OR above 1 means higher odds of selecting more keywords.
+}{M2 --- 순서 로지스틱 회귀 (키워드 수)}{%
+\textit{정의:} 순서형 범주 결과를 위한 로지스틱 회귀의 확장. 척도의 각 임계값 이상일 확률을 모형화하며, 범주 간 등간격을 가정하지 않고 자연적 순서를 존중한다.\\[3pt]
+\textit{선택 이유:} 키워드 수는 0, 1, 2, 3, 4, 5의 고정된 순서를 가진다. 연속형(OLS)으로 처리하면 0에서 1의 간격이 4에서 5의 간격과 같다고 가정하게 되는데, 이는 타당하지 않다. 순서 로지스틱은 그러한 가정 없이 순위를 존중한다.\\[3pt]
+\textit{결과:} 누적 승산비. 1보다 크면 더 많은 키워드를 선택할 승산이 높음을 의미한다.
+}
+
+\gterm{M3 --- Ordered Logistic Regression (Rating, exploratory)}{%
+\textit{What it is:} same model type as M2, applied to star ratings (1--5).\\[3pt]
+\textit{Why exploratory:} the direction of causality is unclear. Keyword Count could influence Rating, or both could reflect the same underlying engagement. Additionally, only 32\% of reviews have a rating, which reduces the sample and power. Results should be interpreted with caution.
+}{M3 --- 순서 로지스틱 회귀 (별점, 탐색적)}{%
+\textit{정의:} M2와 동일한 모형 유형을 별점(1\textasciitilde5)에 적용한 것.\\[3pt]
+\textit{탐색적인 이유:} 인과 방향이 불분명하다. 키워드 수가 별점에 영향을 줄 수도 있고, 두 변수 모두 동일한 참여도를 반영할 수도 있다. 또한 리뷰의 32\%만 별점을 포함하고 있어 표본과 검정력이 줄어든다. 결과 해석 시 주의가 필요하다.
+}
+
+\gterm{M4 --- Negative Binomial Regression (Reactions)}{%
+\textit{What it is:} a regression model for count data where the variance is much larger than the mean (overdispersion). It adds a dispersion parameter $\alpha$ to account for this extra variability. A log offset for review age is included so that older reviews are not unfairly compared to newer ones: the model estimates reactions \textit{per unit of exposure time}, not reactions in absolute terms.\\[3pt]
+\textit{Why chosen:} Reactions are counts (0, 1, 2, \ldots). Poisson regression assumes variance equals mean, but here variance is 37 times the mean ($\hat\alpha = 2.44$). Negative binomial handles overdispersion. The offset for review age corrects for the fact that a one-month-old review has had less time to receive reactions than a two-year-old one.\\[3pt]
+\textit{Output:} incidence rate ratios (IRR). An IRR of 1.97 means the reaction rate is 97\% higher for each unit increase in that predictor.
+}{M4 --- 음이항 회귀 (반응 수)}{%
+\textit{정의:} 분산이 평균보다 훨씬 큰(과산포) 계수 데이터를 위한 회귀 모형. 산포 모수 $\alpha$를 추가하여 초과 변동성을 설명한다. 리뷰 경과일에 대한 로그 오프셋을 포함하여 오래된 리뷰와 최신 리뷰를 공정하게 비교한다: 모형은 절대적 반응 수가 아닌 \textit{단위 노출 시간당} 반응 수를 추정한다.\\[3pt]
+\textit{선택 이유:} 반응 수는 계수형 데이터(0, 1, 2, \ldots)다. 포아송 회귀는 분산이 평균과 같다고 가정하지만, 여기서는 분산이 평균의 37배($\hat\alpha = 2.44$)다. 음이항 회귀는 과산포를 처리한다. 리뷰 경과일 오프셋은 1개월 된 리뷰가 2년 된 리뷰보다 반응을 받을 시간이 적었다는 점을 보정한다.\\[3pt]
+\textit{결과:} 발생비(IRR). IRR 1.97은 해당 예측변수가 한 단위 증가할 때 반응 발생률이 97\% 높아짐을 의미한다.
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\clearpage
+
+\begin{center}
+  {\large\bfseries Anticipated Questions \& Answers}\\[2pt]
+  {\large\bfseries 예상 질문 및 답변}
+\end{center}
+\rule{\linewidth}{0.8pt}\vspace{4pt}
+
+% Q&A helper: question bold, answer below
+\newcommand{\qa}[4]{%
+  \noindent%
+  \begin{minipage}[t]{0.485\linewidth}
+    \small\textbf{Q: #1}\\[3pt] #2
+  \end{minipage}\hfill\vrule\hfill%
+  \begin{minipage}[t]{0.483\linewidth}
+    \small\textbf{Q: #3}\\[3pt] #4
+  \end{minipage}\par\vspace{8pt}%
+}
+
+\noindent{\footnotesize\bfseries DATA \hfill 데이터}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\qa{Why only 29 attractions? Is that enough?}{%
+The 29 are not a random sample --- they are all attractions that met the minimum threshold of 30 reviews. The analysis unit is the review (N = 14,401), not the attraction. Place fixed effects handle the small number of locations by absorbing each one's unique characteristics.
+}{왜 29개 관광지만? 충분한가?}{%
+29개는 무작위 표본이 아니라 최소 리뷰 수(30건) 기준을 충족한 모든 관광지다. 분석 단위는 관광지가 아닌 리뷰(N = 14,401)다. 관광지 고정효과가 각 장소의 고유 특성을 흡수하여 관광지 수가 적은 문제를 처리한다.
+}
+
+\qa{Are the reviews genuine? Could they be fake?}{%
+Naver Place has receipt verification (controlled as a variable). There is no monetary incentive for fake reviews as on some other platforms. Reviews without verification are included but the verification status is controlled in all models.
+}{리뷰가 진짜인지 어떻게 아는가? 허위 리뷰는?}{%
+네이버 플레이스에는 영수증 인증 기능이 있으며(변수로 통제됨), 다른 플랫폼과 달리 허위 리뷰를 유도하는 금전적 인센티브가 없다. 인증되지 않은 리뷰도 포함되지만 인증 여부는 모든 모형에서 통제된다.
+}
+
+\noindent{\footnotesize\bfseries MODELS \hfill 모형}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\qa{Why four separate models instead of one?}{%
+Each dependent variable has a different statistical distribution: binary, ordinal, ordinal, count with overdispersion. No single model handles all four correctly. Using separate models is the standard approach; one integrated model would require compromises on each outcome.
+}{왜 하나의 통합 모형이 아닌 네 개의 별도 모형인가?}{%
+각 종속변수는 통계적 분포가 다르다: 이진, 순서형, 순서형, 과산포 계수형. 이 네 가지를 모두 올바르게 처리하는 단일 모형은 존재하지 않는다. 별도 모형을 사용하는 것이 표준 접근법이며, 통합 모형을 쓰면 각 결과에서 타협이 필요하다.
+}
+
+\qa{Why not OLS regression for everything?}{%
+OLS for binary outcomes predicts probabilities outside [0,1] and violates homoscedasticity. For ordinal outcomes it assumes equal intervals between categories. For counts it can predict negative values. Each outcome type has its own appropriate model family.
+}{왜 모든 것에 OLS 회귀를 쓰지 않는가?}{%
+이진 결과에 OLS를 적용하면 [0,1] 범위를 벗어나는 확률을 예측하고 등분산성 가정을 위반한다. 순서형 결과에는 범주 간 등간격을 가정한다. 계수형 결과에는 음수 값을 예측할 수 있다. 각 결과 유형마다 적합한 모형 계열이 따로 있다.
+}
+
+\qa{What exactly is the offset in M4?}{%
+Reactions accumulate over time: a review posted 2 years ago had more time to receive likes than one posted last week. Without correction, older reviews would look artificially more popular. The offset $\log(\text{days})$ converts the outcome to a rate (reactions per day of exposure), making old and new reviews comparable.
+}{M4의 오프셋이 정확히 무엇인가?}{%
+반응 수는 시간이 지날수록 누적된다: 2년 전에 올린 리뷰는 지난주에 올린 리뷰보다 좋아요를 받을 시간이 더 많았다. 보정 없이는 오래된 리뷰가 인위적으로 더 인기 있어 보인다. 오프셋 $\log(\text{일수})$는 결과를 노출 기간당 반응 수(비율)로 변환하여 오래된 리뷰와 새 리뷰를 공정하게 비교한다.
+}
+
+\qa{Why Negative Binomial and not Poisson?}{%
+Poisson requires variance $=$ mean. Here variance is 37 times the mean (overdispersion parameter $\hat\alpha = 2.44$). Using Poisson anyway would underestimate standard errors, producing false significance. Negative binomial adds a dispersion parameter to absorb the extra variability.
+}{왜 포아송이 아닌 음이항인가?}{%
+포아송은 분산 $=$ 평균을 요구한다. 여기서는 분산이 평균의 37배다(산포 모수 $\hat\alpha = 2.44$). 그럼에도 포아송을 사용하면 표준오차가 과소추정되어 거짓 유의성이 발생한다. 음이항은 산포 모수를 추가하여 초과 변동성을 흡수한다.
+}
+
+\noindent{\footnotesize\bfseries RESULTS \hfill 결과}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\qa{What does AUC = 0.773 mean? Is it good?}{%
+AUC is the probability that the model ranks a random revisitor above a random non-revisitor. 0.5 = random chance, 1.0 = perfect. At 0.773, the model is correct 77.3\% of the time. For behavioral observational data this is considered good.
+}{AUC = 0.773은 무슨 의미인가? 좋은 수치인가?}{%
+AUC는 모형이 무작위 재방문자를 무작위 비재방문자보다 높게 순위 매길 확률이다. 0.5 = 무작위 추측, 1.0 = 완벽한 예측. 0.773에서 모형은 77.3\% 정확하다. 행동 관찰 데이터에서 이는 좋은 수치로 평가된다.
+}
+
+\qa{Why does sentiment reduce revisit (OR = 0.70)?}{%
+Counterintuitive but interpretable: reviewers who write very positive text may have had a peak experience that they do not feel the need to repeat. Revisitors may be more pragmatic or habitual visitors who are less emotionally expressive. The model controls for all other variables, so this is a net sentiment effect.
+}{왜 감성 점수가 재방문을 감소시키는가 (OR = 0.70)?}{%
+직관에 반하지만 해석 가능하다: 매우 긍정적인 텍스트를 쓰는 리뷰어는 반복할 필요를 느끼지 않는 절정 경험을 했을 수 있다. 재방문자는 감정 표현이 적은 실용적이거나 습관적인 방문객일 수 있다. 모형은 다른 모든 변수를 통제하므로 이는 순수한 감성 효과다.
+}
+
+\qa{Statistical vs.\ practical significance: are the effects large?}{%
+OR = 1.52 for reviewer history means a 52\% increase in revisit odds per log-unit increase in reviews written. This is substantively meaningful. OR = 4.02 for writing text in M2 is very large: writing free text quadruples keyword count odds. Not all results are large --- M3 effects are modest --- but M1, M2 and M4 show strong, interpretable patterns.
+}{통계적 유의성 대 실질적 유의성: 효과 크기가 큰가?}{%
+리뷰 이력의 OR = 1.52는 리뷰 수 로그값이 한 단위 증가할 때 재방문 승산이 52\% 높아짐을 의미한다. 이는 실질적으로 의미 있다. M2에서 텍스트 작성의 OR = 4.02는 매우 크다: 자유 텍스트 작성이 키워드 수 승산을 4배 높인다. 모든 결과가 큰 것은 아니지만(M3 효과는 완만), M1, M2, M4는 강하고 해석 가능한 패턴을 보인다.
+}
+
+\noindent{\footnotesize\bfseries THEORY \hfill 이론}\par
+\vspace{2pt}\rule{\linewidth}{0.3pt}\vspace{4pt}
+
+\qa{What is information diversity theory (Lee et al., 2026)?}{%
+Lee, Jeong, and Kim (2026) propose that review quality is partly captured by how many distinct informational dimensions a review covers --- not just whether it is positive or long, but whether it addresses multiple aspects of the experience. Keyword Count operationalizes this at the review level: selecting more tags means covering more dimensions of the visit.
+}{정보 다양성 이론이란 무엇인가 (이민영 외, 2026)?}{%
+이민영, 정동영, 김지영(2026)은 리뷰 품질이 부분적으로 리뷰가 다루는 정보적 차원의 수에 의해 포착된다고 제안한다. 긍정적이거나 긴 것만이 아니라 경험의 여러 측면을 다루는지가 중요하다. 키워드 수는 이를 리뷰 수준에서 조작화한다: 태그를 더 많이 선택할수록 방문의 더 많은 차원을 다루는 것이다.
+}
+
+\qa{Can these results be generalized beyond Korea?}{%
+The direction of effects --- active reviewers return more, text effort drives engagement --- likely holds on other structured review platforms. The specific coefficient values are context-dependent. The study's clearest generalization is methodological: using platform-structured metadata as behavioral proxies for constructs like information diversity.
+}{이 결과를 한국 이외로 일반화할 수 있는가?}{%
+효과의 방향 --- 활동적인 리뷰어가 더 많이 재방문하고, 텍스트 노력이 반응을 유도한다 --- 은 구조화된 메타데이터를 가진 다른 리뷰 플랫폼에서도 유지될 가능성이 높다. 구체적인 계수값은 맥락 의존적이다. 이 연구의 가장 명확한 일반화는 방법론적인 것이다: 플랫폼 구조화 메타데이터를 정보 다양성과 같은 개념의 행동적 대리 지표로 사용하는 방식.
+}
+
+\noindent\rule{\linewidth}{0.8pt}
+
+\end{document}

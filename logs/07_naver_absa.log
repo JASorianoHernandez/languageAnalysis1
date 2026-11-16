@@ -1,0 +1,140 @@
+﻿python.exe : [transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+At line:1 char:302
++ ... tch {} } }; & "C:\Users\crono\anaconda3\envs\faiss-gpu\python.exe" 07 ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ([transformers] ...dtype` instead!:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Reviews to process: 1173  (Korean-only dataset, ABSA only)
+
+Loading Qwen/Qwen2.5-7B-Instruct in 4-bit...
+
+Loading weights:   0%|          | 0/339 [00:00<?, ?it/s]
+Loading weights:   0%|          | 1/339 [00:02<15:17,  2.71s/it]
+Loading weights:   1%|          | 2/339 [00:04<11:05,  1.97s/it]
+Loading weights:   1%|          | 4/339 [00:04<04:43,  1.18it/s]
+Loading weights:   1%|▏         | 5/339 [00:04<03:33,  1.57it/s]
+Loading weights:   2%|▏         | 6/339 [00:04<02:44,  2.03it/s]
+Loading weights:   5%|▍         | 16/339 [00:05<00:36,  8.92it/s]
+Loading weights:   5%|▌         | 18/339 [00:05<00:39,  8.08it/s]
+Loading weights:   8%|▊         | 28/339 [00:05<00:20, 15.01it/s]
+Loading weights:   9%|▉         | 31/339 [00:06<00:23, 13.08it/s]
+Loading weights:  12%|█▏        | 40/339 [00:06<00:16, 18.19it/s]
+Loading weights:  13%|█▎        | 43/339 [00:06<00:19, 15.37it/s]
+Loading weights:  15%|█▌        | 52/339 [00:06<00:14, 20.48it/s]
+Loading weights:  16%|█▌        | 55/339 [00:07<00:17, 16.35it/s]
+Loading weights:  19%|█▉        | 64/339 [00:07<00:13, 21.05it/s]
+Loading weights:  20%|█▉        | 67/339 [00:07<00:16, 16.62it/s]
+Loading weights:  22%|██▏       | 76/339 [00:08<00:12, 21.64it/s]
+Loading weights:  23%|██▎       | 79/339 [00:08<00:15, 17.05it/s]
+Loading weights:  26%|██▌       | 88/339 [00:08<00:11, 21.95it/s]
+Loading weights:  27%|██▋       | 91/339 [00:09<00:14, 17.24it/s]
+Loading weights:  29%|██▉       | 100/339 [00:09<00:10, 22.02it/s]
+Loading weights:  30%|███       | 103/339 [00:09<00:13, 17.17it/s]
+Loading weights:  33%|███▎      | 112/339 [00:09<00:10, 21.55it/s]
+Loading weights:  34%|███▍      | 115/339 [00:10<00:13, 16.92it/s]
+Loading weights:  37%|███▋      | 124/339 [00:10<00:09, 21.55it/s]
+Loading weights:  37%|███▋      | 127/339 [00:11<00:13, 15.87it/s]
+Loading weights:  40%|████      | 136/339 [00:11<00:10, 19.16it/s]
+Loading weights:  41%|████      | 139/339 [00:11<00:13, 14.77it/s]
+Loading weights:  44%|████▎     | 148/339 [00:12<00:10, 18.83it/s]
+Loading weights:  45%|████▍     | 151/339 [00:12<00:12, 14.59it/s]
+Loading weights:  47%|████▋     | 160/339 [00:12<00:09, 18.49it/s]
+Loading weights:  48%|████▊     | 163/339 [00:13<00:12, 14.33it/s]
+Loading weights:  51%|█████     | 172/339 [00:13<00:09, 18.27it/s]
+Loading weights:  52%|█████▏    | 175/339 [00:14<00:11, 14.15it/s]
+Loading weights:  54%|█████▍    | 184/339 [00:14<00:08, 17.95it/s]
+Loading weights:  55%|█████▌    | 187/339 [00:14<00:10, 14.15it/s]
+Loading weights:  58%|█████▊    | 196/339 [00:15<00:07, 18.00it/s]
+Loading weights:  59%|█████▊    | 199/339 [00:15<00:10, 13.91it/s]
+Loading weights:  61%|██████▏   | 208/339 [00:15<00:07, 17.78it/s]
+Loading weights:  62%|██████▏   | 211/339 [00:16<00:09, 13.51it/s]
+Loading weights:  65%|██████▍   | 220/339 [00:16<00:06, 17.43it/s]
+Loading weights:  65%|██████▌   | 222/339 [00:17<00:08, 13.04it/s]
+Loading weights:  68%|██████▊   | 232/339 [00:17<00:05, 17.90it/s]
+Loading weights:  69%|██████▉   | 235/339 [00:17<00:07, 14.27it/s]
+Loading weights:  72%|███████▏  | 244/339 [00:18<00:05, 17.95it/s]
+Loading weights:  73%|███████▎  | 247/339 [00:18<00:06, 14.01it/s]
+Loading weights:  76%|███████▌  | 256/339 [00:18<00:04, 17.81it/s]
+Loading weights:  76%|███████▌  | 258/339 [00:19<00:06, 12.00it/s]
+Loading weights:  79%|███████▉  | 268/339 [00:19<00:04, 16.54it/s]
+Loading weights:  80%|███████▉  | 270/339 [00:20<00:05, 12.38it/s]
+Loading weights:  83%|████████▎ | 280/339 [00:20<00:03, 16.81it/s]
+Loading weights:  83%|████████▎ | 282/339 [00:21<00:04, 12.40it/s]
+Loading weights:  86%|████████▌ | 292/339 [00:21<00:02, 16.10it/s]
+Loading weights:  87%|████████▋ | 294/339 [00:22<00:03, 12.27it/s]
+Loading weights:  90%|████████▉ | 304/339 [00:22<00:02, 16.93it/s]
+Loading weights:  90%|█████████ | 306/339 [00:22<00:02, 12.80it/s]
+Loading weights:  93%|█████████▎| 316/339 [00:23<00:01, 17.60it/s]
+Loading weights:  94%|█████████▍| 319/339 [00:23<00:01, 13.58it/s]
+Loading weights:  97%|█████████▋| 328/339 [00:23<00:00, 17.45it/s]
+Loading weights:  98%|█████████▊| 331/339 [00:24<00:00, 13.51it/s]
+Loading weights: 100%|██████████| 339/339 [00:24<00:00, 13.86it/s]
+  GPU memory allocated: 5.6 GB
+
+════════════════════════════════════════════════════════════
+PART 1 — ABSA
+════════════════════════════════════════════════════════════
+  1/1173  (3s elapsed, ~3249s left)
+  20/1173  (41s elapsed, ~2355s left)
+  40/1173  (80s elapsed, ~2271s left)
+  60/1173  (119s elapsed, ~2213s left)
+  80/1173  (157s elapsed, ~2146s left)
+  100/1173  (194s elapsed, ~2084s left)
+  120/1173  (231s elapsed, ~2029s left)
+  140/1173  (272s elapsed, ~2005s left)
+  160/1173  (310s elapsed, ~1960s left)
+  180/1173  (348s elapsed, ~1921s left)
+  200/1173  (387s elapsed, ~1885s left)
+  220/1173  (426s elapsed, ~1846s left)
+  240/1173  (463s elapsed, ~1800s left)
+  260/1173  (501s elapsed, ~1760s left)
+  280/1173  (539s elapsed, ~1719s left)
+  300/1173  (579s elapsed, ~1686s left)
+  320/1173  (619s elapsed, ~1649s left)
+  340/1173  (659s elapsed, ~1614s left)
+  360/1173  (696s elapsed, ~1572s left)
+  380/1173  (734s elapsed, ~1532s left)
+  400/1173  (773s elapsed, ~1494s left)
+  420/1173  (813s elapsed, ~1457s left)
+  440/1173  (851s elapsed, ~1417s left)
+  460/1173  (891s elapsed, ~1380s left)
+  480/1173  (929s elapsed, ~1341s left)
+  500/1173  (966s elapsed, ~1300s left)
+  520/1173  (1006s elapsed, ~1264s left)
+  540/1173  (1046s elapsed, ~1226s left)
+  560/1173  (1084s elapsed, ~1187s left)
+  580/1173  (1121s elapsed, ~1146s left)
+  600/1173  (1158s elapsed, ~1106s left)
+  620/1173  (1194s elapsed, ~1065s left)
+  640/1173  (1233s elapsed, ~1027s left)
+  660/1173  (1270s elapsed, ~987s left)
+  680/1173  (1308s elapsed, ~948s left)
+  700/1173  (1344s elapsed, ~908s left)
+  720/1173  (1380s elapsed, ~868s left)
+  740/1173  (1416s elapsed, ~829s left)
+  760/1173  (1454s elapsed, ~790s left)
+  780/1173  (1491s elapsed, ~751s left)
+  800/1173  (1531s elapsed, ~714s left)
+  820/1173  (1568s elapsed, ~675s left)
+  840/1173  (1607s elapsed, ~637s left)
+  860/1173  (1645s elapsed, ~599s left)
+  880/1173  (1681s elapsed, ~560s left)
+  900/1173  (1721s elapsed, ~522s left)
+  920/1173  (1760s elapsed, ~484s left)
+  940/1173  (1798s elapsed, ~446s left)
+  960/1173  (1837s elapsed, ~408s left)
+  980/1173  (1876s elapsed, ~369s left)
+  1000/1173  (1913s elapsed, ~331s left)
+  1020/1173  (1954s elapsed, ~293s left)
+  1040/1173  (1993s elapsed, ~255s left)
+  1060/1173  (2032s elapsed, ~217s left)
+  1080/1173  (2069s elapsed, ~178s left)
+  1100/1173  (2106s elapsed, ~140s left)
+  1120/1173  (2142s elapsed, ~101s left)
+  1140/1173  (2180s elapsed, ~63s left)
+  1160/1173  (2218s elapsed, ~25s left)
+  1173/1173  (2244s elapsed, ~0s left)
+
+Valid JSON answers: KO 100.0%, EN 0%
+Saved: data\analysis\naver\naver_absa.csv  (Korean-only mode: summaries and figures skipped)

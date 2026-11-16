@@ -1,0 +1,41 @@
+Loaded 1494 reviews, 8 places
+1. Sentiment bar chart...
+2. Sentiment heatmap...
+3. Word clouds...
+4. Topic distribution heatmap...
+5. TTR analysis...
+6. TF-IDF keyword contrast...
+7. Mann-Whitney U tests...
+  경복궁              KO=0.562  EN=0.644  p=0.8167 n.s.
+  창덕궁              KO=0.520  EN=0.605  p=0.8017 n.s.
+  덕수궁              KO=0.608  EN=0.698  p=0.8212 n.s.
+  북촌한옥마을           KO=0.571  EN=0.583  p=0.3784 n.s.
+  국립중앙박물관          KO=0.577  EN=0.688  p=0.7158 n.s.
+  N서울타워            KO=0.434  EN=0.717  p=0.9687 n.s.
+  광안리해수욕장          KO=0.697  EN=0.723  p=0.4311 n.s.
+  해운대해수욕장          KO=0.607  EN=0.777  p=0.9721 n.s.
+  ALL              KO=0.571  EN=0.677  p=0.9763 n.s.
+  Saved: stats_mannwhitney.csv
+8. Saving analysis_data.json...
+  Saved: analysis_data.json
+
+── All figures saved to data\analysis\figures ──
+  01_sentiment_bar.png
+  02_sentiment_heatmap.png
+  03a_wordcloud_ko.png
+  03b_wordcloud_en.png
+  04_topic_dist_en.png
+  04_topic_dist_ko.png
+  05_ttr_bar.png
+  06_tfidf_contrast.png
+  07_motivations_stacked.png
+  08_crosslingual_sim.png
+  09_absa_heatmap_en.png
+  09_absa_heatmap_ko.png
+  10_absa_radar.png
+  11_geo_bubble_busan.png
+  11_geo_bubble_seoul.png
+  12_sentiment_scatter.png
+  13_hypothesis_tests.png
+  14_lda_k_selection.png
+  bubble_map.html

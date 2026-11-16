@@ -1,0 +1,303 @@
+% Compile with xelatex
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Malgun Gothic}
+\setCJKsansfont{Malgun Gothic}
+% Korean uses spaces between words, unlike Chinese/Japanese: keep them visible
+\xeCJKsetup{CJKspace=true}
+
+\usepackage[top=1.0cm, bottom=0.7cm, left=1.4cm, right=1.4cm]{geometry}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{float}   % [H] placement used by the generated appendix tables
+% Match the reference paper's caption style: "표 1. 변수요약 / Variable summary"
+\captionsetup[table]{name=표, labelsep=period, font=small, labelfont=bf,
+                     skip=3pt, justification=centering}
+
+\linespread{0.94}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\setlength{\emergencystretch}{1em}
+\renewcommand{\arraystretch}{1.0}
+\pagestyle{empty}
+
+\newcommand{\headrule}{\vspace{1pt}\noindent\rule{\linewidth}{0.4pt}\vspace{1pt}}
+\newcommand{\sect}[1]{\vspace{2.5pt}\noindent\textbf{#1}\par\vspace{0pt}}
+
+\begin{document}
+\footnotesize
+
+% ═══════════════════════════════════════════════════════════════════
+% PAGE 1 — ENGLISH
+% ═══════════════════════════════════════════════════════════════════
+\begin{center}
+{\large\textbf{What Makes an Attraction Review Informative}}\\[2pt]
+{\large\textbf{Visit Context, Information Diversity and Reader Response on Naver Place}}\\[5pt]
+{\normalsize Jorge Adan Soriano Hernandez}\\
+{\small Department of Data Science, Hoseo University \quad$\cdot$\quad Research proposal, October 2026}
+\end{center}
+
+\headrule
+
+\sect{1. Topic}
+Online reviews are the main source travellers consult before choosing where to go. Lee, Jeong and
+Kim (2026) showed that the \textbf{diversity} of information in a review — how many distinct keywords
+it carries — drives business performance separately from the sheer \textbf{quantity} of reviews. They
+measured it on Naver Smart Place, aggregated by business and week. This study takes the same
+construct down to the individual review and asks where that diversity comes from: which visitors
+write informative reviews, and which reviews other users actually find useful.
+
+\sect{2. Problem}
+Lee et al.\ (2026) observe performance (page views, total clicks) but aggregate reviews to the
+business--week level, so the content and the visit context of any single review stay invisible. Their
+information diversity is a weekly average; the companion, the purpose of the visit and the waiting
+experience behind it are never used, although Naver collects all three. The antecedents of an
+informative review are therefore unknown: we know diversity matters, not who supplies it.
+
+\sect{3. Research questions}
+\begin{enumerate}[leftmargin=14pt, itemsep=0pt, topsep=1pt]
+\item Which visit contexts are associated with returning to the same attraction?
+\item Which reviewers and visit contexts produce more diverse information, i.e.\ more keywords?
+\item Which reviews do other users respond to, and does sentiment help or hurt?
+\end{enumerate}
+
+\sect{4. Data}
+Naver Place reviews for Korean attractions, collected by scraping each place individually.
+12{,}537 reviews from 7{,}230 reviewers across 22 attractions; 9{,}843 carry text and 4{,}148 carry a
+star rating. The unit of analysis is the review $i$ at place $j$, not the business--week.
+
+\sect{5. Variables}
+\vspace{-3pt}
+\begin{center}
+\begin{tabular}{@{}llp{8.4cm}@{}}
+\toprule
+\textbf{Role} & \textbf{Variable} & \textbf{Definition} \\
+\midrule
+Dependent   & Revisit         & Review written on a second or later visit (0/1) \\
+            & Keyword Count   & Keyword tags the reviewer selected, 0--5: information diversity \\
+            & Rating, Reactions & Star rating 1--5; users who reacted to the review (helpfulness) \\
+\midrule
+Independent & Companion       & alone, partner, friend, child, family, colleague \\
+            & Purpose         & travel, outing, daily life, date, socialising \\
+            & Waited, Reserved, Sentiment & queued on arrival; booked ahead; text sentiment $-1$ to $1$ \\
+            & Tag themes      & ten themes: visual, content, crowding, quiet, facilities, access,
+                                family, value, food, water leisure \\
+\midrule
+Control     & Text Length, Image Count & $\ln$ characters; photos attached to the review \\
+            & User Reviews, User Followers & $\ln$ of the reviewer's review and follower counts \\
+            & Review Age      & $\ln$ days since posting; exposure offset in M4 \\
+            & Season, Weekend, Verification, Place FE & $\delta_j$ absorbs attraction characteristics \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{-1pt}
+Descriptives: Revisit 22.9\%, Keyword Count $\mu=3.06$ (max 5), Rating $\mu=4.69$,
+Reactions $\mu=1.29$ (max 122), Sentiment $\mu=0.66$. All VIF below 2.6, so collinearity is not a
+concern. Keyword Count sits on the same 0--5 scale Lee et al.\ (2026) report, because Naver caps
+keyword selection at five — the two studies measure the same instrument at different levels.
+
+\sect{6. Models}
+Review-level regressions with place fixed effects $\delta_j$ and standard errors clustered by
+reviewer, since the same person often writes several reviews.
+\vspace{-6pt}
+\begin{align*}
+\text{M1:}\quad & \operatorname{logit} P(\textit{Revisit}_{ij}) = \beta_0 + \mathbf{x}_{ij}^\top\boldsymbol\beta + \delta_j \\[-1pt]
+\text{M2:}\quad & P(\textit{KeywordCount}_{ij} \le k) = \big[1 + e^{-(\tau_k - \mathbf{x}_{ij}^\top\boldsymbol\beta - \delta_j)}\big]^{-1}, \quad k = 0,\dots,4 \\[-1pt]
+\text{M3:}\quad & P(\textit{Rating}_{ij} \le k) = \big[1 + e^{-(\tau_k - \mathbf{x}_{ij}^\top\boldsymbol\beta - \delta_j)}\big]^{-1}, \quad k = 1,\dots,4 \\[-1pt]
+\text{M4:}\quad & \textit{Reactions}_{ij} \sim \text{NegBin}(\mu_{ij}), \quad
+                  \ln \mu_{ij} = \beta_0 + \mathbf{x}_{ij}^\top\boldsymbol\beta + \gamma \ln(\textit{Age}_{ij}) + \delta_j
+\end{align*}
+\vspace{-9pt}
+
+Each model is re-estimated on one random review per reviewer and per place; only effects that
+survive are reported as robust. Cross-validation is grouped by reviewer, so no reviewer appears in
+both folds.
+
+\sect{7. Results}
+\vspace{-3pt}
+\begin{center}
+\begin{tabular}{@{}llp{7.1cm}@{}}
+\toprule
+\textbf{Model} & \textbf{Out-of-sample} & \textbf{Leading effects (odds / incidence ratios)} \\
+\midrule
+M1 Revisit       & AUC 0.776 (ext.\ 0.788) & reviewer's reviews 1.53\textsuperscript{***}, alone 1.67\textsuperscript{**},
+                   waited 0.50\textsuperscript{***}, sentiment 0.68\textsuperscript{***}, travel 0.58\textsuperscript{***} \\
+M2 Keyword Count & RMSE 1.34 vs 1.86 base  & wrote text 4.39\textsuperscript{***}, visit info 2.18\textsuperscript{***},
+                   revisitor 1.62\textsuperscript{***}, travel 1.79\textsuperscript{***} \\
+M3 Rating        & weak, exploratory       & keyword count 1.59\textsuperscript{***}, revisitor 1.44\textsuperscript{*} \\
+M4 Reactions     & AUC 0.819 (any reaction)& followers 1.96\textsuperscript{***}, text length 1.64\textsuperscript{***},
+                   \textbf{sentiment 0.76\textsuperscript{**}} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{-1pt}
+The sentiment result replicates Lee et al.\ (2026), who also find sentiment entering engagement
+negatively ($\alpha = -0.011$ to $-0.018$). Measurement levels apart, the same pattern appears:
+effusive praise is not what readers respond to.
+
+\sect{8. Implications}
+For platforms, information diversity tracks reviewer engagement rather than the kind of visit, so
+prompting for varied keywords should work better with experienced reviewers. For attraction
+managers, queueing is the single strongest negative signal for returning, and it is actionable.
+
+\sect{9. Limitations and next steps}
+\begin{itemize}[leftmargin=12pt, itemsep=0pt, topsep=1pt]
+\item Associations only. Lee et al.\ (2026) identify effects from Naver's keyword expansion and lag
+      all regressors to $t-1$; this design is cross-sectional and has neither.
+\item Only place fixed effects, where the source study uses place \emph{and} time. Month fixed
+      effects are the next addition.
+\item A single platform, so nothing here separates Naver's reviewer population from Korean
+      reviewers in general.
+\end{itemize}
+
+\vspace{2pt}
+\footnotesize\textit{Full variable definitions, descriptive statistics, the correlation matrix and
+variance inflation factors are in the appendix, Tables \ref{tab:variables}--\ref{tab:vif}.}
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════════
+% PAGE 2 — KOREAN
+% ═══════════════════════════════════════════════════════════════════
+\begin{center}
+{\large\textbf{무엇이 관광지 리뷰를 유익하게 만드는가}}\\[2pt]
+{\large\textbf{네이버 플레이스의 방문 맥락, 정보 다양성, 이용자 반응}}\\[5pt]
+{\normalsize 소리아노 에르난데스 호르헤 아단}\\
+{\small 호서대학교 데이터사이언스학과 \quad$\cdot$\quad 연구 계획서, 2026년 10월}
+\end{center}
+
+\headrule
+
+\sect{1. 주제}
+온라인 리뷰는 여행자가 목적지를 선택하기 전에 참고하는 핵심 정보원이다. 이민영 외(2026)는 리뷰에 담긴
+정보의 \textbf{다양성}, 즉 서로 다른 키워드의 수가 정보의 \textbf{양}과는 별개로 업체 성과에 영향을 미친다는
+점을 밝혔다. 해당 연구는 네이버 스마트 플레이스 자료를 업체·주 단위로 집계하여 이를 측정하였다. 본
+연구는 같은 개념을 개별 리뷰 수준으로 내려 분석하며, 그 다양성이 어디에서 비롯되는지를 묻는다. 즉 어떤
+방문객이 유익한 리뷰를 작성하며, 어떤 리뷰가 다른 이용자의 반응을 얻는가를 규명하고자 한다.
+
+\sect{2. 문제 제기}
+이민영 외(2026)는 업체 성과(페이지 뷰, 총 클릭 수)를 관측하지만, 리뷰를 업체·주 단위로 집계하므로 개별
+리뷰의 내용과 방문 맥락은 관측되지 않는다. 해당 연구의 정보 다양성은 주간 평균값이며, 그 배후에 있는
+동반자, 방문 목적, 대기 경험은 네이버가 모두 수집하고 있음에도 활용되지 않는다. 따라서 유익한 리뷰의
+선행 요인은 아직 밝혀지지 않았다. 다양성이 중요하다는 점은 알지만, 누가 그것을 제공하는지는 모른다.
+
+\sect{3. 연구 질문}
+\begin{enumerate}[leftmargin=14pt, itemsep=0pt, topsep=1pt]
+\item 어떤 방문 맥락이 동일 관광지로의 재방문과 연관되는가?
+\item 어떤 작성자와 방문 맥락이 더 다양한 정보, 즉 더 많은 키워드를 제공하는가?
+\item 어떤 리뷰가 다른 이용자의 반응을 얻으며, 감성은 이에 도움이 되는가 아니면 저해하는가?
+\end{enumerate}
+
+\sect{4. 데이터}
+한국 관광지에 대한 네이버 플레이스 리뷰를 관광지별로 개별 수집하였다. 관광지 22곳, 작성자 7{,}230명,
+리뷰 12{,}537건이며 이 중 9{,}843건은 텍스트를, 4{,}148건은 별점을 포함한다. 분석 단위는 업체·주가 아니라
+관광지 $j$에 대한 개별 리뷰 $i$이다.
+
+\sect{5. 변수}
+\vspace{-3pt}
+\begin{center}
+\begin{tabular}{@{}llp{8.2cm}@{}}
+\toprule
+\textbf{구분} & \textbf{변수} & \textbf{설명} \\
+\midrule
+종속변수 & 재방문         & 2회차 이상 방문 시 작성된 리뷰 여부 (0/1) \\
+         & 키워드 수      & 작성자가 선택한 키워드 수, 0--5: 정보 다양성 \\
+         & 별점, 반응 수  & 1--5점; 리뷰에 반응한 이용자 수 (유용성) \\
+\midrule
+독립변수 & 동반자         & 혼자, 연인, 친구, 아이, 가족, 동료 \\
+         & 방문 목적      & 여행, 나들이, 일상, 데이트, 친목 \\
+         & 대기, 예약, 감성 & 입장 대기, 사전 예약 여부; 텍스트 감성 점수 $-1$\,$\sim$\,$1$ \\
+         & 키워드 주제    & 10개 주제: 시각, 볼거리, 혼잡, 한적, 시설, 접근성, 가족, 가격, 음식, 물놀이 \\
+\midrule
+통제변수 & 텍스트 길이, 사진 수 & 글자 수의 로그값; 리뷰에 첨부된 사진 수 \\
+         & 작성자 리뷰 수, 팔로워 수 & 각각 로그값 \\
+         & 리뷰 경과일    & 작성 후 경과일의 로그값; M4의 노출 보정항 \\
+         & 계절, 주말, 인증, 관광지 고정효과 & $\delta_j$가 장소 고유 특성을 통제 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{-1pt}
+기술통계: 재방문 22.9\%, 키워드 수 $\mu=3.06$ (최대 5), 별점 $\mu=4.69$, 반응 수 $\mu=1.29$ (최대 122),
+감성 점수 $\mu=0.66$. 모든 VIF가 2.6 미만으로 다중공선성 문제는 없다. 키워드 수는 이민영 외(2026)가
+보고한 0--5 척도와 동일한데, 이는 네이버가 키워드 선택을 최대 5개로 제한하기 때문이다. 두 연구는 동일한
+측정 도구를 서로 다른 수준에서 관측하고 있다.
+
+\sect{6. 연구모형}
+관광지 고정효과 $\delta_j$를 포함한 리뷰 단위 회귀분석이며, 동일 작성자가 여러 리뷰를 작성하므로
+표준오차는 작성자 단위로 군집화한다.
+\vspace{-6pt}
+\begin{align*}
+\text{M1:}\quad & \operatorname{logit} P(\text{재방문}_{ij}) = \beta_0 + \mathbf{x}_{ij}^\top\boldsymbol\beta + \delta_j \\[-1pt]
+\text{M2:}\quad & P(\text{키워드 수}_{ij} \le k) = \big[1 + e^{-(\tau_k - \mathbf{x}_{ij}^\top\boldsymbol\beta - \delta_j)}\big]^{-1}, \quad k = 0,\dots,4 \\[-1pt]
+\text{M3:}\quad & P(\text{별점}_{ij} \le k) = \big[1 + e^{-(\tau_k - \mathbf{x}_{ij}^\top\boldsymbol\beta - \delta_j)}\big]^{-1}, \quad k = 1,\dots,4 \\[-1pt]
+\text{M4:}\quad & \text{반응 수}_{ij} \sim \text{NegBin}(\mu_{ij}), \quad
+                  \ln \mu_{ij} = \beta_0 + \mathbf{x}_{ij}^\top\boldsymbol\beta + \gamma \ln(\text{경과일}_{ij}) + \delta_j
+\end{align*}
+\vspace{-9pt}
+
+모든 모형은 작성자별·관광지별 리뷰 1건만 무작위로 추출한 표본에서 재추정하며, 이 검정을 통과한 효과만
+강건한 것으로 보고한다. 교차검증은 작성자 단위로 분할하여 동일 작성자가 학습과 검증에 함께 포함되지
+않도록 하였다.
+
+\sect{7. 연구결과}
+\vspace{-3pt}
+\begin{center}
+\begin{tabular}{@{}llp{7.1cm}@{}}
+\toprule
+\textbf{모형} & \textbf{교차검증} & \textbf{주요 효과 (승산비 / 발생비)} \\
+\midrule
+M1 재방문    & AUC 0.776 (확장 0.788) & 작성자 리뷰 수 1.53\textsuperscript{***}, 혼자 1.67\textsuperscript{**},
+               대기 0.50\textsuperscript{***}, 감성 0.68\textsuperscript{***}, 여행 0.58\textsuperscript{***} \\
+M2 키워드 수 & RMSE 1.34 (기준 1.86)  & 텍스트 작성 4.39\textsuperscript{***}, 방문 정보 2.18\textsuperscript{***},
+               재방문 1.62\textsuperscript{***}, 여행 1.79\textsuperscript{***} \\
+M3 별점      & 설명력 낮음, 탐색적     & 키워드 수 1.59\textsuperscript{***}, 재방문 1.44\textsuperscript{*} \\
+M4 반응 수   & AUC 0.819 (반응 유무)  & 팔로워 1.96\textsuperscript{***}, 텍스트 길이 1.64\textsuperscript{***},
+               \textbf{감성 0.76\textsuperscript{**}} \\
+\bottomrule
+\end{tabular}
+\end{center}
+\vspace{-1pt}
+감성 결과는 이민영 외(2026)의 발견을 재현한다. 해당 연구 역시 감성이 참여에 부정적으로 작용함을
+보고하였다($\alpha = -0.011 \sim -0.018$). 측정 수준은 다르지만 동일한 양상이 나타난다. 즉 과도한
+칭찬은 독자의 반응을 이끌어내지 못한다.
+
+\sect{8. 시사점}
+플랫폼 측면에서 정보 다양성은 방문 유형보다 작성자의 참여도를 따르므로, 다양한 키워드를 유도하는 기능은
+경험이 많은 작성자에게 더 효과적일 것이다. 관광지 운영 측면에서 입장 대기는 재방문에 대한 가장 강한
+부정적 신호이며, 이는 실무적으로 개선 가능한 요인이다.
+
+\sect{9. 한계 및 향후 과제}
+\begin{itemize}[leftmargin=12pt, itemsep=0pt, topsep=1pt]
+\item 결과는 상관관계이다. 이민영 외(2026)는 네이버의 키워드 확장을 활용해 효과를 식별하고 모든 독립
+      변수를 $t-1$로 처리하지만, 본 설계는 횡단면이며 두 장치를 모두 갖추지 못했다.
+\item 관광지 고정효과만 포함하였으나, 원 연구는 업체와 시간의 양방향 고정효과를 사용한다. 월 고정효과
+      추가가 다음 과제이다.
+\item 단일 플랫폼 자료이므로 네이버 작성자 집단과 한국인 작성자 전반을 구분할 수 없다.
+\end{itemize}
+
+\vspace{2pt}
+\footnotesize\textit{변수의 상세 정의, 기술통계, 상관분석표, 분산팽창계수는 부록
+표 \ref{tab:variables}--\ref{tab:vif}에 수록하였다.}
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════════
+% PAGES 3+ — APPENDIX / 부록  (tables generated by 10_descriptive_tables.py)
+% ═══════════════════════════════════════════════════════════════════
+\begin{center}
+{\large\textbf{Appendix \quad 부록}}\\[3pt]
+{\small Naver Place, 12{,}537 reviews from 7{,}230 reviewers across 22 attractions}\\
+{\small 네이버 플레이스, 관광지 22곳, 작성자 7{,}230명, 리뷰 12{,}537건}
+\end{center}
+
+\headrule
+\vspace{4pt}
+
+\input{tables_naver}
+
+\end{document}

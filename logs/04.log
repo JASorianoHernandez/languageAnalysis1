@@ -1,0 +1,80 @@
+﻿Corpus loaded: 472 reviews
+
+── Sentiment analysis ──
+  Loading KO sentiment model (hun3359/klue-bert-base-sentiment)...
+  klue-bert-base-sentiment loaded OK
+  Scoring English reviews (VADER)...
+  Scoring Korean reviews (transformer)...
+    20/232
+    40/232
+    60/232
+    80/232
+    100/232
+    120/232
+    140/232
+    160/232
+    180/232
+    200/232
+    220/232
+  Saved: sentiment_results.csv
+  Saved: summary_sentiment.csv
+                    mean     std  count
+place   language                       
+경복궁     en        0.6729  0.3267     30
+        ko        0.5970  0.3683     30
+광안리해수욕장 en        0.7750  0.3446     30
+        ko        0.7622  0.2305     30
+광장시장    en        0.4549  0.4703     30
+        ko        0.3358  0.7270     30
+롯데월드    en        0.5968  0.4363     30
+        ko        0.8056  0.2096     30
+북촌한옥마을  en        0.4694  0.3842     30
+        ko        0.5953  0.3865     30
+창덕궁     en        0.6679  0.3587     30
+        ko        0.5887  0.4354     30
+해운대해수욕장 en        0.7584  0.3092     30
+        ko        0.5950  0.4512     30
+홍대거리    en        0.4194  0.4627     30
+        ko        0.6657  0.3855     22
+
+── Topic modeling (LDA) ──
+  English LDA...
+  Saved: lda_en_topics.csv
+    Topic 1: beach, clean, enjoy, rides, people, bridge, magic, although, take, busan
+    Topic 2: palace, garden, secret, changdeokgung, world, traditional, hanbok, long, history, gyeongbokgung
+    Topic 3: area, fun, beach, people, food, street, local, shops, tourists, attractions
+    Topic 4: beach, busan, walking, haeundae, atmosphere, ocean, experience, sand, area, restaurants
+    Topic 5: beach, food, street, night, area, busan, walk, free, shops, restaurants
+  Korean LDA...
+  Saved: lda_ko_topics.csv
+    Topic 1: 한옥, 북촌, 경복궁, 마을, 관광객, 드론, 광안리, 전통, 외국인, 골목
+    Topic 2: 시간, 경복궁, 풍경, 창덕궁, 경회루, 조선, 사진, 향원정, 바람, 분위기
+    Topic 3: 해운대, 해수욕장, 창덕궁, 부산, 궁궐, 분위기, 해변, 주변, 바다, 축제
+    Topic 4: 경복궁, 시간, 한복, 사진, 마지막, 후원, 외국인, 건물, 공연, 날씨
+    Topic 5: 홍대, 다양, 풍경, 거리, 한옥, 바다, 외국인, 마을, 부산, 북촌
+  Saved: topic_assignments.csv
+
+── Complete ──
+Output files in data\analysis/
+  absa_results.csv
+  absa_summary.csv
+  analysis_data.json
+  crosslingual_similarity.csv
+  dictionary_check.csv
+  figures
+  hypothesis_by_place.csv
+  hypothesis_matched_terms.csv
+  hypothesis_tests.csv
+  hypothesis_tests_sensitivity.csv
+  lda_en_topics.csv
+  lda_k_selection.csv
+  lda_ko_topics.csv
+  llm_summaries.json
+  motivation_results.csv
+  motivation_summary.csv
+  sentiment_results.csv
+  stats_mannwhitney.csv
+  summary_sentiment.csv
+  tfidf_contrast.csv
+  topic_assignments.csv
+  ttr_results.csv

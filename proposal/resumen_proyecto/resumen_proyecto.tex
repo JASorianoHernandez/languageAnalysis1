@@ -1,0 +1,469 @@
+% Compile with xelatex (twice).
+% Tables come from 10_01_descriptive_tables.py via tables_naver.tex, which defines
+% \tblVariables \tblDescriptives \tblCorrelations \tblVIF as reusable macros —
+% the document is bilingual and prints each table once per language.
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont{Malgun Gothic}
+\setCJKsansfont{Malgun Gothic}
+% Korean uses spaces between words, unlike Chinese/Japanese: keep them visible
+\xeCJKsetup{CJKspace=true}
+
+\usepackage[top=1.1cm, bottom=1.0cm, left=1.4cm, right=1.4cm]{geometry}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,backgrounds}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{caption}
+\usepackage{float}   % [H] placement used by the generated tables
+\usepackage{url}
+% Match the reference paper's caption style: "표 1. 변수요약 / Variable summary"
+\captionsetup[table]{name=표, labelsep=period, font=small, labelfont=bf,
+                     skip=3pt, justification=centering}
+
+\linespread{0.96}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{2pt}
+\setlength{\emergencystretch}{1em}
+\renewcommand{\arraystretch}{1.0}
+\pagestyle{plain}
+
+\newcommand{\headrule}{\vspace{1pt}\noindent\rule{\linewidth}{0.4pt}\vspace{1pt}}
+\newcommand{\sect}[1]{\vspace{3pt}\noindent\textbf{#1}\par\vspace{1pt}}
+
+\input{../tables_naver}
+
+\begin{document}
+\footnotesize
+
+% ═══════════════════════════════════════════════════════════════════
+% ENGLISH
+% ═══════════════════════════════════════════════════════════════════
+\begin{center}
+{\large\textbf{Is a Review Useful?}}\\[2pt]
+{\large\textbf{Visit Context and Information Diversity in Korean Attraction Reviews}}\\[5pt]
+{\normalsize Jorge Adan Soriano Hernandez}\\
+{\small Department of Data Science, Hoseo University \quad$\cdot$\quad Research proposal, October 2026}
+\end{center}
+
+\headrule
+
+\sect{1. Topic}
+When deciding whether to visit or revisit a place, one of the strongest considerations travellers
+weigh is checking its reviews, comments, reactions and photos, a direct expression of social media's
+role in decision-making. Within this context, information diversity, that is, how distinct the words
+across a set of reviews actually are, is understood to drive a place's performance independently of
+review volume. Lee, Jeong and Kim (2026) established this at the business-week level on Naver Smart
+Place data: the \textbf{diversity} of information in a review (how many distinct keywords it carries)
+drives business performance separately from the sheer \textbf{quantity} of reviews. This study proposes
+analysing points of interest across Korea through individual reviews and their diversity, taking the
+same construct down to the level of the review itself and asking where that diversity comes from.
+
+\sect{2. Problem}
+A place's performance can be measured in several ways, yet reviews themselves rarely separate how
+much was written from how informative it was. Lee et al.\ (2026) show that information diversity
+predicts business performance independently of review quantity, but they measure performance through
+platform-side traffic (page views, total clicks) aggregated by business and week, so the content of
+the review itself, and the context in which it was written, stay unobserved. Their information
+diversity is a weekly average; the companion, the purpose, the waiting experience and the advance
+reservation behind each visit are never used, although Naver collects all four. What a review
+actually discusses---the aspects of the visit it foregrounds, beyond its overall sentiment---is
+likewise unobserved. The antecedents of an informative review are therefore unknown: we know
+diversity matters, not who supplies it or what it is about.
+
+\sect{3. Research questions}
+\begin{enumerate}[leftmargin=14pt, itemsep=0pt, topsep=1pt]
+\item Which visit contexts are associated with returning to the same attraction?
+\item Which reviewers and visit contexts produce more diverse information, i.e.\ more keywords?
+\item Which reviews do other users respond to, and does sentiment help or hurt?
+\item Which aspects of the visit do different reviewer groups discuss, and does what a review
+      talks about predict reader engagement beyond its overall sentiment?
+\end{enumerate}
+
+\sect{4. Data}
+Naver Place reviews for Korean attractions, collected by scraping each place individually.
+14{,}401 reviews from 8{,}276 reviewers across 29 attractions; 11{,}165 carry text and 4{,}652 carry a
+star rating. The unit of analysis is the review $i$ at place $j$, not the business--week. Every
+place in the catalogue (\texttt{places.json}) with a Naver id has been scraped; coverage ranges from
+1{,}092 reviews (서울스카이) down to 20 (서촌).
+
+\tblPlaces
+
+
+
+
+\clearpage
+\sect{5. Variables}
+Four dependent variables, the visit-context regressors Naver records, and the controls that
+separate a behavioural effect from an artefact of who wrote the review and when.
+
+
+\tblVariables
+
+\begin{figure}[H]\centering
+\begin{tikzpicture}[
+  every node/.style={font=\footnotesize},
+  mb/.style={draw, rounded corners=4pt, fill=white, inner sep=10pt,
+             text width=13.5cm, align=left},
+  arr/.style={-{Stealth[length=6pt]}, thick},
+]
+\node[mb] (data) {
+  \textbf{Data Acquisition / 데이터 수집}\\[4pt]
+  \quad Naver Place scraper $\;\longrightarrow\;$
+  29 attractions $\;\cdot\;$ 14{,}401 reviews $\;\cdot\;$ 8{,}276 reviewers
+};
+\node[mb, below=1.0cm of data] (varbox) {
+  \textbf{Variables / 변수}\\[6pt]
+  \quad\begin{tabular}{|p{5.4cm}|p{5.4cm}|}
+  \hline
+  \rule{0pt}{9pt}\textbf{Visit Context} & \textbf{Reviewer Profile}\\[2pt]
+  $\cdot$ Revisit (binary) & $\cdot$ Followers\\
+  $\cdot$ Visited alone    & $\cdot$ Review count\\
+  $\cdot$ Waited           & $\cdot$ Photo count\\
+  $\cdot$ Group type       & \\[3pt]
+  \hline
+  \end{tabular}
+};
+\node[mb, below=1.0cm of varbox] (modbox) {
+  \textbf{Models / 모형}\\[6pt]
+  \begin{center}\begin{tabular}{|c|c|c|c|}
+  \hline
+  \rule{0pt}{14pt}\quad\textbf{M1}\quad & \quad\textbf{M2}\quad
+    & \quad\textbf{M3}\quad & \quad\textbf{M4}\quad\\[4pt]
+  \hline
+  \end{tabular}\end{center}
+};
+\draw[arr] (data.south) -- (varbox.north);
+\draw[arr] (varbox.south) -- (modbox.north);
+\end{tikzpicture}
+\caption{Research framework / 연구 프레임워크}
+\end{figure}
+
+\sect{6. Descriptive statistics}
+
+\tblDescriptives
+
+\sect{7. Correlations}
+No pair is strong enough to threaten the regressions. The largest, Rating with Sentiment
+($0.514$), confirms the sentiment classifier tracks the stars reviewers actually gave.
+Keyword Count with Review Age ($-0.395$) shows keyword use has grown over the window,
+which is why review age is controlled rather than ignored.
+
+
+\clearpage
+
+\tblCorrelations
+
+\sect{8. Models}
+Review-level regressions with place fixed effects $\delta_j$ and standard errors clustered by
+reviewer, since the same person often writes several reviews.
+\vspace{-6pt}
+\begin{align*}
+\text{M1:}\quad & \operatorname{logit} P(\textit{Revisit}_{ij}) = \beta_0 + \mathbf{x}_{ij}^\top\boldsymbol\beta + \delta_j \\[-1pt]
+\text{M2:}\quad & P(\textit{KeywordCount}_{ij} \le k) = \big[1 + e^{-(\tau_k - \mathbf{x}_{ij}^\top\boldsymbol\beta - \delta_j)}\big]^{-1}, \quad k = 0,\dots,4 \\[-1pt]
+\text{M3:}\quad & P(\textit{Rating}_{ij} \le k) = \big[1 + e^{-(\tau_k - \mathbf{x}_{ij}^\top\boldsymbol\beta - \delta_j)}\big]^{-1}, \quad k = 1,\dots,4 \\[-1pt]
+\text{M4:}\quad & \textit{Reactions}_{ij} \sim \text{NegBin}(\mu_{ij}), \quad
+                  \ln \mu_{ij} = \beta_0 + \mathbf{x}_{ij}^\top\boldsymbol\beta + \gamma \ln(\textit{Age}_{ij}) + \delta_j
+\end{align*}
+\vspace{-9pt}
+
+The link function follows the measurement scale of each outcome: binary for M1, ordinal for M2 and
+M3, and an overdispersed count for M4 (variance $\approx 37\times$ the mean; Poisson ruled out).
+Each model is re-estimated on one random review per reviewer and per place; only effects that
+survive are reported as robust. Cross-validation is grouped by reviewer.
+
+\begin{table}[H]\centering
+\caption{Model notation / Notation summary}
+\footnotesize
+\begin{tabular}{llp{8.2cm}}\toprule
+\textbf{Model} & \textbf{Symbol} & \textbf{Description} \\ \midrule
+\multirow{4}{*}{M1}
+  & $i,\,j$                            & Review $i$ at place $j$ \\
+  & $\beta_0$                          & Intercept \\
+  & $\mathbf{x}_{ij}^\top\boldsymbol\beta$ & Vector of regressors (visit context + controls) and their coefficients \\
+  & $\delta_j$                         & Place fixed effect (one per attraction) \\ \midrule
+\multirow{6}{*}{M2, M3}
+  & $i,\,j$                            & Review $i$ at place $j$ \\
+  & $\beta_0$                          & Intercept \\
+  & $\mathbf{x}_{ij}^\top\boldsymbol\beta$ & Vector of regressors and their coefficients \\
+  & $\delta_j$                         & Place fixed effect \\
+  & $\tau_k$                           & Ordered logit threshold for category $k$ \\
+  & $k$                                & Outcome category (M2: $0\!\dots\!4$;\; M3: $1\!\dots\!4$) \\ \midrule
+\multirow{7}{*}{M4}
+  & $i,\,j$                            & Review $i$ at place $j$ \\
+  & $\beta_0$                          & Intercept \\
+  & $\mathbf{x}_{ij}^\top\boldsymbol\beta$ & Vector of regressors and their coefficients \\
+  & $\delta_j$                         & Place fixed effect \\
+  & $\mu_{ij}$                         & Expected reaction count \\
+  & $\gamma$                           & Log-age elasticity (offset for review age) \\
+  & $\alpha$                           & Negative binomial dispersion ($\hat\alpha = 2.44$; variance $\approx 37\times$ mean) \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\tblVariableMapEN
+
+\tblVIF
+
+\sect{9. Results}
+\vspace{-3pt}
+\begin{table}[H]\centering
+\caption{Results summary / Leading effects (odds ratios and incidence rate ratios)}
+\footnotesize
+\begin{tabular}{lllr}\toprule
+\textbf{Model} & \textbf{Fit} & \textbf{Variable} & \textbf{OR / IRR} \\ \midrule
+\multirow{5}{*}{M1 Revisit} & \multirow{5}{*}{\shortstack[l]{AUC 0.773\\(ext.\ 0.785)}}
+  & Reviewer's total reviews & 1.52*** \\
+  & & Visited alone            & 1.68**  \\
+  & & Waited                   & 0.51*** \\
+  & & Sentiment                & 0.70*** \\
+  & & Travel group             & 0.56*** \\ \midrule
+\multirow{4}{*}{M2 Keyword Count} & \multirow{4}{*}{\shortstack[l]{RMSE 1.37\\vs 1.88 base}}
+  & Wrote text               & 4.02*** \\
+  & & Visit info provided      & 2.53*** \\
+  & & Revisitor                & 1.60*** \\
+  & & Travel group             & 1.73*** \\ \midrule
+\multirow{2}{*}{M3 Rating} & \multirow{2}{*}{exploratory}
+  & Keyword count            & 1.56*** \\
+  & & Revisitor                & 1.37*   \\ \midrule
+\multirow{3}{*}{M4 Reactions} & \multirow{3}{*}{AUC 0.815}
+  & Followers                & 1.97*** \\
+  & & Text length              & 1.64*** \\
+  & & Sentiment                & 0.77**  \\ \bottomrule
+\end{tabular}
+\end{table}
+{\scriptsize * $p<0.05$, ** $p<0.01$, *** $p<0.001$. Ratios $<1$ indicate a negative association. OR/IRR $= e^{\hat\beta}$.}
+
+An aspect-level reading of 11{,}164 reviews, labelled on six content dimensions (historical/cultural,
+accessibility, crowding, food, visual, service/experience) with an LLM-based classifier, sharpens
+the picture. The six aspects were specified a priori from tourism-literature grounds and corroborated
+against unsupervised topic extraction (LDA at optimal $K=6$ and BERTopic $K=15$) prior to LLM
+classification. Visits with children raise mentions in three aspects (historical, accessibility and
+service: ORs 1.22--1.55). Service friction splits two ways: queueing more than doubles crowding
+mentions (OR $2.13$), while advance reservation cuts them (OR $0.69$) and more than doubles service
+mentions (OR $2.39$). Date-purpose visits raise food mentions by 51\%. On engagement, no aspect
+mention reaches $p<.05$ after reviewer controls: on Naver Place, reader reactions are driven by
+reviewer identity (followers, revisitor status, text length), not by what the review discusses.
+
+\sect{10. References}
+\begin{enumerate}\small
+  \item Bae, E., Chang, M., Park, E., \& Kim, D. (2017). The effect of Hallyu on tourism in Korea. \textit{Journal of Open Innovation: Technology, Market, and Complexity}, 3, 22.
+  \item Chang, S. (2021). Food tourism in Korea. \textit{Journal of Vacation Marketing}.
+  \item Ko, S., Kang, S., Kang, H., \& Lee, M.~J. (2018). An exploration of foreign tourists' perceptions of Korean food tour. \textit{Asia Pacific Journal of Tourism Research}, 23(8), 833--846.
+  \item Karabila, I., Darraz, N., EL-Ansari, A., Alami, N., \& EL~Mallahi, M. (2024). BERT-enhanced sentiment analysis for personalized e-commerce recommendations. \textit{Multimedia Tools and Applications}, 83, 56463--56488.
+  \item Lee, M., Jeong, D., \& Kim, A.~J. (2026). The impact of information diversity on online reviews and business performance. \textit{Journal of Consumer Studies}, 37(1). \url{https://doi.org/10.35736/JCS.37.1.1}
+  \item Wang, S., Karmakar, S., Wang, F., \& Pei, Y. (2025). Content dissimilarity and online review helpfulness: Contextual insights. \textit{Journal of Business Research}, 187, 115068.
+\end{enumerate}
+
+\clearpage
+\setcounter{table}{0}   % the Korean half repeats 표 1-4, it does not continue them
+
+% ═══════════════════════════════════════════════════════════════════
+% KOREAN
+% ═══════════════════════════════════════════════════════════════════
+\begin{center}
+{\large\textbf{리뷰는 유용한가?:}}\\[2pt]
+{\large\textbf{한국 관광지 리뷰의 방문 맥락과 정보 다양성 연구}}\\[5pt]
+{\normalsize 소리아노 에르난데스 호르헤 아단}\\
+{\small 호서대학교 데이터사이언스학과 \quad$\cdot$\quad 연구 계획서, 2026년 10월}
+\end{center}
+
+
+
+\headrule
+
+\sect{1. 주제}
+장소를 방문하거나 재방문할지 결정할 때, 여행자가 가장 중요하게 고려하는 것 중 하나는 리뷰·댓글·반응·
+사진을 확인하는 일이며, 이는 소셜 미디어가 의사결정에 미치는 영향을 직접적으로 보여준다. 이러한
+맥락에서 정보 다양성, 즉 리뷰에 사용된 단어가 서로 얼마나 다른가는 리뷰 양과 무관하게 장소의 성과를
+이끄는 요인으로 이해된다. 이민영·정동영·김지영(2026)은 이를 업체·주 단위에서 네이버 스마트 플레이스
+자료로 입증하였다. 즉 리뷰에 담긴 정보의 \textbf{다양성}(서로 다른 키워드의 수)은 정보의 \textbf{양}과는
+별개로 업체 성과에 영향을 미친다. 본 연구는 한국 전역의 관심 지점을 개별 리뷰와 그 다양성을 통해
+분석하며, 같은 개념을 리뷰 자체의 수준으로 내려 그 다양성이 어디에서 비롯되는지를 묻는다.
+
+\sect{2. 문제 제기}
+장소의 성과는 여러 방식으로 측정될 수 있지만, 리뷰 자체는 얼마나 많이 썼는가와 얼마나 유익하게
+썼는가를 거의 구분하지 않는다. 이민영 외(2026)는 정보 다양성이 리뷰 양과 무관하게 업체 성과를
+예측함을 보였으나, 성과를 업체·주 단위로 집계된 플랫폼 측 트래픽(페이지 뷰, 총 클릭 수)으로 측정하여
+리뷰 자체의 내용과 그 작성 맥락은 관측하지 못한다. 해당 연구의 정보 다양성은 주간 평균값이며, 그
+배후에 있는 동반자, 방문 목적, 대기 경험은 네이버가 모두 수집하고 있음에도 활용되지 않는다. 따라서
+유익한 리뷰의 선행 요인은 아직 밝혀지지 않았다. 다양성이 중요하다는 점은 알지만, 누가 그것을
+제공하는지는 모른다.
+
+\sect{3. 연구 질문}
+\begin{enumerate}[leftmargin=14pt, itemsep=0pt, topsep=1pt]
+\item 어떤 방문 맥락이 동일 관광지로의 재방문과 연관되는가?
+\item 어떤 작성자와 방문 맥락이 더 다양한 정보, 즉 더 많은 키워드를 제공하는가?
+\item 어떤 리뷰가 다른 이용자의 반응을 얻으며, 감성은 이에 도움이 되는가 아니면 저해하는가?
+\item 어떤 방문 측면을 작성자 그룹별로 언급하며, 리뷰가 다루는 내용이 전반 감성 이상의
+      이용자 반응을 예측하는가?
+\end{enumerate}
+
+\sect{4. 데이터}
+한국 관광지에 대한 네이버 플레이스 리뷰를 관광지별로 개별 수집하였다. 관광지 29곳, 작성자 8{,}276명,
+리뷰 14{,}401건이며 이 중 11{,}165건은 텍스트를, 4{,}652건은 별점을 포함한다. 분석 단위는 업체·주가 아니라
+관광지 $j$에 대한 개별 리뷰 $i$이다. 카탈로그(\texttt{places.json})에 네이버 ID가 있는 관광지는 모두
+수집되었으며, 관광지별 리뷰 수는 최대 1{,}092건(서울스카이)에서 최소 20건(서촌)까지 분포한다.
+
+\tblPlaces
+
+\sect{5. 변수}
+네 개의 종속변수와, 네이버가 기록하는 방문 맥락 변수, 그리고 누가 언제 작성했는지에서 비롯되는 효과를
+행동적 효과와 분리하기 위한 통제변수로 구성된다.
+
+\tblVariables
+
+\begin{figure}[H]\centering
+\begin{tikzpicture}[
+  every node/.style={font=\footnotesize},
+  mb/.style={draw, rounded corners=4pt, fill=white, inner sep=10pt,
+             text width=13.5cm, align=left},
+  arr/.style={-{Stealth[length=6pt]}, thick},
+]
+\node[mb] (data) {
+  \textbf{데이터 수집 / Data Acquisition}\\[4pt]
+  \quad 네이버 플레이스 스크레이퍼 $\;\longrightarrow\;$
+  관광지 29곳 $\;\cdot\;$ 리뷰 14{,}401건 $\;\cdot\;$ 작성자 8{,}276명
+};
+\node[mb, below=1.0cm of data] (varbox) {
+  \textbf{변수 / Variables}\\[6pt]
+  \quad\begin{tabular}{|p{5.4cm}|p{5.4cm}|}
+  \hline
+  \rule{0pt}{9pt}\textbf{방문 맥락} & \textbf{작성자 프로필}\\[2pt]
+  $\cdot$ 재방문 여부 & $\cdot$ 팔로워 수\\
+  $\cdot$ 혼자 방문   & $\cdot$ 리뷰 수\\
+  $\cdot$ 대기 경험   & $\cdot$ 사진 수\\
+  $\cdot$ 동행 유형   & \\[3pt]
+  \hline
+  \end{tabular}
+};
+\node[mb, below=1.0cm of varbox] (modbox) {
+  \textbf{모형 / Models}\\[6pt]
+  \begin{center}\begin{tabular}{|c|c|c|c|}
+  \hline
+  \rule{0pt}{14pt}\quad\textbf{M1}\quad & \quad\textbf{M2}\quad
+    & \quad\textbf{M3}\quad & \quad\textbf{M4}\quad\\[4pt]
+  \hline
+  \end{tabular}\end{center}
+};
+\draw[arr] (data.south) -- (varbox.north);
+\draw[arr] (varbox.south) -- (modbox.north);
+\end{tikzpicture}
+\caption{연구 프레임워크 / Research framework}
+\end{figure}
+
+\sect{6. 기술통계}
+
+\tblDescriptives
+
+\sect{7. 상관분석}
+회귀분석에 문제가 될 만큼 강한 상관은 없다. 가장 큰 값인 별점과 감성 점수의 상관($0.514$)은
+감성 분류기가 실제 별점을 잘 따라가고 있음을 확인해 준다. 키워드 수와 리뷰 경과일의 상관($-0.395$)은
+관측 기간 동안 키워드 사용이 증가했음을 의미하며, 이것이 리뷰 경과일을 반드시 통제해야 하는 이유이다.
+
+\tblCorrelations
+
+\sect{8. 연구모형}
+관광지 고정효과 $\delta_j$를 포함한 리뷰 단위 회귀분석이며, 동일 작성자가 여러 리뷰를 작성하므로
+표준오차는 작성자 단위로 군집화한다.
+\vspace{-6pt}
+\begin{align*}
+\text{M1:}\quad & \operatorname{logit} P(\text{재방문}_{ij}) = \beta_0 + \mathbf{x}_{ij}^\top\boldsymbol\beta + \delta_j \\[-1pt]
+\text{M2:}\quad & P(\text{키워드 수}_{ij} \le k) = \big[1 + e^{-(\tau_k - \mathbf{x}_{ij}^\top\boldsymbol\beta - \delta_j)}\big]^{-1}, \quad k = 0,\dots,4 \\[-1pt]
+\text{M3:}\quad & P(\text{별점}_{ij} \le k) = \big[1 + e^{-(\tau_k - \mathbf{x}_{ij}^\top\boldsymbol\beta - \delta_j)}\big]^{-1}, \quad k = 1,\dots,4 \\[-1pt]
+\text{M4:}\quad & \text{반응 수}_{ij} \sim \text{NegBin}(\mu_{ij}), \quad
+                  \ln \mu_{ij} = \beta_0 + \mathbf{x}_{ij}^\top\boldsymbol\beta + \gamma \ln(\text{경과일}_{ij}) + \delta_j
+\end{align*}
+\vspace{-9pt}
+
+연결함수는 각 종속변수의 측정 척도에 따라 결정된다. M1은 이항, M2와 M3은 순서형, M4는 과대산포된
+계수형이다(분산 $\approx$ 평균의 37배; 포아송 기각). 강건성 검증을 통과한 효과만 보고하며,
+교차검증은 작성자 단위로 분할한다.
+
+\begin{table}[H]\centering
+\caption{모형 기호 설명}
+\footnotesize
+\begin{tabular}{llp{8.2cm}}\toprule
+\textbf{모형} & \textbf{기호} & \textbf{설명} \\ \midrule
+\multirow{4}{*}{M1}
+  & $i,\,j$                            & 관광지 $j$의 리뷰 $i$ \\
+  & $\beta_0$                          & 절편 \\
+  & $\mathbf{x}_{ij}^\top\boldsymbol\beta$ & 회귀변수 벡터(방문 맥락 + 통제변수) 및 계수 \\
+  & $\delta_j$                         & 관광지 고정효과(관광지별 1개) \\ \midrule
+\multirow{6}{*}{M2, M3}
+  & $i,\,j$                            & 관광지 $j$의 리뷰 $i$ \\
+  & $\beta_0$                          & 절편 \\
+  & $\mathbf{x}_{ij}^\top\boldsymbol\beta$ & 회귀변수 벡터 및 계수 \\
+  & $\delta_j$                         & 관광지 고정효과 \\
+  & $\tau_k$                           & 순서형 로짓의 $k$ 범주 임계값 \\
+  & $k$                                & 종속변수 범주 (M2: $0\!\dots\!4$;\; M3: $1\!\dots\!4$) \\ \midrule
+\multirow{7}{*}{M4}
+  & $i,\,j$                            & 관광지 $j$의 리뷰 $i$ \\
+  & $\beta_0$                          & 절편 \\
+  & $\mathbf{x}_{ij}^\top\boldsymbol\beta$ & 회귀변수 벡터 및 계수 \\
+  & $\delta_j$                         & 관광지 고정효과 \\
+  & $\mu_{ij}$                         & 반응 수의 기댓값 \\
+  & $\gamma$                           & 로그 경과일 탄력성(리뷰 경과일 오프셋) \\
+  & $\alpha$                           & 음이항 산포모수($\hat\alpha = 2.44$; 분산 $\approx$ 평균의 37배) \\ \bottomrule
+\end{tabular}
+\end{table}
+
+\tblVariableMapKO
+
+\tblVIF
+
+\sect{9. 연구결과}
+\vspace{-3pt}
+\begin{table}[H]\centering
+\caption{결과 요약 / 주요 효과 (승산비 및 발생비)}
+\footnotesize
+\begin{tabular}{lllr}\toprule
+\textbf{모형} & \textbf{적합도} & \textbf{변수} & \textbf{OR / IRR} \\ \midrule
+\multirow{5}{*}{M1 재방문} & \multirow{5}{*}{\shortstack[l]{AUC 0.773\\(확장 0.785)}}
+  & 작성자 총 리뷰 수   & 1.52*** \\
+  & & 혼자 방문           & 1.68**  \\
+  & & 대기 경험           & 0.51*** \\
+  & & 감성 점수           & 0.70*** \\
+  & & 여행 그룹           & 0.56*** \\ \midrule
+\multirow{4}{*}{M2 키워드 수} & \multirow{4}{*}{\shortstack[l]{RMSE 1.37\\(기준 1.88)}}
+  & 텍스트 작성         & 4.02*** \\
+  & & 방문 정보 제공      & 2.53*** \\
+  & & 재방문자            & 1.60*** \\
+  & & 여행 그룹           & 1.73*** \\ \midrule
+\multirow{2}{*}{M3 별점} & \multirow{2}{*}{탐색적}
+  & 키워드 수           & 1.56*** \\
+  & & 재방문자            & 1.37*   \\ \midrule
+\multirow{3}{*}{M4 반응 수} & \multirow{3}{*}{AUC 0.815}
+  & 팔로워 수           & 1.97*** \\
+  & & 텍스트 길이         & 1.64*** \\
+  & & 감성 점수           & 0.77**  \\ \bottomrule
+\end{tabular}
+\end{table}
+{\scriptsize * $p<0.05$, ** $p<0.01$, *** $p<0.001$. 비율 $<1$은 부정적 연관을 나타냄. OR/IRR $= e^{\hat\beta}$.}
+
+LLM 기반 분류기로 11{,}164건의 리뷰를 여섯 개 내용 차원(역사·문화, 접근성, 혼잡, 음식,
+시각·사진, 서비스·체험)에 라벨링한 측면 수준 분석은 그림을 더 선명하게 한다. 여섯 측면은
+관광 문헌 근거로 사전 지정되었으며, LLM 분류 전에 비지도 토픽 추출(LDA 최적 $K=6$, BERTopic
+$K=15$)로 보완 검증되었다. 아이와 방문은 세 측면(역사, 접근성, 서비스)의 언급을 1.22--1.55배
+높인다. 서비스 마찰은 두 방향으로 분기한다: 대기는 혼잡 언급을 두 배 이상 높이고(OR $2.13$),
+사전 예약은 혼잡을 줄이면서(OR $0.69$) 서비스 언급을 두 배 이상 높인다(OR $2.39$). 데이트
+목적은 음식 언급을 51\% 상승시킨다. 몰입에 대해서는 작성자 통제 후 어떤 측면 언급도 $p<.05$에
+도달하지 않는다: 네이버 플레이스에서 반응은 리뷰 내용이 아닌 작성자 정체성(팔로워, 재방문 여부,
+텍스트 길이)에 의해 좌우된다.
+
+\sect{10. 참고문헌}
+\begin{enumerate}\small
+  \item Bae, E., Chang, M., Park, E., \& Kim, D. (2017). The effect of Hallyu on tourism in Korea. \textit{Journal of Open Innovation: Technology, Market, and Complexity}, 3, 22.
+  \item Chang, S. (2021). Food tourism in Korea. \textit{Journal of Vacation Marketing}.
+  \item Ko, S., Kang, S., Kang, H., \& Lee, M.~J. (2018). An exploration of foreign tourists' perceptions of Korean food tour. \textit{Asia Pacific Journal of Tourism Research}, 23(8), 833--846.
+  \item Karabila, I., Darraz, N., EL-Ansari, A., Alami, N., \& EL~Mallahi, M. (2024). BERT-enhanced sentiment analysis for personalized e-commerce recommendations. \textit{Multimedia Tools and Applications}, 83, 56463--56488.
+  \item Lee, M., Jeong, D., \& Kim, A.~J. (2026). The impact of information diversity on online reviews and business performance. \textit{Journal of Consumer Studies}, 37(1). \url{https://doi.org/10.35736/JCS.37.1.1}
+  \item Wang, S., Karmakar, S., Wang, F., \& Pei, Y. (2025). Content dissimilarity and online review helpfulness: Contextual insights. \textit{Journal of Business Research}, 187, 115068.
+\end{enumerate}
+
+\end{document}

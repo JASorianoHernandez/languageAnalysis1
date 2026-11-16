@@ -1,0 +1,53 @@
+Corpus: 1494 reviews, 8 places
+
+Loading multilingual-e5-base...
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights:   4%|▍         | 8/199 [00:00<00:02, 67.30it/s]Loading weights:   8%|▊         | 15/199 [00:00<00:02, 67.41it/s]Loading weights:  14%|█▍        | 28/199 [00:00<00:01, 93.43it/s]Loading weights: 100%|██████████| 199/199 [00:00<00:00, 601.88it/s]
+  Model loaded OK
+
+── Part 1: Zero-shot motivation classification ──
+  Embedding motivation labels...
+  Embedding reviews...
+  Saved: motivation_results.csv
+  Saved: motivation_summary.csv
+
+  Motivation distribution (% by language, all places):
+motivation  Cultural Heritage & History  Food & Gastronomy  Nature & Scenery  Photography & Visual Experience  Shopping & Entertainment
+language                                                                                                                               
+en                                 32.1                3.8              30.0                             32.1                       2.1
+ko                                 22.9                4.4              37.3                             34.5                       1.0
+  Saved: 07_motivations_stacked.png
+
+── Part 2: Cross-lingual cosine similarity ──
+  경복궁             KO↔EN sim=0.930  KO-intra=0.860  EN-intra=0.824  divergence=-0.082
+  창덕궁             KO↔EN sim=0.926  KO-intra=0.854  EN-intra=0.817  divergence=-0.084
+  덕수궁             KO↔EN sim=0.924  KO-intra=0.857  EN-intra=0.814  divergence=-0.078
+  북촌한옥마을          KO↔EN sim=0.918  KO-intra=0.864  EN-intra=0.813  divergence=-0.063
+  국립중앙박물관         KO↔EN sim=0.934  KO-intra=0.845  EN-intra=0.825  divergence=-0.105
+  N서울타워           KO↔EN sim=0.934  KO-intra=0.875  EN-intra=0.820  divergence=-0.067
+  광안리해수욕장         KO↔EN sim=0.928  KO-intra=0.864  EN-intra=0.816  divergence=-0.074
+  해운대해수욕장         KO↔EN sim=0.919  KO-intra=0.873  EN-intra=0.817  divergence=-0.052
+  Saved: crosslingual_similarity.csv
+  Saved: 08_crosslingual_sim.png
+
+  Updated: analysis_data.json
+
+── Done ──
+  01_sentiment_bar.png
+  02_sentiment_heatmap.png
+  03a_wordcloud_ko.png
+  03b_wordcloud_en.png
+  04_topic_dist_en.png
+  04_topic_dist_ko.png
+  05_ttr_bar.png
+  06_tfidf_contrast.png
+  07_motivations_stacked.png
+  08_crosslingual_sim.png
+  09_absa_heatmap_en.png
+  09_absa_heatmap_ko.png
+  10_absa_radar.png
+  11_geo_bubble_busan.png
+  11_geo_bubble_seoul.png
+  12_sentiment_scatter.png
+  13_hypothesis_tests.png
+  14_lda_k_selection.png
+  bubble_map.html

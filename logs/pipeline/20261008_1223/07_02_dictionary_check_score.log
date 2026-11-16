@@ -1,0 +1,143 @@
+Coded rows: 602 / 602
+
+hypothesis language           term  term_total  n_reviewed  n_valid  precision                  action
+        H1       en           time          26          20        4      0.200                 EXCLUDE
+        H1       en          hours          11          11       10      0.909                    keep
+        H1       en      admission          10          10       10      1.000                    keep
+        H1       en          times          10          10        5      0.500                 EXCLUDE
+        H1       en          early           9           9        9      1.000                    keep
+        H1       en       entrance           9           9        7      0.778                    keep
+        H1       en           hour           7           7        7      1.000                    keep
+        H1       en          lines           6           6        6      1.000                    keep
+        H1       en           wait           6           6        5      0.833                    keep
+        H1       en        advance           5           5        5      1.000                    keep
+        H1       en         closed           5           5        5      1.000                    keep
+        H1       en       weekends           5           5        5      1.000                    keep
+        H1       en           line           4           4        4      1.000 keep (too few reviewed)
+        H1       en      itinerary           3           3        3      1.000 keep (too few reviewed)
+        H1       en           plan           3           3        3      1.000 keep (too few reviewed)
+        H1       en        weekday           3           3        3      1.000 keep (too few reviewed)
+        H1       en        weekend           3           3        3      1.000 keep (too few reviewed)
+        H1       en         queues           2           2        2      1.000 keep (too few reviewed)
+        H1       en    reservation           2           2        2      1.000 keep (too few reviewed)
+        H1       en         waited           2           2        2      1.000 keep (too few reviewed)
+        H1       en           book           1           1        1      1.000 keep (too few reviewed)
+        H1       en         booked           1           1        1      1.000 keep (too few reviewed)
+        H1       en        booking           1           1        1      1.000 keep (too few reviewed)
+        H1       en            bus           1           1        1      1.000 keep (too few reviewed)
+        H1       en          buses           1           1        1      1.000 keep (too few reviewed)
+        H1       en          entry           1           1        1      1.000 keep (too few reviewed)
+        H1       en        parking           1           1        1      1.000 keep (too few reviewed)
+        H1       en        planned           1           1        0      0.000 keep (too few reviewed)
+        H1       en          queue           1           1        1      1.000 keep (too few reviewed)
+        H1       en   reservations           1           1        1      1.000 keep (too few reviewed)
+        H1       en        reserve           1           1        1      1.000 keep (too few reviewed)
+        H1       en       schedule           1           1        1      1.000 keep (too few reviewed)
+        H1       en      schedules           1           1        1      1.000 keep (too few reviewed)
+        H1       en         subway           1           1        1      1.000 keep (too few reviewed)
+        H1       en      transport           1           1        1      1.000 keep (too few reviewed)
+        H1       en transportation           1           1        1      1.000 keep (too few reviewed)
+        H1       en        waiting           1           1        1      1.000 keep (too few reviewed)
+        H1       en       weekdays           1           1        1      1.000 keep (too few reviewed)
+        H1       ko             시간          61          20       11      0.550                 EXCLUDE
+        H1       ko             코스          21          20       19      0.950                    keep
+        H1       ko             입장          16          16       16      1.000                    keep
+        H1       ko             버스          13          13        1      0.077                 EXCLUDE
+        H1       ko            주차장          11          11       11      1.000                    keep
+        H1       ko            기다리           9           9        9      1.000                    keep
+        H1       ko             예약           9           9        9      1.000                    keep
+        H1       ko            입장료           9           9        9      1.000                    keep
+        H1       ko             주말           9           9        5      0.556                 EXCLUDE
+        H1       ko              줄           9           9        8      0.889                    keep
+        H1       ko             이동           8           8        7      0.875                    keep
+        H1       ko             주차           8           8        8      1.000                    keep
+        H1       ko             평일           8           8        8      1.000                    keep
+        H1       ko             미리           5           5        5      1.000                    keep
+        H1       ko             운영           5           5        4      0.800                    keep
+        H1       ko            지하철           5           5        5      1.000                    keep
+        H1       ko             일찍           4           4        4      1.000 keep (too few reviewed)
+        H1       ko             교통           3           3        3      1.000 keep (too few reviewed)
+        H1       ko             대기           3           3        3      1.000 keep (too few reviewed)
+        H1       ko             마감           3           3        3      1.000 keep (too few reviewed)
+        H1       ko            웨이팅           3           3        3      1.000 keep (too few reviewed)
+        H1       ko             휴무           2           2        2      1.000 keep (too few reviewed)
+        H1       ko             계획           1           1        1      1.000 keep (too few reviewed)
+        H1       ko             동선           1           1        1      1.000 keep (too few reviewed)
+        H1       ko             오픈           1           1        0      0.000 keep (too few reviewed)
+        H2       en         family           6           6        5      0.833                    keep
+        H2       en       children           4           4        4      1.000 keep (too few reviewed)
+        H2       en           kids           4           4        4      1.000 keep (too few reviewed)
+        H2       en       families           3           3        3      1.000 keep (too few reviewed)
+        H2       en            son           3           3        2      0.667 keep (too few reviewed)
+        H2       en          group           2           2        0      0.000 keep (too few reviewed)
+        H2       en         groups           2           2        2      1.000 keep (too few reviewed)
+        H2       en          child           1           1        1      1.000 keep (too few reviewed)
+        H2       en        couples           1           1        1      1.000 keep (too few reviewed)
+        H2       en        friends           1           1        1      1.000 keep (too few reviewed)
+        H2       en            kid           1           1        1      1.000 keep (too few reviewed)
+        H2       ko             가족          16          16       14      0.875                    keep
+        H2       ko             친구          15          15       15      1.000                    keep
+        H2       ko             아이          12          12       12      1.000                    keep
+        H2       ko            데이트           6           6        6      1.000                    keep
+        H2       ko             연인           4           4        4      1.000 keep (too few reviewed)
+        H2       ko             남편           1           1        1      1.000 keep (too few reviewed)
+        H2       ko             단체           1           1        1      1.000 keep (too few reviewed)
+        H2       ko             부모           1           1        1      1.000 keep (too few reviewed)
+        H2       ko             아내           1           1        1      1.000 keep (too few reviewed)
+        H2       ko             아빠           1           1        1      1.000 keep (too few reviewed)
+        H2       ko            어머니           1           1        1      1.000 keep (too few reviewed)
+        H2       ko             조카           1           1        1      1.000 keep (too few reviewed)
+        H3       en       friendly           6           6        3      0.500                 EXCLUDE
+        H3       en          staff           6           6        6      1.000                    keep
+        H3       en         guided           3           3        3      1.000 keep (too few reviewed)
+        H3       en        vendors           3           3        3      1.000 keep (too few reviewed)
+        H3       en        service           2           2        0      0.000 keep (too few reviewed)
+        H3       en          guide           1           1        0      0.000 keep (too few reviewed)
+        H3       en        helpful           1           1        1      1.000 keep (too few reviewed)
+        H3       en         polite           1           1        0      0.000 keep (too few reviewed)
+        H3       en           rude           1           1        1      1.000 keep (too few reviewed)
+        H3       en     unfriendly           1           1        1      1.000 keep (too few reviewed)
+        H3       en         vendor           1           1        1      1.000 keep (too few reviewed)
+        H3       ko             친절           7           7        7      1.000                    keep
+        H3       ko             안내           4           4        4      1.000 keep (too few reviewed)
+        H3       ko             상인           3           3        2      0.667 keep (too few reviewed)
+        H3       ko             해설           3           3        3      1.000 keep (too few reviewed)
+        H3       ko            해설사           3           3        3      1.000 keep (too few reviewed)
+        H3       ko            가이드           2           2        2      1.000 keep (too few reviewed)
+        H3       ko             사장           2           2        2      1.000 keep (too few reviewed)
+        H3       ko             직원           2           2        2      1.000 keep (too few reviewed)
+        H4       en            fun          21          20       19      0.950                    keep
+        H4       en          enjoy          18          18       18      1.000                    keep
+        H4       en        enjoyed           8           8        8      1.000                    keep
+        H4       en       enjoying           5           5        5      1.000                    keep
+        H4       en  entertainment           3           3        3      1.000 keep (too few reviewed)
+        H4       en       exciting           3           3        3      1.000 keep (too few reviewed)
+        H4       en      enjoyable           2           2        2      1.000 keep (too few reviewed)
+        H4       en          happy           2           2        2      1.000 keep (too few reviewed)
+        H4       en           play           2           2        1      0.500 keep (too few reviewed)
+        H4       en        delight           1           1        1      1.000 keep (too few reviewed)
+        H4       en     delightful           1           1        1      1.000 keep (too few reviewed)
+        H4       en   entertaining           1           1        1      1.000 keep (too few reviewed)
+        H4       en        playing           1           1        0      0.000 keep (too few reviewed)
+        H4       en         thrill           1           1        1      1.000 keep (too few reviewed)
+        H4       en      thrilling           1           1        1      1.000 keep (too few reviewed)
+        H4       ko             즐기          41          20       20      1.000                    keep
+        H4       ko              놀          12          12       11      0.917                    keep
+        H4       ko             즐겁          10          10       10      1.000                    keep
+        H4       ko             재밌           7           7        7      1.000                    keep
+        H4       ko             재미           5           5        5      1.000                    keep
+        H4       ko            즐거움           4           4        3      0.750 keep (too few reviewed)
+        H4       ko             신나           3           3        3      1.000 keep (too few reviewed)
+        H4       ko             흥미           3           3        1      0.333 keep (too few reviewed)
+        H4       ko             설레           1           1        1      1.000 keep (too few reviewed)
+
+Overall dictionary precision (share of valid contexts):
+language       en     ko
+hypothesis              
+H1          0.818  0.838
+H2          0.857  0.967
+H3          0.731  0.962
+H4          0.957  0.938
+
+Saved data\analysis\dictionary_precision.csv
+Next: run 08_01_hypothesis_tests.py; terms marked EXCLUDE are dropped in the sensitivity run.

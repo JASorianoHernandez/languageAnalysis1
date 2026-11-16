@@ -1,0 +1,37 @@
+EN: 676 documents, 1541 terms
+  K= 2  c_v=0.466  perplexity=111.7
+  K= 3  c_v=0.425  perplexity=114.2
+  K= 4  c_v=0.470  perplexity=116.2
+  K= 5  c_v=0.458  perplexity=120.1
+  K= 6  c_v=0.448  perplexity=123.7
+  K= 7  c_v=0.436  perplexity=127.7
+  K= 8  c_v=0.435  perplexity=129.5
+  K= 9  c_v=0.450  perplexity=130.8
+  K=10  c_v=0.417  perplexity=135.4
+  K=11  c_v=0.410  perplexity=137.0
+  K=12  c_v=0.412  perplexity=139.5
+  K=13  c_v=0.421  perplexity=141.0
+  K=14  c_v=0.425  perplexity=146.1
+  K=15  c_v=0.413  perplexity=146.5
+KO: 680 documents, 1405 terms
+  K= 2  c_v=0.346  perplexity=98.4
+  K= 3  c_v=0.416  perplexity=96.6
+  K= 4  c_v=0.483  perplexity=95.8
+  K= 5  c_v=0.425  perplexity=100.4
+  K= 6  c_v=0.486  perplexity=101.1
+  K= 7  c_v=0.485  perplexity=102.5
+  K= 8  c_v=0.500  perplexity=104.5
+  K= 9  c_v=0.463  perplexity=106.1
+  K=10  c_v=0.468  perplexity=108.3
+  K=11  c_v=0.486  perplexity=109.2
+  K=12  c_v=0.451  perplexity=111.7
+  K=13  c_v=0.435  perplexity=111.4
+  K=14  c_v=0.469  perplexity=112.2
+  K=15  c_v=0.467  perplexity=112.9
+
+Best K by mean coherence (c_v):
+  EN: top-3 K=4 (0.470), K=2 (0.466), K=5 (0.458) | K=5: 0.458 (rank 3 of 14)
+  KO: top-3 K=8 (0.500), K=11 (0.486), K=6 (0.486) | K=5: 0.425 (rank 12 of 14)
+
+Saved: data\analysis\lda_k_selection.csv
+Saved: data\analysis\figures\14_lda_k_selection.png

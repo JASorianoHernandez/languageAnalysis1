@@ -1,0 +1,7 @@
+.env
+data/
+results/
+__pycache__/
+*.pyc
+node_modules/
+proposal/deck/proposal_deck.pptx

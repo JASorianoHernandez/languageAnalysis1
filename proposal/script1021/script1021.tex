@@ -1,0 +1,704 @@
+% Compile with xelatex (twice).
+% Talk script v8 (2026-10-22) — aligned to 20-slide deck after user's
+% remodel. New dedicated slides: 5 (Paradox), 10 (Review writing videos),
+% 13 (Models & Variables Korean mirror). Slide 17 expanded to cover
+% Divergent traces. All em-dashes avoided. Korean numbers phonetic.
+%
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{xeCJK}
+\setCJKmainfont[AutoFakeSlant=0.15]{Malgun Gothic}
+\setCJKsansfont[AutoFakeSlant=0.15]{Malgun Gothic}
+\xeCJKsetup{CJKspace=true}
+
+\usepackage[top=1.4cm, bottom=1.4cm, left=1.4cm, right=1.4cm]{geometry}
+\usepackage{booktabs}
+\usepackage{url}
+\usepackage{enumitem}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{longtable}
+
+\linespread{1.1}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+
+\newcommand{\sechead}[2]{%
+  \vspace{6pt}%
+  \noindent\rule{\linewidth}{0.6pt}\\[1pt]
+  {\small\bfseries #1\hfill #2}\\[-3pt]
+  \rule{\linewidth}{0.4pt}\par\vspace{2pt}%
+}
+
+\newcommand{\sent}[1]{#1\\[4pt]}
+
+\newcommand{\bilingual}[2]{%
+  \noindent%
+  \begin{minipage}[t]{0.485\linewidth}
+    \small #1
+  \end{minipage}\hfill\vrule\hfill%
+  \begin{minipage}[t]{0.483\linewidth}
+    \small #2
+  \end{minipage}\par\vspace{3pt}%
+}
+
+\begin{document}
+
+\begin{center}
+  {\large\bfseries Talk Script v8 + Q\&A + Glossary}\\[3pt]
+  {\large\bfseries 발표 스크립트 v8 + 예상 질의응답 + 용어집}\\[2pt]
+  {\small \textit{An Empirical Analysis of Visit Context and Review Outcomes
+  in Online Reviews of Korean Tourist Attractions}}\\[2pt]
+  {\small 20 slides $\cdot$ Korean numbers written phonetically $\cdot$ no em-dashes}
+\end{center}
+
+\vspace{4pt}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 1 --- Title}{$\sim$20s}
+
+\bilingual{%
+\sent{Good morning. I am Jorge Soriano from the Department of Data
+Science at Hoseo University.}
+\sent{Today I present an empirical analysis of how visit context shapes
+online reviews on Naver Place.}
+}{%
+\sent{안녕하세요. 저는 호서대학교 데이터사이언스학과의 호르헤
+소리아노입니다.}
+\sent{오늘은 방문 맥락이 네이버 플레이스 리뷰에 어떻게 영향을 주는지에
+대한 실증 분석을 발표합니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 2 --- Agenda}{$\sim$10s}
+
+\bilingual{%
+\sent{Introduction, theoretical background, methodology, results, and
+conclusion.}
+}{%
+\sent{서론, 이론적 배경, 방법론, 결과, 그리고 결론입니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 3 --- Section 1: Introduction}{$\sim$5s}
+
+\bilingual{%
+\sent{Let's start.}
+}{%
+\sent{시작하겠습니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 4 --- Introduction}{$\sim$35s}
+
+\bilingual{%
+\sent{Online reviews drive travel decisions.}
+\sent{Naver Place is distinctive. Each review carries structured visit
+context: companion, purpose, wait, and reservation.}
+\sent{Previous studies either analyse review text with NLP and ignore
+context, or aggregate reviews to the business level and lose individual
+variation. Neither can ask how the context of a specific visit shapes
+the outcome of that specific review.}
+}{%
+\sent{온라인 리뷰는 여행 결정을 좌우합니다.}
+\sent{네이버 플레이스는 특별합니다. 각 리뷰에 동반자, 목적, 대기, 예약
+이라는 구조화된 방문 맥락이 포함되어 있습니다.}
+\sent{기존 연구는 NLP로 텍스트만 분석해 맥락을 무시하거나, 업체 단위로
+집계해 개별 변이를 잃습니다. 두 접근법 모두 특정 방문의 맥락이 그 특정
+리뷰의 결과를 어떻게 좌우하는지 묻지 못합니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 5 --- A real-world paradox / 현실의 역설}{$\sim$25s}
+
+\bilingual{%
+\sent{Earlier this year, Korean media reported a case. A customer visited
+a raw-fish restaurant in Incheon forty-three times. Every review praised
+the staff as 'good, friendly'. Every rating was one star. The owner's
+health declined and he closed the shop.}
+\sent{In our data, the correlation between rating and revisit is just
+zero-point-zero-eight. This paradox is not a one-off news story. It is
+a systematic pattern across thousands of reviews.}
+}{%
+\sent{올해 초, 한국 언론이 한 사례를 보도했습니다. 한 손님이 인천의
+어느 횟집을 사십삼(43) 번 방문했습니다. 매번 리뷰에는 ``굿, 친절해요''
+라고 적었지만, 매번 별점은 일점(1)이었습니다. 사장님은 건강이 나빠져
+결국 가게를 폐업했습니다.}
+\sent{저희 데이터에서 별점과 재방문의 상관은 영 점 영팔(0.08)에
+불과합니다. 이 역설은 일회성 사건이 아니라 수천 건의 리뷰에 걸친
+체계적인 패턴입니다.}
+}
+
+\vspace{2pt}
+{\scriptsize\textit{News source / 보도 출처:}
+JTBC 사건반장 2026-07-27 \url{https://www.youtube.com/watch?v=qOzc5bO1pHU}
+$\cdot$ WikiTree \url{https://www.wikitree.co.kr/articles/1148982}
+$\cdot$ Insight \url{https://www.insight.co.kr/news/564977}}
+\vspace{3pt}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 6 --- Research Questions and Contribution}{$\sim$45s}
+
+\bilingual{%
+\sent{Two questions.}
+\sent{RQ1 asks what predicts a returning visitor.}
+\sent{RQ2 asks what predicts each rating category: TOP (five stars),
+MID (four to four-and-a-half), LOW (three-and-a-half or below).}
+\sent{Our contribution is twofold.}
+\sent{First, we are the first to exploit Naver Place visit context at
+the individual-review level.}
+\sent{Second, we model both outcomes in parallel. This lets us show that
+declared satisfaction (rating) and behavioural satisfaction (revisit)
+are related but distinct traces of a latent construct.}
+}{%
+\sent{두 가지 질문입니다.}
+\sent{첫째, 재방문자 리뷰를 예측하는 요인은 무엇인가?}
+\sent{둘째, 각 별점 범주를 예측하는 요인은 무엇인가? 오점(5)의 TOP,
+사에서 사점오(4\textasciitilde4.5)의 MID, 삼점오(3.5) 이하의 LOW입니다.}
+\sent{저희의 기여는 두 가지입니다.}
+\sent{첫째, 네이버 플레이스의 방문 맥락을 개별 리뷰 수준에서 활용한
+최초의 연구입니다.}
+\sent{둘째, 두 결과를 병렬로 모델링합니다. 이를 통해 선언된 만족도(별점)
+와 행동적 만족도(재방문)가 관련은 있지만 잠재적 구성개념의 서로 다른
+흔적임을 보여줍니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 7 --- Section 2: Theoretical Background}{$\sim$5s}
+
+\bilingual{%
+\sent{On to the theoretical background.}
+}{%
+\sent{이론적 배경으로 넘어갑니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 8 --- Theoretical Background}{$\sim$35s}
+
+\bilingual{%
+\sent{Three anchors.}
+\sent{First, Lee and colleagues, 2026: review diversity predicts
+platform performance at the business level. We take that construct to the
+individual review.}
+\sent{Second, SERVQUAL by Parasuraman and colleagues, 1988: waiting is a
+responsiveness failure.}
+\sent{Third, Karabila and colleagues, 2024: BERT models classify review
+sentiment with high accuracy.}
+}{%
+\sent{세 가지 축입니다.}
+\sent{첫째, 이민영 외, 이천이십육(2026)년. 리뷰 다양성이 업체 단위
+성과를 예측합니다. 저희는 이 개념을 개별 리뷰 수준으로 확장합니다.}
+\sent{둘째, SERVQUAL (Parasuraman 외, 천구백팔십팔(1988)년). 대기는 반응성의
+실패입니다.}
+\sent{셋째, Karabila 외, 이천이십사(2024)년. BERT 모형은 리뷰 감성을 높은
+정확도로 분류합니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 9 --- Section 3: Methodology}{$\sim$5s}
+
+\bilingual{%
+\sent{Methodology.}
+}{%
+\sent{방법론입니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 10 --- Review writing / 리뷰 쓰기}{$\sim$20s}
+
+\bilingual{%
+\sent{Before describing the pipeline, two short clips show how a Naver
+Place review is actually written. Each one presents a structured
+template: the reviewer picks the companion type, the purpose of the
+visit, whether they waited, whether they reserved. The star rating and
+the free-text review follow.}
+\sent{These structured fields are the visit context we exploit.}
+}{%
+\sent{파이프라인을 설명하기 전에, 짧은 두 영상으로 네이버 플레이스
+리뷰가 실제로 어떻게 작성되는지 보여드립니다. 각 영상은 구조화된
+템플릿을 보여줍니다. 리뷰어는 동반자 유형, 방문 목적, 대기 여부, 예약
+여부를 선택합니다. 별점과 자유 텍스트 리뷰가 그 뒤에 이어집니다.}
+\sent{이 구조화된 필드가 바로 저희가 활용하는 방문 맥락입니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 11 --- Research Pipeline}{$\sim$45s}
+
+\bilingual{%
+\sent{14{,}401 Korean reviews from 8{,}276 reviewers across 29
+attractions, scraped from Naver Place.}
+\sent{The 29 attractions were selected using two sources: Yanolja
+Research's Korea Top 500 ranking and Korea Tourism Organization
+visitor-volume data, within typological strata like palaces, hanok
+villages, markets, and modern landmarks.}
+\sent{11{,}165 reviews have text (the Model 1 sample). 4{,}044 also have
+a star rating (the Model 2 sample).}
+\sent{Variables combine visit context, reviewer identity, and text
+sentiment. All features are stored in JSON files that feed the modeling
+pipeline.}
+\sent{From there, we fit two models in parallel: binary logistic for
+revisit, multinomial logistic for rating. Both include place fixed
+effects and reviewer-clustered standard errors. Details on the next
+slide.}
+}{%
+\sent{스물아홉(29) 개 관광지의 리뷰어 팔천이백칠십육(8{,}276) 명이
+작성한 일만 사천사백일(14{,}401) 건의 한국어 리뷰입니다. 네이버
+플레이스에서 수집했습니다.}
+\sent{스물아홉(29) 개 관광지는 두 가지 기준으로 선정했습니다. 야놀자
+리서치의 ``한국 톱 오백(500)'' 순위, 그리고 한국관광공사의 방문객 수
+데이터입니다. 궁궐, 한옥, 시장, 현대 랜드마크 등 유형별 범주 안에서
+선정했습니다.}
+\sent{일만 천백육십오(11{,}165) 건은 텍스트를 포함합니다. M1 표본입니다.
+사천사십사(4{,}044) 건은 별점도 포함합니다. M2 표본입니다.}
+\sent{변수는 방문 맥락, 리뷰어 정체성, 그리고 텍스트 감성을 결합합니다.
+모든 특성은 JSON 파일로 저장되어 모형 학습 파이프라인의 입력이 됩니다.}
+\sent{그로부터 두 모형을 병렬 추정합니다. 재방문은 이항 로지스틱,
+별점은 다항 로지스틱입니다. 두 모형 모두 장소 고정효과와 군집
+표준오차를 포함합니다. 자세한 내용은 다음 슬라이드입니다.}
+}
+
+\vspace{2pt}
+{\scriptsize\textit{Sources / 자료 출처:}
+Yanolja Top 500 \url{https://www.yanolja-research.com/insight/view/640?lang=en}
+$\cdot$ KTO Datalab \url{https://datalab.visitkorea.or.kr}}
+\vspace{3pt}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 12 --- Models and Variables}{$\sim$30s}
+
+\bilingual{%
+\sent{Model 1 is a binary logistic regression on revisit. Model 2 is a
+multinomial logistic regression on rating, with TOP as the reference.}
+\sent{Three predictors are shared: sentiment, waited, and log followers.
+Model 1 adds tourist, alone, and log reviews. Model 2 adds log photos
+and season autumn. Eight unique variables in total.}
+}{%
+\sent{모형 일(1)은 재방문에 대한 이항 로지스틱 회귀입니다. 모형 이(2)는
+별점에 대한 다항 로지스틱 회귀이며, 참조는 TOP입니다.}
+\sent{세(3) 예측 변수가 공유됩니다. 감성, 대기, 그리고 팔로워 수의
+로그값입니다. 모형 일(1)은 관광객, 혼자, 리뷰 수의 로그값을 추가하고,
+모형 이(2)는 사진 수의 로그값과 가을 방문을 추가합니다. 총 여덟(8) 개의
+고유 변수입니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 13 --- Models and Variables (Korean mirror)}{$\sim$10s}
+
+\bilingual{%
+\sent{The same table in Korean for the audience, keeping the variable
+names unchanged for consistency with the equations.}
+}{%
+\sent{청중을 위해 같은 표를 한국어로 제공합니다. 수식과의 일관성을 위해
+변수명은 그대로 유지합니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 14 --- Section 4: Results}{$\sim$5s}
+
+\bilingual{%
+\sent{Now the results.}
+}{%
+\sent{이제 결과입니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 15 --- Model 1: Revisit}{$\sim$45s}
+
+\bilingual{%
+\sent{Model 1. All six predictors are significant.}
+\sent{The strongest finding: waiting at the entrance halves the odds of
+being a returning visitor. Odds ratio 0.54.}
+\sent{Tourists are 45 percent less likely to return. Solo visitors are
+more than twice as likely to return, probably locals or committed
+enthusiasts.}
+\sent{Reviewer activity (followers and prior reviews) predicts revisit
+positively, reflecting reviewer identity.}
+\sent{Cross-validation AUC is 0.80.}
+}{%
+\sent{모형 일(1)입니다. 여섯(6) 변수 모두 유의합니다.}
+\sent{가장 강한 발견은 입구 대기입니다. 재방문자일 오즈를 절반으로
+줄입니다. 오즈비 영 점 오사(0.54)입니다.}
+\sent{관광객은 재방문할 확률이 사십오(45) 퍼센트 낮고, 혼자 방문자는 두
+배 이상 높습니다. 지역 주민이거나 애호가일 가능성이 높습니다.}
+\sent{리뷰어 활동(팔로워와 이전 리뷰 수)은 재방문을 양으로 예측하며,
+리뷰어 정체성을 반영합니다.}
+\sent{교차검증 AUC는 영 점 팔공(0.80)입니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 16 --- Model 2: Rating}{$\sim$50s}
+
+\bilingual{%
+\sent{Model 2. Two columns: MID vs TOP, and LOW vs TOP.}
+\sent{The key insight is asymmetry.}
+\sent{Waiting is not significant for MID vs TOP, but triples the odds
+of LOW vs TOP. Waiting is a disaster signal, not a mediocrity signal.}
+\sent{Sentiment dominates both comparisons, far stronger for LOW.}
+\sent{Autumn protects strongly against both MID and LOW, consistent
+with autumn being Korea's foliage peak season.}
+\sent{Within-plus-or-minus-one accuracy is 95 percent.}
+}{%
+\sent{모형 이(2)입니다. 두 열은 MID 대 TOP, 그리고 LOW 대 TOP입니다.}
+\sent{핵심 통찰은 비대칭성입니다.}
+\sent{대기는 MID 대 TOP에서는 유의하지 않지만, LOW 대 TOP의 오즈를
+세 배로 늘립니다. 오즈비 삼 점 일공(3.10)입니다. 대기는 ``실패 신호''이지
+``평범함 신호''가 아닙니다.}
+\sent{감성은 두 비교 모두에서 지배적이지만, LOW에서 훨씬 강합니다.}
+\sent{가을 방문은 MID와 LOW를 모두 강하게 방지합니다. 한국의 단풍
+성수기와 일치합니다.}
+\sent{within-플러스마이너스일(within-$\pm 1$) 정확도는 구십오(95) 퍼센트입니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 17 --- Model fit summary and Divergent traces}{$\sim$40s}
+
+\bilingual{%
+\sent{Both models fit well. Model 1: pseudo-R-squared 0.20, AUC 0.80.
+Model 2: pseudo-R-squared 0.19, within-plus-or-minus-one accuracy 95
+percent.}
+\sent{Now the key interpretive point. The correlation between revisit
+and rating is only zero-point-zero-eight. Shared variance is below one
+percent. The same shared predictors even act differently: waited is
+strongly negative for revisit, and triples the odds of a LOW rating.
+Sentiment weakly reduces revisit, but strongly protects against low
+ratings.}
+\sent{Declared and behavioural satisfaction are related but genuinely
+distinct traces of a latent construct.}
+}{%
+\sent{두 모형 모두 적합도가 양호합니다. 모형 일(1)은 pseudo-R 제곱 영 점
+이공(0.20), AUC 영 점 팔공(0.80). 모형 이(2)는 pseudo-R 제곱 영 점
+일구(0.19), within-플러스마이너스일 정확도 구십오(95) 퍼센트입니다.}
+\sent{이제 핵심 해석입니다. 재방문과 별점의 상관은 영 점 영팔(0.08)에
+불과하고, 공유 분산은 1\% 미만입니다. 같은 공유 예측 변수조차 다르게
+작용합니다. ``대기''는 재방문에 강한 음의 효과를 보이고 LOW 별점의
+오즈를 세 배로 늘립니다. ``감성''은 재방문을 약하게 줄이지만 낮은
+별점은 강하게 방지합니다.}
+\sent{선언된 만족도와 행동적 만족도는 관련은 있지만 잠재적 구성개념의
+진정으로 구별되는 흔적입니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 18 --- Section 5: Conclusions}{$\sim$5s}
+
+\bilingual{%
+\sent{Finally, conclusions and limitations.}
+}{%
+\sent{마지막으로 결론과 한계입니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 19 --- Conclusions and Limitations}{$\sim$40s}
+
+\bilingual{%
+\sent{Two findings.}
+\sent{First, visit context (waited, companion, tourist) predicts revisit
+beyond reviewer traits and sentiment.}
+\sent{Second, revisit and rating are related but distinct traces of
+satisfaction. The correlation is only 0.08.}
+\sent{Two limitations.}
+\sent{One, observational data; no causal identification.}
+\sent{Two, most attractions are from the Seoul metropolitan area;
+generalisation requires replication.}
+}{%
+\sent{두 가지 발견입니다.}
+\sent{첫째, 방문 맥락(대기, 동반자, 관광객 여부)이 리뷰어 특성과 감성을
+넘어 재방문을 예측합니다.}
+\sent{둘째, 재방문과 별점은 관련은 있지만 만족도의 서로 다른 흔적입니다.
+상관은 영 점 영팔(0.08)에 불과합니다.}
+\sent{두 가지 한계입니다.}
+\sent{하나, 관측 자료이므로 인과관계를 식별할 수 없습니다.}
+\sent{둘, 대부분의 관광지가 서울 수도권에 위치하므로, 일반화에는 반복
+연구가 필요합니다.}
+}
+
+% ═════════════════════════════════════════════════════════════════════════════
+\sechead{Slide 20 --- Thank you}{$\sim$10s}
+
+\bilingual{%
+\sent{Thank you for your attention. I welcome your questions.}
+}{%
+\sent{경청해 주셔서 감사합니다. 질문을 환영합니다.}
+}
+
+\vspace{10pt}
+
+\noindent\rule{\linewidth}{0.5pt}
+
+\vspace{4pt}
+
+\begin{center}
+\small
+\textbf{Normal pace:} $\sim$8:10. \textbf{Slow pace ($\times$1.25):} $\sim$10:10.\\
+\textbf{정상 속도:} 약 8분 10초. \textbf{느린 속도:} 약 10분 10초.
+\end{center}
+
+% ═════════════════════════════════════════════════════════════════════════════
+% ANTICIPATED Q&A
+% ═════════════════════════════════════════════════════════════════════════════
+\clearpage
+
+\begin{center}
+  {\large\bfseries Anticipated Q\&A / 예상 질의응답}\\[4pt]
+  {\small Short, speakable answers for the three most likely reviewer
+  questions. Korean numbers written phonetically for oral reading.}
+\end{center}
+
+\vspace{8pt}
+
+% ─── Q1 ────────────────────────────────────────────────────────────────────
+\noindent\textbf{Q1 --- Why multinomial and not binary?}
+
+\noindent\textbf{Q1 --- 왜 다항 로지스틱이고 이항은 아닙니까?}
+
+\vspace{3pt}
+
+\bilingual{%
+\sent{\textit{We tested binary. The problem is it collapses MID and LOW
+together, which hides our key finding: waiting doesn't make customers
+mediocre, it makes them angry. That asymmetry only appears when LOW is
+modeled separately.}}
+}{%
+\sent{\textit{이항 로지스틱도 시도했습니다. 하지만 MID와 LOW가
+합쳐지면서 핵심 발견이 사라집니다. 대기는 ``평범함 신호''가 아니라
+``실패 신호''라는 비대칭성은 LOW를 따로 모델링할 때만 드러납니다.}}
+}
+
+\vspace{8pt}
+
+% ─── Q2 ────────────────────────────────────────────────────────────────────
+\noindent\textbf{Q2 --- Why different N for M1 and M2?}
+
+\noindent\textbf{Q2 --- 왜 M1과 M2의 표본 크기 N이 다릅니까?}
+
+\vspace{3pt}
+
+\bilingual{%
+\sent{\textit{Not all Naver reviews include a star rating. Of the 11,165
+reviews with text, only 4,044 also have a rating. Each model uses the
+maximum data available for its outcome. We also ran M1 on the 4,044
+subset as a robustness check, and the coefficients hold.}}
+}{%
+\sent{\textit{네이버 리뷰 모두에 별점이 있는 것은 아닙니다. 텍스트가
+있는 일만 천백육십오(11{,}165) 건 중 사천사십사(4{,}044) 건만 별점도
+포함합니다. 각 모형은 자신의 결과변수에 사용 가능한 최대 데이터를
+활용합니다. 강건성 확인을 위해 M1을 사천사십사(4{,}044) 건 부분표본
+에서도 추정했고, 계수는 유지됩니다.}}
+}
+
+\vspace{8pt}
+
+% ─── Q3 ────────────────────────────────────────────────────────────────────
+\noindent\textbf{Q3 --- Isn't there self-selection? You only observe people
+who left a review.}
+
+\noindent\textbf{Q3 --- 자기선택 편의가 있지 않습니까? 리뷰를 남긴 사람만
+관측하는데요.}
+
+\vspace{3pt}
+
+\bilingual{%
+\sent{\textit{Yes, this is a review-based study, so by design we only
+observe reviewers. Our findings describe what differentiates returning
+reviewers from one-time reviewers, not visitors from the general
+population. We state this explicitly as a limitation.}}
+}{%
+\sent{\textit{네, 리뷰 기반 연구이므로 리뷰 작성자만 관측됩니다. 저희의
+발견은 재방문 리뷰어와 일회성 리뷰어를 구분하는 요인을 설명하지, 일반
+방문객 전체를 설명하지 않습니다. 이 점은 한계로 명시합니다.}}
+}
+
+\vspace{10pt}
+\noindent\rule{\linewidth}{0.5pt}
+
+% ═════════════════════════════════════════════════════════════════════════════
+% GLOSSARY
+% ═════════════════════════════════════════════════════════════════════════════
+\clearpage
+
+\begin{center}
+  {\large\bfseries Glossary of key terms / 용어집}\\[4pt]
+  {\small Technical vocabulary used in the talk, organised by theme.
+  Each entry: English $\cdot$ Korean $\cdot$ brief Spanish/context note.}
+\end{center}
+
+\vspace{8pt}
+
+% ─── Statistical models ────────────────────────────────────────────────────
+\noindent\textbf{\large 1. Statistical models / 통계 모형}
+
+\vspace{4pt}
+
+\footnotesize
+
+\begin{longtable}{@{}p{3.6cm} p{3.5cm} p{9cm}@{}}
+\toprule
+\textbf{English} & \textbf{Korean} & \textbf{Note (ES / context)} \\
+\midrule
+Binary logistic regression  & 이항 로지스틱 회귀         & Modelo logístico binario. Modela P(Y=1) con Y de 2 categorías. Usado en M1 (재방문). \\
+Multinomial logistic regression & 다항 로지스틱 회귀      & Modelo multinomial. Modela P(Y=k) con Y de 3+ categorías no ordenadas. Usado en M2 (별점). \\
+Ordered logit               & 순서형 로지스틱             & Logístico ordinal; respeta orden pero requiere proportional odds. Lo probamos y lo descartamos. \\
+Logit link                  & 로짓 링크                    & Función de enlace: $\logit(p) = \ln(p/(1-p))$. \\
+Odds ratio (OR)             & 오즈비                       & Razón de probabilidades. OR > 1: aumenta; OR < 1: reduce; OR = 1: sin efecto. $\exp(\beta)$. \\
+95\% confidence interval    & 95\% 신뢰구간                & Rango donde cae el valor real con 95\% de confianza. \\
+Place fixed effects         & 장소 고정효과                & Dummies por lugar (28 para 29 lugares, uno es referencia). Controlan heterogeneidad entre lugares. \\
+Clustered standard errors   & 군집 표준오차                 & SE corregidos por autocorrelación dentro de un cluster (aquí: por reviewer). \\
+Reference category          & 참조 범주                     & Categoría base contra la que se comparan las otras. En M2 es TOP (5★). \\
+\bottomrule
+\end{longtable}
+
+% ─── Model fit metrics ─────────────────────────────────────────────────────
+\vspace{10pt}
+\noindent\normalsize\textbf{\large 2. Model fit \& evaluation / 모형 적합도 및 평가}
+
+\vspace{4pt}
+
+\footnotesize
+
+\begin{longtable}{@{}p{3.6cm} p{3.5cm} p{9cm}@{}}
+\toprule
+\textbf{English} & \textbf{Korean} & \textbf{Note (ES / context)} \\
+\midrule
+Pseudo-$R^2$ (McFadden)     & 맥패든 pseudo-$R^2$        & McFadden $R^2 = 1 - LL_{mod}/LL_{null}$. Rango 0-1. 0.2-0.4 = ``excelente'' según McFadden. \\
+AIC (Akaike Information Criterion) & AIC                 & Criterio de información: menor = mejor balance ajuste/parsimonia. \\
+BIC (Bayesian Information Criterion) & BIC                 & Más estricto con la complejidad que AIC. \\
+AUC (ROC area)              & AUC                           & Área bajo la curva ROC. Rango 0.5-1.0. $\ge$ 0.70 aceptable, 0.80 bueno, 0.90 excelente. \\
+Brier score                  & 브라이어 점수                 & Medida de calibración de probabilidades. Menor = mejor. \\
+Log-likelihood (LLF)         & 로그 우도                      & Verosimilitud log del modelo. Base para pseudo-$R^2$ y LR test. \\
+Within-$\pm 1$ accuracy      & within-$\pm 1$ 정확도         & \% de predicciones a $\le 1$ categoría de la real (para M2 multinomial). \\
+Cross-validation (CV)        & 교차검증                       & Partición de datos en folds para evaluar generalización fuera-de-muestra. \\
+5-fold CV grouped by reviewer & 리뷰어 기준 5-fold 교차검증  & 5-fold CV donde ningún reviewer aparece en train y test. \\
+\bottomrule
+\end{longtable}
+
+% ─── Statistical tests ─────────────────────────────────────────────────────
+\vspace{10pt}
+\noindent\normalsize\textbf{\large 3. Statistical tests / 통계 검정}
+
+\vspace{4pt}
+
+\footnotesize
+
+\begin{longtable}{@{}p{3.6cm} p{3.5cm} p{9cm}@{}}
+\toprule
+\textbf{English} & \textbf{Korean} & \textbf{Note (ES / context)} \\
+\midrule
+Brant test                   & Brant 검정                     & Prueba del supuesto de proportional odds en ordered logit. Si p < 0.05: el supuesto falla. \\
+Proportional odds assumption & 비례오즈 가정                   & Supuesto del ordered logit: el efecto de cada predictor es constante entre todos los umbrales. Es lo que probó mal con sentiment y age. \\
+Likelihood ratio test (LR)   & 우도비 검정                     & Prueba para comparar modelos anidados. $LR = 2(LL_{full} - LL_{null})$. \\
+Wald test                    & 왈드 검정                       & Prueba de significancia individual de cada coeficiente. \\
+p-value                      & p값                           & Probabilidad de observar el efecto si H0 fuera cierta. Significativo si p < 0.05. \\
+Significance thresholds       & 유의수준                      & * p<.05 (débil), ** p<.01 (moderado), *** p<.001 (fuerte). \\
+Variance inflation factor (VIF) & 분산팽창계수                  & Diagnóstico de multicolinealidad. VIF > 5-10 es problemático. Los nuestros están todos < 2.3. \\
+\bottomrule
+\end{longtable}
+
+% ─── Study-specific terms ──────────────────────────────────────────────────
+\vspace{10pt}
+\noindent\normalsize\textbf{\large 4. Study-specific terms / 연구 특정 용어}
+
+\vspace{4pt}
+
+\footnotesize
+
+\begin{longtable}{@{}p{3.6cm} p{3.5cm} p{9cm}@{}}
+\toprule
+\textbf{English} & \textbf{Korean} & \textbf{Note (ES / context)} \\
+\midrule
+Visit context                & 방문 맥락                       & Metadatos del contexto del visita (동행자, 목적, 대기, 예약). Clave del paper. \\
+Companion type               & 동행 유형                       & Con quién fue el reviewer (혼자, 배우자/연인, 친구, 아이, 가족, 동료). \\
+Visit purpose                & 방문 목적                       & Por qué fue (여행, 나들이, 일상, 데이트, 사교). \\
+Wait experience              & 대기 경험                       & Si tuvo que hacer fila en la entrada (binaria). \\
+Reservation                  & 예약                            & Si hizo reservación previa (binaria). \\
+Revisit                      & 재방문                           & Variable Y de M1. 1 si visitó $\ge$ 2 veces. \\
+Star rating                   & 별점                             & Variable Y de M2. 0.5-5.0 estrellas, agrupada en 3 categorías. \\
+Reviewer                      & 작성자 / 리뷰어                   & El usuario que escribió la review. \\
+Follower count                & 팔로워 수                         & Red del reviewer en la plataforma. \\
+Review text                   & 리뷰 텍스트                        & Contenido textual de la review. \\
+Sentiment                     & 감성                              & Score $[-1, 1]$ del clasificador KLUE-BERT. \\
+Latent satisfaction           & 잠재적 만족도                     & Constructo no-observable. Rating y revisit son sus trazas observables. \\
+Declared trace                & 선언된 흔적                        & Rating: lo que el reviewer declara explícitamente. \\
+Behavioural trace             & 행동적 흔적                        & Revisit: lo que el reviewer hace. \\
+LOW / MID / TOP categories    & LOW / MID / TOP 범주             & LOW: $\le 3.5$★ (6.8\%). MID: 4-4.5★ (18.0\%). TOP: 5★ (75.2\%). \\
+Season autumn                 & 가을 (season\_autumn)             & Visita en otoño (sep-nov). Season peak en Corea por 단풍 (hojas de otoño). \\
+\bottomrule
+\end{longtable}
+
+% ─── Methodology terms ─────────────────────────────────────────────────────
+\vspace{10pt}
+\noindent\normalsize\textbf{\large 5. Methodology \& design / 방법론 설계}
+
+\vspace{4pt}
+
+\footnotesize
+
+\begin{longtable}{@{}p{3.6cm} p{3.5cm} p{9cm}@{}}
+\toprule
+\textbf{English} & \textbf{Korean} & \textbf{Note (ES / context)} \\
+\midrule
+Stratified sampling          & 층화 추출                       & Muestreo estratificado por tipo de lugar. \\
+Scraping                     & 스크래핑                         & Recolección automática de datos web. \\
+Cross-sectional design       & 횡단면적 설계                     & Datos de un punto en el tiempo (no panel). \\
+Confound                     & 혼란 변수                         & Variable que confunde la relación X-Y. \\
+Mechanical correlation       & 기계적 상관                       & Correlación por diseño del cálculo, no por relación sustantiva (ej: sentiment y rating en M2). \\
+Managerial lever              & 운영적 레버                      & Variable sobre la que un operador puede actuar. En nuestro caso: waited. \\
+Robustness check              & 강건성 검증                      & Spec alternativa para confirmar que la principal no es sensible a pequeños cambios. \\
+Forest plot                   & forest plot                     & Gráfico de ORs con intervalos de confianza. Visualización estándar. \\
+Confusion matrix              & 혼동 행렬                        & Tabla de predicciones vs. real por categoría. \\
+\bottomrule
+\end{longtable}
+
+% ─── Spoken numbers ────────────────────────────────────────────────────────
+\vspace{10pt}
+\noindent\normalsize\textbf{\large 6. Reading numbers aloud / 숫자 읽기}
+
+\vspace{4pt}
+
+\footnotesize
+
+\begin{longtable}{@{}p{4.5cm} p{5.5cm} p{6cm}@{}}
+\toprule
+\textbf{Written} & \textbf{English spoken} & \textbf{Korean spoken} \\
+\midrule
+OR = 0.54               & ``odds ratio zero-point-five-four''                           & ``오즈비 영 점 오사'' \\
+OR = 3.10               & ``odds ratio three-point-one-zero''                           & ``오즈비 삼 점 일공'' \\
+p < 0.001               & ``p less than zero-point-zero-zero-one''                     & ``p 영 점 영영일 미만'' \\
+$R^2 = 0.20$             & ``R-squared equals zero-point-two-zero''                    & ``R 제곱 영 점 이공'' \\
+$r = 0.08$               & ``r equals zero-point-zero-eight''                           & ``r 영 점 영팔'' \\
+95\%                     & ``ninety-five percent''                                       & ``구십오 퍼센트'' \\
+45\%                     & ``forty-five percent''                                        & ``사십오 퍼센트'' \\
+14,401 reviews          & ``fourteen thousand four hundred and one''                   & ``일만 사천사백일 (건)'' \\
+11,165 reviews          & ``eleven thousand one hundred sixty-five''                   & ``일만 천백육십오 (건)'' \\
+4,044 reviews           & ``four thousand forty-four''                                 & ``사천사십사 (건)'' \\
+8,276 reviewers         & ``eight thousand two hundred seventy-six''                   & ``팔천이백칠십육 (명)'' \\
+29 attractions          & ``twenty-nine attractions''                                   & ``스물아홉 (곳)'' / ``이십구 (개)'' \\
+Chi-squared 18.8        & ``chi-squared eighteen-point-eight''                         & ``카이제곱 십팔 점 팔'' \\
+\bottomrule
+\end{longtable}
+
+% ─── Common phrases ────────────────────────────────────────────────────────
+\vspace{10pt}
+\noindent\normalsize\textbf{\large 7. Useful spoken phrases / 유용한 발표 표현}
+
+\vspace{4pt}
+
+\footnotesize
+
+\begin{longtable}{@{}p{6.5cm} p{9cm}@{}}
+\toprule
+\textbf{English (spoken)} & \textbf{Korean (spoken)} \\
+\midrule
+``Let me walk you through this.''              & ``한번 짚어드리겠습니다.'' \\
+``The key insight here is \ldots''              & ``여기서 핵심 통찰은 \ldots'' \\
+``This matters because \ldots''                 & ``이 점이 중요한 이유는 \ldots'' \\
+``As you can see on the slide \ldots''          & ``슬라이드에서 보시다시피 \ldots'' \\
+``In plain terms \ldots'' / ``put simply \ldots'' & ``쉽게 말씀드리면 \ldots'' \\
+``The take-away is \ldots''                     & ``요점은 \ldots'' \\
+``I want to be upfront about this limitation''  & ``이 한계점은 분명히 말씀드리고 싶습니다'' \\
+``Our contribution is \ldots''                   & ``저희의 기여는 \ldots'' \\
+``That concludes my presentation. Thank you.''  & ``이것으로 발표를 마치겠습니다. 감사합니다.'' \\
+``I'd be happy to take any questions.''         & ``질문 받겠습니다. / 질문 환영합니다.'' \\
+\bottomrule
+\end{longtable}
+
+\end{document}

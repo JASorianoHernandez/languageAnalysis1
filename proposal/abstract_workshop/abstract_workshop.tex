@@ -1,0 +1,126 @@
+% Compile with xelatex
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{Malgun Gothic}[Ligatures=TeX]
+\setsansfont{Malgun Gothic}[Ligatures=TeX]
+
+\usepackage[top=2.0cm, bottom=2.0cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{fancyhdr}
+
+% ─── Conference running header (as in template) ─────────────
+\pagestyle{fancy}
+\fancyhf{}
+\renewcommand{\headrulewidth}{0.4pt}
+\fancyhead[L]{\small 2026년 한국생산운영관리학회 추계학술대회 발표 초록집}
+\fancyfoot[C]{\small -- \thepage{} --}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{3pt}
+\setlength{\emergencystretch}{1em}
+
+% ============================================================
+\begin{document}
+
+% ============================================================
+% PAGE 1 — Korean
+% Primary title: Korean; secondary (small italic): English
+% ============================================================
+\begin{center}
+{\Large\textbf{국내 관광명소 온라인 리뷰에서 방문 맥락과\\[2pt]
+리뷰 결과에 관한 실증분석}}
+
+\vspace{12pt}
+
+{\normalsize *소리아노 에르난데스 호르헤 아단 (호서대학교 데이터사이언스학과,
+대학원생, adan\_25@naver.com)}
+
+\end{center}
+
+\vspace{10pt}
+
+\noindent\textbf{\large 초록}
+
+\vspace{4pt}
+
+\noindent
+본 연구는 한국 관광지에 대한 네이버 플레이스 온라인 리뷰에서, 플랫폼이 구조화하여
+수집한 방문 맥락(동행 유형, 방문 목적, 대기 여부, 예약 여부)이 리뷰 결과에 어떻게
+반영되는지를 분석하고자 한다. 선행 연구는 리뷰 텍스트의 감성이나 주제 구조에
+집중해 왔으며, 플랫폼이 제공하는 방문 맥락 메타데이터를 공동 예측 집합으로 활용하여
+리뷰 결과를 설명하려는 시도는 상대적으로 부족하였다. 또한 많은 연구가 단일 관광지나
+단일 범주에 국한되어, 다양한 유형의 관광지를 포괄하는 리뷰 수준의 비교 분석이
+부족한 실정이다. 이에 본 연구는 두 가지 연구 질문을 다룬다. 첫째, 방문 맥락과
+작성자 특성이 리뷰어의 선언된 만족도(별점)에 어떻게 영향을 미치는가. 둘째, 방문
+맥락과 작성자 특성이 재방문 여부에 어떻게 반영되는가. 두 결과 변수는 관측 불가능한
+만족도의 서로 다른 흔적으로 간주하며, 별점은 선언된 지표, 재방문 표식은 과거
+경험에 기반한 행동 지표로 해석한다. 분석 대상은 방문객 규모를 기준으로 한 층화 추출로 선정된 서울·부산 등 29개 주요
+관광지의 한국어 리뷰 14{,}401건이며, 별점에 대한 순서형 로지스틱 회귀와 재방문
+여부에 대한 이항 로지스틱 회귀를 활용한다. 두 모형은 방문 맥락, 작성자 특성, 리뷰
+길이, 장소 통제를 공통 예측 변수로 사용한다. 본 연구는 플랫폼이 구조화한 방문
+맥락을 리뷰 수준의 공동 예측 집합으로 활용하여, 선언된 만족도와 행동적 만족도의
+흔적을 동시에 설명하는 분석 틀을 제시한다는 데 의의가 있다.
+
+\vspace{6pt}
+
+\noindent\textbf{주제어 (Keywords):} 리뷰, 방문 맥락, 재방문, 만족도,
+로지스틱 회귀
+
+% ============================================================
+% PAGE 2 — English
+% Primary title: English; secondary (small italic): Korean
+% ============================================================
+\newpage
+
+\begin{center}
+{\Large\textbf{An Empirical Analysis of Visit Context and\\[2pt]
+Review Outcomes in Online Reviews of Korean Tourist Attractions}}
+
+\vspace{12pt}
+
+{\normalsize *Jorge Adan Soriano Hernandez (Department of Data Science,
+Hoseo University, Graduate Student, adan\_25@naver.com)}
+
+\end{center}
+
+\vspace{10pt}
+
+\noindent\textbf{\large Abstract}
+
+\vspace{4pt}
+
+\noindent
+This study aims to examine how platform-structured visit context (companion
+type, visit purpose, whether the reviewer waited in line, and whether a
+reservation was made) is reflected in the outcomes of online reviews of
+Korean tourist attractions on Naver Place. Prior work has focused on review
+text, sentiment, or topic structure, and the use of platform-provided
+visit-context metadata as a joint predictor set to explain review-level
+outcomes remains limited. Moreover, most existing studies are restricted to
+a single attraction or category, leaving a gap in review-level comparative
+analysis across heterogeneous destinations. This study addresses two
+research questions. First, how do visit context and reviewer characteristics
+shape the reviewer's declared satisfaction, expressed as the star rating?
+Second, how do visit context and reviewer characteristics relate to the
+revisit indicator? Both outcomes are interpreted as different observable
+traces of an unobservable satisfaction construct, with the star rating as a
+declared signal and the revisit flag as a behavioural one grounded in
+prior experience. The dataset consists of 14{,}401 Korean-language reviews
+from 29 major Korean tourist attractions in and around Seoul and Busan,
+selected via stratified sampling based on visitor volume. An ordered
+logistic regression of the star rating and a binary logistic regression of
+the revisit indicator are employed, both using visit context, reviewer
+characteristics, review length, and place controls as common predictors.
+This study contributes by proposing an analytic framework that uses
+platform-structured visit context as a joint predictor set at the review
+level, explaining both declared and behavioural traces of satisfaction
+simultaneously.
+
+\vspace{6pt}
+
+\noindent\textbf{주제어 (Keywords):} review, visit context, revisit,
+satisfaction, logistic regression
+
+\end{document}

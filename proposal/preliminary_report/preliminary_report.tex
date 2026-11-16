@@ -1,0 +1,348 @@
+% Compile with xelatex
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{Malgun Gothic}[Ligatures=TeX]
+\setsansfont{Malgun Gothic}[Ligatures=TeX]
+
+\usepackage[top=2.2cm, bottom=2.2cm, left=2.5cm, right=2.5cm]{geometry}
+\usepackage{booktabs,longtable,array,multirow}
+\usepackage{graphicx}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{../data/analysis/figures/}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{6pt}
+
+\newcolumntype{R}{>{\raggedleft\arraybackslash}p{1.4cm}}
+
+% ─────────────────────────────────────────────────────────────
+\begin{document}
+
+\begin{center}
+{\Large\textbf{Preliminary Analysis Report}}\\[6pt]
+{\large Cross-Cultural Perception of Korean Tourist Attractions}\\[4pt]
+{\normalsize 8 places (Seoul and Busan) $\cdot$ 472 reviews $\cdot$ October 2026}
+\end{center}
+
+\vspace{8pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ── 1. CORPUS ────────────────────────────────────────────────
+\section*{1. Corpus Summary}
+
+A bilingual corpus of 472 reviews was constructed from 8 tourist destinations
+in Seoul and Busan. Each place is represented by up to 30 Korean-language
+(domestic) and 30 English-language (foreign) reviews, taken in platform order
+from culturally segmented online review platforms.
+
+\textbf{Data quality.} The Korean review scraper captured many reviews twice
+(once with and once without line breaks, sometimes with a ``video'' badge
+prepended). Duplicates are now removed by comparing texts without spaces and
+punctuation; in the earlier version of the corpus about a quarter of the
+Korean reviews were copies. All results below are computed on the
+deduplicated corpus. Only Hongdae Street has fewer than 30 unique Korean
+reviews (22).
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{llcc}
+\toprule
+\textbf{City} & \textbf{Place} & \textbf{KO reviews} & \textbf{EN reviews} \\
+\midrule
+Seoul  & Gyeongbokgung (경복궁)         & 30 & 30 \\
+Seoul  & Changdeokgung (창덕궁)         & 30 & 30 \\
+Seoul  & Bukchon Village (북촌한옥마을)   & 30 & 30 \\
+Seoul  & Gwangjang Market (광장시장)     & 30 & 30 \\
+Seoul  & Hongdae Street (홍대거리)       & 22 & 30 \\
+Seoul  & Lotte World (롯데월드)          & 30 & 30 \\
+Busan  & Gwangalli Beach (광안리해수욕장) & 30 & 30 \\
+Busan  & Haeundae Beach (해운대해수욕장)  & 30 & 30 \\
+\midrule
+       & \textbf{Total}                 & \textbf{232} & \textbf{240} \\
+\bottomrule
+\end{tabular}
+\caption{Corpus composition by place and language group.}
+\end{table}
+
+% ── 2. SENTIMENT ─────────────────────────────────────────────
+\section*{2. Sentiment Analysis}
+
+Pre-trained sentiment classifiers were applied to each language group separately.
+The table shows the mean sentiment score (range -1 to 1) and the result of a
+one-sided Mann-Whitney U test (H$_1$: KO $>$ EN).
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lRRRRl}
+\toprule
+\textbf{Place} & \textbf{KO} & \textbf{EN} & \textbf{U} & \textbf{p-value} & \textbf{Sig.} \\
+\midrule
+Gyeongbokgung    & 0.597 & 0.673 & 397.0 & 0.786 & n.s. \\
+Changdeokgung    & 0.589 & 0.668 & 398.0 & 0.781 & n.s. \\
+Bukchon Village  & 0.595 & 0.469 & 575.5 & 0.032 & * \\
+Gwangjang Market & 0.336 & 0.455 & 460.0 & 0.444 & n.s. \\
+Hongdae Street   & 0.666 & 0.419 & 431.0 & 0.031 & * \\
+Lotte World      & 0.806 & 0.597 & 569.0 & 0.040 & * \\
+Gwangalli Beach  & 0.762 & 0.775 & 364.0 & 0.900 & n.s. \\
+Haeundae Beach   & 0.595 & 0.758 & 346.0 & 0.939 & n.s. \\
+\midrule
+\textbf{Overall} & \textbf{0.617} & \textbf{0.602} & 28796.5 & \textbf{0.259} & n.s. \\
+\bottomrule
+\end{tabular}
+\caption{Mean sentiment and Mann-Whitney U test results. * $p < 0.05$ (uncorrected).}
+\end{table}
+
+There is no overall difference between groups ($p = 0.259$). Domestic reviewers
+are significantly more positive at three sites: Bukchon Village, Hongdae Street
+and Lotte World. Gwangjang Market has the lowest domestic sentiment (0.336).
+The three per-site effects do not survive a correction for eight comparisons
+and should be read as exploratory.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=0.85\linewidth]{01_sentiment_bar.png}
+\caption{Mean sentiment by place and language group.}
+\end{figure}
+
+% ── 3. CROSS-LINGUAL SIMILARITY ─────────────────────────────
+\section*{3. Cross-lingual Semantic Similarity}
+
+Multilingual sentence embeddings (multilingual-e5-base) project Korean and
+English reviews into a shared semantic space. Per-site cosine similarity
+between group centroids quantifies experiential convergence.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lRRR}
+\toprule
+\textbf{Place} & \textbf{KO-EN sim} & \textbf{KO intra} & \textbf{EN intra} \\
+\midrule
+Gyeongbokgung    & 0.910 & 0.878 & 0.823 \\
+Changdeokgung    & 0.917 & 0.860 & 0.817 \\
+Bukchon Village  & 0.898 & 0.878 & 0.813 \\
+Gwangjang Market & 0.933 & 0.862 & 0.818 \\
+Hongdae Street   & 0.926 & 0.868 & 0.804 \\
+Lotte World      & 0.930 & 0.854 & 0.806 \\
+Gwangalli Beach  & 0.914 & 0.880 & 0.822 \\
+Haeundae Beach   & 0.903 & 0.890 & 0.813 \\
+\bottomrule
+\end{tabular}
+\caption{Cross-lingual cosine similarity and intra-group coherence.}
+\end{table}
+
+Cross-group similarity is consistently high (0.90 to 0.93) and exceeds
+intra-group similarity at every site, indicating that both groups discuss
+similar aspects of each location. Gwangjang Market shows the highest
+alignment (0.933); Bukchon Village the lowest (0.898).
+
+% ── 4. MOTIVATION ────────────────────────────────────────────
+\section*{4. Travel Motivation (Zero-shot Classification)}
+
+A zero-shot classification using cosine similarity in the embedding space
+assigned each review to one of five motivation categories.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lRR}
+\toprule
+\textbf{Motivation} & \textbf{KO (\%)} & \textbf{EN (\%)} \\
+\midrule
+Photography \& Visual Experience & 36.6 & 37.1 \\
+Nature \& Scenery                & 27.2 & 21.7 \\
+Food \& Gastronomy               & 15.9 & 15.8 \\
+Cultural Heritage \& History     & 14.7 & 15.8 \\
+Shopping \& Entertainment        &  5.6 &  9.6 \\
+\bottomrule
+\end{tabular}
+\caption{Overall motivation distribution by language group.}
+\end{table}
+
+Both groups are dominated by Photography/Visual ($\sim$37\%). Domestic
+reviewers lean more towards Nature \& Scenery (27.2\% vs 21.7\%), while
+foreign reviewers show a larger share of Shopping \& Entertainment
+(9.6\% vs 5.6\%).
+
+% ── 5. LEXICAL DIVERSITY ────────────────────────────────────
+\section*{5. Lexical Diversity (TTR)}
+
+Type-Token Ratio (TTR) measures lexical diversity per review. English reviews
+show higher TTR at every site (weighted mean EN = 0.935, KO = 0.871), with the
+smallest gap at Lotte World (0.911 vs 0.898). Because TTR depends on how each
+language is tokenized, part of this gap may reflect the languages themselves
+rather than writing style.
+
+% ── 6. TF-IDF KEYWORDS ──────────────────────────────────────
+\section*{6. TF-IDF Keyword Contrast}
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{clcl}
+\toprule
+\textbf{Rank} & \textbf{Korean} & & \textbf{English} \\
+\midrule
+1 & 경복궁 (Gyeongbokgung) & & beach \\
+2 & 한옥 (hanok)           & & palace \\
+3 & 외국인 (foreigners)    & & worth \\
+4 & 해운대 (Haeundae)      & & area \\
+5 & 시간 (time)            & & experience \\
+6 & 북촌 (Bukchon)         & & food \\
+7 & 창덕궁 (Changdeokgung) & & people \\
+8 & 해수욕장 (beach)       & & street \\
+\bottomrule
+\end{tabular}
+\caption{Top TF-IDF keywords per language group.}
+\end{table}
+
+Korean keywords are dominated by place names and by 외국인 (foreigners):
+domestic reviewers frequently comment on the presence of foreign visitors.
+English keywords are more evaluative (worth, experience).
+
+% ── 7. LDA TOPICS ────────────────────────────────────────────
+\section*{7. LDA Topic Modeling}
+
+Five topics were extracted for each language group.
+
+\textbf{English topics:}
+\begin{enumerate}\itemsep2pt
+  \item beach, clean, enjoy, rides, people, bridge, magic
+  \item palace, garden, secret, changdeokgung, traditional, hanbok, history
+  \item area, fun, beach, people, food, street, local, shops
+  \item beach, busan, walking, haeundae, atmosphere, ocean, sand
+  \item beach, food, street, night, area, busan, walk, free
+\end{enumerate}
+
+\textbf{Korean topics:}
+\begin{enumerate}\itemsep2pt
+  \item 한옥, 북촌, 경복궁, 마을, 관광객, 드론, 광안리, 전통, 외국인, 골목
+  \item 시간, 경복궁, 풍경, 창덕궁, 경회루, 조선, 사진, 향원정
+  \item 해운대, 해수욕장, 창덕궁, 부산, 궁궐, 분위기, 해변, 바다, 축제
+  \item 경복궁, 시간, 한복, 사진, 후원, 외국인, 건물, 공연
+  \item 홍대, 다양, 풍경, 거리, 한옥, 바다, 외국인, 마을, 부산
+\end{enumerate}
+
+\textbf{Choice of K.} Following Chen et al.\ (2024), LDA was fitted for
+K = 2 to 15 with three random seeds per K, recording c\_v coherence and
+perplexity. Coherence is flat across K with large seed-to-seed variation
+(English 0.38 to 0.48; Korean 0.36 to 0.45). The highest mean coherence
+is at K = 3 for English (0.480) and K = 8 for Korean (0.447); K = 5 scores
+0.425 and 0.400 respectively, within one standard deviation of the best
+values. No K is clearly optimal, so K = 5 is retained as a compromise
+between interpretability and granularity, and the topics are treated as
+descriptive.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{14_lda_k_selection.png}
+\caption{Coherence (c\_v) and perplexity by number of topics (mean $\pm$ SD over 3 seeds).}
+\end{figure}
+
+% ── 8. HYPOTHESES ────────────────────────────────────────────
+\section*{8. Hofstede-based Hypothesis Tests}
+
+Following the design of Chen et al.\ (2024), five hypotheses were derived from
+Hofstede's cultural dimensions (Korea: individualism 18, uncertainty avoidance
+85, power distance 60, indulgence 29). Each topical hypothesis uses a bilingual
+target dictionary. Two tests are run on all reviews of each group:
+\textbf{presence} (does a review mention the topic; 2$\times$2 chi-square) and
+\textbf{intensity} (share of target tokens per review; Mann-Whitney U). Both are
+one-sided and Holm-corrected for five hypotheses. H5 uses the sentiment score
+(intensity) and the share of positive reviews, sentiment $> 0.05$ (presence).
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{llrrrrl}
+\toprule
+\textbf{H} & \textbf{Dimension: topic (expected)} & \textbf{KO \%} & \textbf{EN \%} &
+\textbf{OR} & \textbf{p (Holm)} & \textbf{Result} \\
+\midrule
+H1 & Uncertainty avoidance: planning (KO$>$EN) & 48.3 & 35.0 & 1.73 & 0.009 & Supported \\
+H2 & Collectivism: family (KO$>$EN)            & 16.8 &  8.8 & 2.08 & 0.017 & Supported \\
+H3 & Power distance: service (KO$>$EN)         &  7.3 &  7.9 & 0.92 & 1.000 & n.s. \\
+H4 & Indulgence: enjoyment (EN$>$KO)           & 25.4 & 21.2 & 1.26 & 1.000 & n.s. \\
+H5 & Collectivism: positive text (KO$>$EN)     & 87.9 & 85.0 & 1.28 & 0.529 & n.s. \\
+\bottomrule
+\end{tabular}
+\caption{Presence test (chi-square) with full dictionaries. OR = odds ratio KO vs EN.}
+\end{table}
+
+In the intensity test only H2 is supported ($p_{Holm} = 0.025$).
+
+\textbf{Dictionary validation.} All 602 matched contexts were coded manually
+(keyword in context). Overall precision ranges from 0.73 to 0.97. Six terms
+fell below 70\% precision and were removed in a sensitivity run: 시간 (mostly
+``a good time''), 버스 (the tokenizer splits 버스킹, busking), 주말, time, times
+and friendly.
+
+\begin{table}[H]
+\centering
+\small
+\begin{tabular}{lrrrrl}
+\toprule
+\textbf{H} & \multicolumn{2}{c}{\textbf{Full KO / EN \%, p}} &
+\multicolumn{2}{c}{\textbf{Validated KO / EN \%, p}} & \textbf{Robust} \\
+\midrule
+H1 Planning & 48.3 / 35.0 & 0.009 & 32.3 / 27.1 & 0.425 & no \\
+H2 Family   & 16.8 / 8.8  & 0.017 & 16.8 / 8.8  & 0.022 & yes \\
+\bottomrule
+\end{tabular}
+\caption{Sensitivity of the presence test to dictionary validation (H3 to H5 unchanged, n.s.).}
+\end{table}
+
+H1 depended on ambiguous terms and is not robust. \textbf{H2 is the only
+robust result}: domestic reviewers are about twice as likely to mention
+family or companions (OR = 2.08), consistent with collectivism. The effect
+size is small ($\phi = 0.12$).
+
+\textbf{H5 with star ratings.} Text sentiment does not support H5, but star
+ratings do in part. Star ratings are available for all English reviews and for
+142 of 232 Korean reviews (61\%; coverage varies by place). Among rated reviews,
+Korean reviewers rate higher (4.78 vs 4.55; one-sided Mann-Whitney $p = 0.023$),
+also after adjusting for place (+0.15 stars, $p = 0.031$). The gap comes from
+low ratings: 2.1\% of Korean versus 10.0\% of English ratings are 3 stars or
+fewer, while the share of 5-star ratings does not differ after adjustment
+(OR = 1.09, n.s.). This matches the wording of Chen et al.\ (2024), that
+Chinese-speaking tourists are less inclined to assign low ratings, but rests on a
+non-random subset of Korean reviews. As a validation of the text-based measure,
+sentiment correlates only weakly with star ratings (Spearman $\rho$ = 0.27 EN,
+0.21 KO), partly because almost all ratings are 4 or 5 stars.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=\linewidth]{13_hypothesis_tests.png}
+\caption{Intensity (top) and presence (bottom) tests per hypothesis, full dictionaries.}
+\end{figure}
+
+% ── 9. OBSERVATIONS ──────────────────────────────────────────
+\section*{9. Preliminary Observations}
+
+\begin{itemize}\itemsep3pt
+  \item No overall sentiment difference between domestic and foreign reviewers
+        ($p = 0.259$); differences are site-specific (Bukchon Village,
+        Hongdae Street and Lotte World, KO $>$ EN).
+  \item High cross-lingual similarity (0.90 to 0.93) shows that both groups
+        discuss similar aspects, with different emphasis and vocabulary.
+  \item Domestic reviewers mention family and companions about twice as often
+        as foreign reviewers; this is the only Hofstede-based hypothesis that
+        survives dictionary validation.
+  \item Hypotheses on uncertainty avoidance, power distance and indulgence are
+        not supported. Rating leniency (H5) is not visible in text sentiment, but
+        rated Korean reviews contain fewer low star ratings than English ones.
+  \item Limitations: small samples per site, platform and language are
+        confounded, and the English-language group is culturally heterogeneous.
+  \item Data collection for 2 additional places (인사동길, N서울타워) is pending.
+\end{itemize}
+
+\vspace{8pt}
+\noindent\rule{\linewidth}{0.4pt}
+{\small Hoseo University \hfill October 2026}
+
+\end{document}

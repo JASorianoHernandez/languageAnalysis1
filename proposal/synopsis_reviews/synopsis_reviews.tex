@@ -1,0 +1,173 @@
+% Compile with xelatex
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\setmainfont{Malgun Gothic}[Ligatures=TeX]
+\setsansfont{Malgun Gothic}[Ligatures=TeX]
+
+\usepackage[top=1.8cm, bottom=1.8cm, left=2.2cm, right=2.2cm]{geometry}
+\usepackage{microtype}
+\usepackage{amsmath}
+\usepackage{multicol}
+
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt}
+\pagestyle{empty}
+
+% ─────────────────────────────────────────────────────────────
+\begin{document}
+
+\begin{center}
+{\normalsize\textbf{Cross-Cultural Perception of Korean Tourist Attractions:\\[2pt]
+A Comparative NLP Analysis of Domestic and Foreign Online Reviews}}
+
+\vspace{3pt}
+
+{\normalsize\textbf{한국 관광지에 대한 문화 간 인식 비교:\\[2pt]
+내국인과 외국인 온라인 리뷰의 자연어 처리 분석}}
+\end{center}
+
+\vspace{2pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+\begin{multicols}{2}
+
+\noindent{\footnotesize\textbf{Research Questions.}
+This study investigates how domestic Korean tourists and foreign visitors
+perceive the same tourist attractions differently through their online reviews
+on culturally segmented platforms.
+Specifically, it examines:
+(1)~sentiment gaps between the two groups,
+(2)~structural differences in thematic emphasis,
+and (3)~semantic convergence and divergence patterns shaped by cultural background.}
+
+\vspace{1pt}
+
+\noindent{\footnotesize\textbf{연구 질문.}
+이 연구는 동일한 한국 관광지를 방문한 내국인과 외국인 관광객이
+온라인 리뷰 플랫폼에서 해당 장소를 어떻게 상이하게 인식하는지를
+다층적 자연어 처리(NLP) 파이프라인을 통해 비교한다.
+(1)~두 집단 간 감성 평가의 차이,
+(2)~주제적 관심사의 구조적 차이,
+(3)~관광 경험의 의미적 수렴·발산 양상을 검토한다.}
+
+\vspace{4pt}
+\noindent\rule{\columnwidth}{0.2pt}
+\vspace{2pt}
+
+\noindent{\footnotesize\textbf{Corpus.}
+Major tourist sites in Seoul and Busan are selected via stratified sampling
+based on official Korean Tourism Organization (KTO) visitor statistics,
+Datalab foot-traffic rankings, and Yanolja Top~500 data.
+Destination types include palaces, traditional villages, markets,
+entertainment districts, landmarks, and beaches.
+A balanced bilingual corpus is constructed with Korean-language (domestic)
+and English-language (foreign) reviews for each site.}
+
+\vspace{1pt}
+
+\noindent{\footnotesize\textbf{코퍼스.}
+한국관광공사(KTO) 입장객 통계, 한국관광데이터랩 인기관광지 순위,
+야놀자 Top~500 등을 기반으로 서울·부산의 주요 관광지를 층화 추출한다.
+궁궐, 전통마을, 전통시장, 유흥·쇼핑가, 랜드마크, 해수욕장 등을 포함하며,
+각 장소에 대해 내국인(한국어)과 외국인(영어) 리뷰를 균형 있게 수집한다.}
+
+\vspace{4pt}
+\noindent\rule{\columnwidth}{0.2pt}
+\vspace{2pt}
+
+\noindent{\footnotesize\textbf{Analysis I: Sentiment Analysis.}
+Pre-trained sentiment classifiers are applied to Korean and English reviews
+separately. Mean sentiment is compared across place$\times$group,
+and Mann-Whitney U tests assess the statistical significance of
+inter-group differences.}
+
+\vspace{1pt}
+
+\noindent{\footnotesize\textbf{분석 I: 감성 분석.}
+사전 학습된 감성 분류 모델을 적용하여 리뷰별 감성 점수를 산출하고,
+장소$\times$집단별 평균을 비교한다.
+Mann-Whitney U 검정으로 두 집단 간 차이의 통계적 유의성을 검증한다.}
+
+\vspace{4pt}
+\noindent\rule{\columnwidth}{0.2pt}
+\vspace{2pt}
+
+\noindent{\footnotesize\textbf{Analysis II: Topic Modeling.}
+Latent Dirichlet Allocation (LDA) is applied separately to each language
+corpus to extract dominant themes. Topic distributions are compared per site,
+supplemented by TF-IDF keyword contrast and type-token ratio (TTR) analysis.}
+
+\vspace{1pt}
+
+\noindent{\footnotesize\textbf{분석 II: 주제 모델링.}
+한국어·영어 코퍼스 각각에 잠재 디리클레 할당(LDA)을 적용하여 주요 주제를
+추출하고, 장소별 분포를 비교한다. TF-IDF 키워드 대조 분석과
+유형-토큰 비율(TTR)로 어휘적 다양성 차이를 측정한다.}
+
+\vspace{4pt}
+\noindent\rule{\columnwidth}{0.2pt}
+\vspace{2pt}
+
+\noindent{\footnotesize\textbf{Analysis III: Cross-lingual Similarity.}
+Multilingual sentence embeddings project both Korean and English reviews
+into a shared semantic space. Per-site cosine similarity between group
+centroids quantifies experiential convergence, and zero-shot motivation
+classification (cultural heritage, food, photography, shopping, nature)
+reveals differences in visit motivation.}
+
+\vspace{1pt}
+
+\noindent{\footnotesize\textbf{분석 III: 다국어 의미 유사도.}
+다국어 문장 임베딩으로 양 언어 리뷰를 동일 의미 공간에 투영하고,
+장소별 코사인 유사도로 경험의 수렴도를 정량화한다.
+제로샷 방식으로 관광 동기(문화유산, 음식, 사진, 쇼핑, 자연)를
+분류하여 집단 간 방문 동기 차이를 분석한다.}
+
+\vspace{4pt}
+\noindent\rule{\columnwidth}{0.2pt}
+\vspace{2pt}
+
+\noindent{\footnotesize\textbf{Analysis IV: Aspect-Based Sentiment (ABSA).}
+An instruction-tuned LLM extracts fine-grained sentiment across five
+tourism-relevant aspects (historical-cultural value, accessibility,
+crowding, food, visual experience), enabling aspect-level comparison
+of how each group evaluates the same destination.}
+
+\vspace{1pt}
+
+\noindent{\footnotesize\textbf{분석 IV: 측면 기반 감성 분석(ABSA).}
+명령 기반 대규모 언어 모델(LLM)로 다섯 가지 관광 측면(역사·문화,
+접근성, 혼잡도, 음식, 시각적 경험)에 대한 세부 감성을 추출하여
+동일 장소에 대한 집단별 평가 차이를 비교한다.}
+
+\vspace{4pt}
+\noindent\rule{\columnwidth}{0.2pt}
+\vspace{2pt}
+
+\noindent{\footnotesize\textbf{Expected Contributions.}
+This study offers one of the first systematic, multi-layered NLP comparisons
+of domestic vs.\ foreign tourist perception through culturally segmented
+review platforms. The integrated framework combining sentiment, topic,
+semantic similarity, and aspect-level analysis provides practical
+implications for destination marketing organizations (DMOs) seeking to
+tailor strategies to heterogeneous visitor segments.}
+
+\vspace{1pt}
+
+\noindent{\footnotesize\textbf{기대 기여.}
+문화적으로 분리된 두 플랫폼의 리뷰를 통해 동일 관광지에 대한
+내국인·외국인 인식 차이를 다층적 NLP 기법으로 체계적으로 비교하는
+최초의 시도 중 하나이다. 감성, 주제, 의미 유사도, 측면 기반 평가를
+결합한 통합적 프레임워크를 제시하며, 관광 마케팅 기관(DMO)의
+맞춤형 전략 수립에 실질적 시사점을 제공한다.}
+
+\end{multicols}
+
+\vspace{2pt}
+\noindent\rule{\linewidth}{0.4pt}
+\vspace{1pt}
+
+{\scriptsize 호서대학교 / Hoseo University \hfill 2026년 10월}
+
+\end{document}

@@ -1,0 +1,198 @@
+{
+  "경복궁": {
+    "name_en": "Gyeongbokgung", "naver_id": "11571707",
+    "gmaps_url": "https://www.google.com/maps/place/Gyeongbokgung/data=!3m1!4b1!4m4!3m3!1s0x357ca2c74aeddea1:0x8b3046532cc715f6!16zL20vMDJ2M3Q2!20s8Q98HXHG%2BRRVMC55?entry=ttu&g_ep=EgoyMDI2MDkyMy4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "palace", "city": "Seoul", "lat": 37.5796, "lon": 126.9770,
+    "yanolja_rank": 5, "cross_cultural_corpus": true
+  },
+  "창덕궁": {
+    "name_en": "Changdeokgung", "naver_id": "12261493",
+    "gmaps_url": "https://www.google.com/maps/place/Changdeokgung/data=!3m1!4b1!4m4!3m3!1s0x357ca25bce7408e3:0xff296b97da565068!16s%2Fg%2F11b7gr9kq4!20s8Q98HXHR%2BQCF73XC?entry=ttu&g_ep=EgoyMDI2MDkyNy4xIKXMDSoASAFQAw%3D%3D",
+    "place_type": "palace", "city": "Seoul", "lat": 37.5794, "lon": 126.9910,
+    "yanolja_rank": 12, "cross_cultural_corpus": true
+  },
+  "덕수궁": {
+    "name_en": "Deoksugung", "naver_id": "11571730",
+    "gmaps_url": "https://www.google.com/maps/place/Deoksugung+Palace/data=!3m1!4b1!4m4!3m3!1s0x357ca28d3199c531:0x7a2d35df0efd2d8!16zL20vMDJoZzZw!20s8Q98HX8F%2B9X2?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "palace", "city": "Seoul", "lat": 37.5658, "lon": 126.9751,
+    "yanolja_rank": 9, "cross_cultural_corpus": true
+  },
+  "창경궁": {
+    "name_en": "Changgyeonggung", "naver_id": "11571740",
+    "gmaps_url": "https://www.google.com/maps/place/Changgyeonggung+Palace/data=!3m1!4b1!4m4!3m3!1s0x357ca2d63cdfd837:0x4ae06b4de851f3cf!16zL20vMDNuODI2!20s8Q98HXHV%2BGXF?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "palace", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 15, "cross_cultural_corpus": false
+  },
+
+  "북촌한옥마을": {
+    "name_en": "Bukchon Village", "naver_id": "13034552",
+    "gmaps_url": "https://www.google.com/maps/place/Bukchon+Hanok+Village/data=!3m1!4b1!4m4!3m3!1s0x357ca2daaff8c14f:0xcdbcbaa9ffc9e59a!16s%2Fm%2F043pdws!20s8Q98HXJM%2BHXPMXM3?entry=ttu&g_ep=EgoyMDI2MDkyMy4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "traditional", "city": "Seoul", "lat": 37.5826, "lon": 126.9831,
+    "yanolja_rank": 6, "cross_cultural_corpus": true
+  },
+  "인사동길": {
+    "name_en": "Insadong-gil", "naver_id": "13542782",
+    "gmaps_url": "https://www.google.com/maps/place/Insa-dong+Culture+Street/data=!3m1!4b1!4m4!3m3!1s0x357ca2e7f9c7f07b:0xb277f48a0573a31f!16s%2Fg%2F1q5bl3xm9!20s8Q98HXCP%2BVP626QF?entry=ttu&g_ep=EgoyMDI2MDkyNy4xIKXMDSoASAFQAw%3D%3D",
+    "place_type": "traditional", "city": "Seoul", "lat": 37.5740, "lon": 126.9850,
+    "yanolja_rank": 45, "cross_cultural_corpus": true
+  },
+  "낙산공원": {
+    "name_en": "Naksan Park", "naver_id": "13299765",
+    "gmaps_url": "https://www.google.com/maps/place/Parque+de+Naksan/data=!3m1!4b1!4m4!3m3!1s0x357ca32d72d213e9:0x9f6263b27f9d345d!16s%2Fg%2F1tdqfdp7!20s8Q99H2J4%2B7X97H4C?entry=ttu&g_ep=EgoyMDI2MDkzMC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "nature", "city": "Seoul", "lat": 37.5806, "lon": 127.0074,
+    "yanolja_rank": 94, "cross_cultural_corpus": true
+  },
+  "남산골한옥마을": {
+    "name_en": "Namsangol Village", "naver_id": "13198659",
+    "gmaps_url": "https://www.google.com/maps/place/Namsangol+Hanok+Village/data=!3m1!4b1!4m4!3m3!1s0x357ca2fcfa6a299b:0x79c3be57e1edbdfe!16s%2Fm%2F043qqp1!20s8Q98HX5V%2BPQH?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "traditional", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 119, "cross_cultural_corpus": false
+  },
+
+  "광장시장": {
+    "name_en": "Gwangjang Mkt", "naver_id": "21075936",
+    "gmaps_url": "https://www.google.com/maps/place/Gwangjang+Market/data=!3m1!4b1!4m4!3m3!1s0x357ca2ed7e74759b:0xd656a34831089f44!16s%2Fm%2F012r1x6q!20s8Q98HXCX%2B2R9FMCG?entry=ttu&g_ep=EgoyMDI2MDkyMy4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "market", "city": "Seoul", "lat": 37.5701, "lon": 126.9997,
+    "yanolja_rank": 89, "cross_cultural_corpus": true
+  },
+
+  "홍대거리": {
+    "name_en": "Hongdae St.", "naver_id": "18781826",
+    "gmaps_url": "https://www.google.com/maps/place/Hongdae+Street/data=!3m1!4b1!4m4!3m3!1s0x357c98c52a22c0eb:0xd5c6adb2b4dc943a!16s%2Fg%2F11bwm5q2sv!20s8Q98HW4G%2BF2FRF7H?entry=ttu&g_ep=EgoyMDI2MDkyMy4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "entertainment", "city": "Seoul", "lat": 37.5563, "lon": 126.9237,
+    "yanolja_rank": 74, "cross_cultural_corpus": true
+  },
+  "국립중앙박물관": {
+    "name_en": "Natl. Museum", "naver_id": "11620570",
+    "gmaps_url": "https://www.google.com/maps/place/National+Museum+of+Korea/data=!3m1!4b1!4m4!3m3!1s0x357ca2ed7e746c37:0x616286c7a66e50e7!16zL20vMGN6emN3!20s8Q98GXFJ%2BG5X?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "museum", "city": "Seoul", "lat": 37.5240, "lon": 126.9804,
+    "yanolja_rank": 7, "cross_cultural_corpus": true
+  },
+  "코엑스": {
+    "name_en": "COEX", "naver_id": "11576171",
+    "gmaps_url": "https://www.google.com/maps/place/COEX+Convention+%26+Exhibition+Center/data=!4m8!1m2!2m1!1z7L2U7JeR7Iqk!3m4!1s0x357ca536e4738c97:0x336c7537649c9fe4!15sCgnsvZTsl5HsiqRaCyIJ7L2U7JeR7IqkkgERY29udmVudGlvbl9jZW50ZXLgAQA!16zL20vMGNjZ2hj!20s8Q99G365%2BMMC?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "modern", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 164, "cross_cultural_corpus": false,
+    "_note": "yanolja_rank is for 코엑스아쿠아리움 (COEX Aquarium), the closest ranked sub-venue"
+  },
+  "서대문자연사박물관": {
+    "name_en": "Seodaemun Museum", "naver_id": "11620547",
+    "gmaps_url": "https://www.google.com/maps/place/Seodaemun+Museum+of+Natural+History/data=!4m6!3m5!1s0x357c9866a9946033:0xd1e53fac8bbf511e!9m1!1b1!16s%2Fm%2F040705r!20s8Q98HWGP%2BMX9?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "museum", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": null, "cross_cultural_corpus": false
+  },
+  "올림픽공원": {
+    "name_en": "Olympic Park", "naver_id": "12268494",
+    "gmaps_url": "https://www.google.com/maps/place/Olympic+Park/data=!4m6!3m5!1s0x357ca5610ed8f483:0x5e38157c0815a26f!9m1!1b1!16zL20vMDk1OWM5!20s8Q99G4CC%2B7HH?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "nature", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": null, "cross_cultural_corpus": false
+  },
+  "에버랜드": {
+    "name_en": "Everland", "naver_id": "11574457",
+    "gmaps_url": "https://www.google.com/maps/place/Everland/data=!4m14!1m7!3m6!1s0x357b5403ce34d773:0x1fa18ab619238098!2sEverland!9m1!1b1!16s%2Fm%2F012dzv65!20s8Q9976V3%2BH28!3m5!1s0x357b5403ce34d773:0x1fa18ab619238098!9m1!1b1!16s%2Fm%2F012dzv65!20s8Q9976V3%2BH28?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "entertainment", "city": "Gyeonggi", "lat": null, "lon": null,
+    "yanolja_rank": null, "cross_cultural_corpus": false,
+    "_note": "city corrected to Gyeonggi -- Everland is in Yongin, not Seoul"
+  },
+  "서울스카이": {
+    "name_en": "Seoul Sky", "naver_id": "303218356",
+    "gmaps_url": "https://www.google.com/maps/place/Seoul+Sky/data=!3m1!4b1!4m4!3m3!1s0x357b458e7369b7bb:0x99685e4ee512b384!16s%2Fg%2F11r8bs_pvr!20s8Q99G472%2B2W7?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "modern", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": null, "cross_cultural_corpus": false
+  },
+  "동대문디자인플라자": {
+    "name_en": "DDP", "naver_id": "18063223",
+    "gmaps_url": "https://www.google.com/maps/place/Dongdaemun+Design+Plaza+(DDP)/data=!4m7!1m2!2m1!1z6rK97Z2s6raB!3m3!1s0x357b456faf5814f3:0x5c22a91dab450bdc!16s%2Fm%2F03ylq94!20s8Q99H285%2BJM9?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "modern", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": null, "cross_cultural_corpus": false
+  },
+
+  "N서울타워": {
+    "name_en": "N Seoul Tower", "naver_id": "11662870",
+    "gmaps_url": "https://www.google.com/maps/place/N+Seoul+Tower/data=!4m12!1m7!3m6!1s0x357ca257a88e6aa9:0x5cf8577c2e7982a5!2sN+Seoul+Tower!9m1!1b1!16zL20vMDJxcGYx!20s8Q98HX2Q%2BF79MRC2!3m3!1s0x357ca257a88e6aa9:0x5cf8577c2e7982a5!16zL20vMDJxcGYx!20s8Q98HX2Q%2BF79MRC2?entry=ttu&g_ep=EgoyMDI2MDkyNy4xIKXMDSoASAFQAw%3D%3D",
+    "place_type": "modern", "city": "Seoul", "lat": 37.5512, "lon": 126.9882,
+    "yanolja_rank": 16, "cross_cultural_corpus": true
+  },
+  "롯데월드": {
+    "name_en": "Lotte World", "naver_id": "1039363430",
+    "gmaps_url": "https://www.google.com/maps/place/Lotte+World/data=!4m2!3m1!1s0x357ca5a7250efe81:0x433df2c1fec03b98!18m1!1e1?utm_source=mstt_1&entry=gps",
+    "place_type": "modern", "city": "Seoul", "lat": 37.5111, "lon": 127.0980,
+    "yanolja_rank": 19, "cross_cultural_corpus": true,
+    "_note": "yanolja_rank is for 롯데월드타워 (Lotte World Tower), the adjacent landmark"
+  },
+  "여의도한강공원": {
+    "name_en": "Yeouido Park", "naver_id": "13416869",
+    "gmaps_url": "https://www.google.com/maps/place/Yeouido+Hangang+Park/data=!3m1!4b1!4m4!3m3!1s0x357c9f3b03c4b7ef:0xa4d8869ebf8d452c!16s%2Fg%2F122cc2sw!20s8Q98GWGM%2BMVP?entry=ttu&g_ep=EgoyMDI2MTAwNC4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "nature", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": null, "cross_cultural_corpus": false
+  },
+  "명동성당": {
+    "name_en": "Myeongdong Cathedral", "naver_id": "11781308", "gmaps_url": "https://www.google.com/maps/place/Myeong-dong+Cathedral/data=!3m1!4b1!4m4!3m3!1s0x357ca2e54c5068b3:0x44b42da266a7c893!16zL20vMGM4bG16!20s8Q98HX7P%2B9X3?entry=ttu&g_ep=EgoyMDI2MTAwNS4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "modern", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 33, "cross_cultural_corpus": false,
+    "_note": "no better bucket than 'modern' exists yet for a landmark that is neither palace/traditional/nature/market/museum -- reconsider the taxonomy if several of these get added"
+  },
+  "경희궁": {
+    "name_en": "Gyeonghuigung", "naver_id": "11619097", "gmaps_url": "https://www.google.com/maps/place/Gyeonghuigung+Palace/data=!4m8!1m2!2m1!1z6rK97Z2s6raB!3m4!1s0x357ca291bee0231f:0x344c1aff85cff47f!15sCgnqsr3tnazqtoFaCyIJ6rK97Z2s6raBkgEVaGVyaXRhZ2VfcHJlc2VydmF0aW9u4AEA!16zL20vMDNuODJr!20s8Q98HXC9%2BF7V?entry=ttu&g_ep=EgoyMDI2MTAwNS4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "palace", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 41, "cross_cultural_corpus": false
+  },
+  "독립문": {
+    "name_en": "Independence Gate", "naver_id": null, "gmaps_url": null,
+    "place_type": "modern", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 44, "cross_cultural_corpus": false,
+    "_note": "restored 2026-10-12 -- this entry was accidentally overwritten when 서대문형무소역사관's naver_id/gmaps_url were pasted into it"
+  },
+  "서대문형무소역사관": {
+    "name_en": "Seodaemun Prison History Hall", "naver_id": "12384776", "gmaps_url": "https://www.google.com/maps/place/Seodaemun+Prison+History+Hall/data=!4m7!1m2!2m1!1z64-F66a966y4!3m3!1s0x357ca282cc50f361:0x1f9df4a115e4132!16zL20vMGNiYmJm!20s8Q98HXF4%2BPCH?entry=ttu&g_ep=EgoyMDI2MTAwNS4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "museum", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 245, "cross_cultural_corpus": false,
+    "_note": "classified as museum (it is a 역사관), not the 'landmark/modern' stratum label it was proposed under"
+  },
+
+  
+  "koreanName": {
+    "name_en": "EnglgishName", "naver_id": "NaverIDNumber", "gmaps_url": "googlemapsLinkIfneeded",
+    "place_type": "KindOfPlace", "city": "CityName", "lat": null, "lon": null,
+    "yanolja_rank": 245, "cross_cultural_corpus": false,
+    "_note": ""
+  },
+
+  "북한산": {
+    "name_en": "Bukhansan", "naver_id": "11491416", "gmaps_url": "https://www.google.com/maps/place/Bukhansan/data=!3m1!4b1!4m4!3m3!1s0x357cbdd5b945eccf:0xfb9486536d6d79f9!16zL20vMGI2cHoz!20s8Q98MX6V%2B88P?entry=ttu&g_ep=EgoyMDI2MTAwNS4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "nature", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 127, "cross_cultural_corpus": false
+  },
+  "운현궁": {
+    "name_en": "Unhyeongung", "naver_id": "11619094", "gmaps_url": "https://www.google.com/maps/place/Unhyeongung+Palace/data=!3m1!4b1!4m4!3m3!1s0x357ca2dcb98bf2cb:0xc526f2f307dc1df1!16zL20vMGdwMHcw!20s8Q98HXGP%2BCR7?entry=ttu&g_ep=EgoyMDI2MTAwNS4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "palace", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 156, "cross_cultural_corpus": false,
+    "_note": "royal residence, not a hanok village -- classified as palace, not traditional"
+  },
+  "은평한옥마을": {
+    "name_en": "Eunpyeong Village", "naver_id": "37825869", "gmaps_url": "https://www.google.com/maps/place/Eunpyeong+Hanok+Village/data=!4m4!3m3!1s0x357c97cc14f395d1:0x6751df797ce9de66!16s%2Fg%2F11gdlx8xfb!20s8Q98JWRQ%2BGMG?entry=ttu&g_ep=EgoyMDI2MTAwNS4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "traditional", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": 178, "cross_cultural_corpus": false
+  },
+  "서촌": {
+    "name_en": "Seochon", "naver_id": "31148576", "gmaps_url": "https://www.google.com/maps/place/Seochon+Hanok+Village/data=!4m8!1m2!2m1!1z7ISc7LSM!3m4!1s0x357ca3aae21d7f5b:0xc9dc2a495949a180!15sCgbshJzstIySARJ0b3VyaXN0X2F0dHJhY3Rpb27gAQA!16s%2Fg%2F11h1hvdj57!20s8Q98HXHF%2BF69?entry=ttu&g_ep=EgoyMDI2MTAwNS4wIKXMDSoASAFQAw%3D%3D",
+    "place_type": "traditional", "city": "Seoul", "lat": null, "lon": null,
+    "yanolja_rank": null, "cross_cultural_corpus": false,
+    "_note": "Yanolja tier 3, no numeric rank recovered"
+  },
+
+  "광안리해수욕장": {
+    "name_en": "Gwangalli Beach", "naver_id": "11491655",
+    "gmaps_url": "https://www.google.com/maps/place/Gwangalli+Beach/data=!3m1!4b1!4m4!3m3!1s0x3568ed2f27c70ec7:0xff6df0e14d9216fb!16s%2Fm%2F03hp9yc!20s8Q7F5439%2B7F7MRQ5?entry=ttu&g_ep=EgoyMDI2MDkyNy4xIKXMDSoASAFQAw%3D%3D",
+    "place_type": "nature", "city": "Busan", "lat": 35.1531, "lon": 129.1186,
+    "yanolja_rank": null, "cross_cultural_corpus": true,
+    "_note": "selection rationale for the Busan beaches was not recovered from session history"
+  },
+  "해운대해수욕장": {
+    "name_en": "Haeundae Beach", "naver_id": "11491806",
+    "gmaps_url": "https://www.google.com/maps/place/Playa+Haeundae/data=!4m2!3m1!1s0x35688d5c0efe075f:0x9963b1d5c163ac98!18m1!1e1?utm_source=mstt_1&entry=gps",
+    "place_type": "nature", "city": "Busan", "lat": 35.1587, "lon": 129.1604,
+    "yanolja_rank": null, "cross_cultural_corpus": true,
+    "_note": "selection rationale for the Busan beaches was not recovered from session history"
+  }
+}
